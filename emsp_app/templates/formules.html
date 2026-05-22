@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Formules &amp; Nomenclatures – EMSP{% endblock %}
+{% block page_title %}📐 Formules &amp; Nomenclatures{% endblock %}
+{% block breadcrumb %}EMSP / Documentation technique{% endblock %}
+
+{% block content %}
+
+<div class="card" style="margin-bottom:20px">
+  <div class="card-header">
+    <h2>📋 À quoi sert cette page ?</h2>
+  </div>
+  <div class="card-body" style="font-size:.9rem;line-height:1.7;color:#444">
+    <p>Cette page documente toutes les <strong>formules Excel automatiques</strong> présentes dans le fichier
+    <code>data.xlsx</code>, ainsi que les <strong>conventions de nommage</strong> (nomenclatures) à respecter
+    lors de la saisie.</p>
+    <p style="margin-top:8px">
+      ⚠️ <strong>Les cellules contenant des formules ne sont jamais modifiées par l'interface de saisie.</strong>
+      Elles se recalculent automatiquement à l'ouverture du fichier Excel.
+    </p>
+  </div>
+</div>
+
+<!-- Formules -->
+<div class="card" style="margin-bottom:20px">
+  <div class="card-header">
+    <h2>⚙️ Formules automatiques protégées</h2>
+  </div>
+  <div class="card-body">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">
+      <span class="tag tag-blue">🔵 Bleu = défini dans le cahier des charges</span>
+      <span class="tag tag-red" style="background:#FFF0F0;color:#CC0000">🔴 Rouge = ajout complémentaire</span>
+    </div>
+
+    {% for title, f in formulas.items() %}
+    <div class="formula-block" style="{{ 'border-left:4px solid #CC0000' if not f.spec else 'border-left:4px solid #1F3864' }}">
+      <h4>
+        {% if not f.spec %}<span style="color:#CC0000">[Ajout] </span>{% endif %}
+        {{ title }}
+      </h4>
+      <div class="formula-code">{{ f.formule }}</div>
+      <div class="desc">{{ f.description }}</div>
+      {% if f.colonnes %}
+      <table class="cols-table" style="margin-top:8px">
+        <tr><td colspan="2" style="font-size:.72rem;color:#888;padding-bottom:4px">Colonnes impliquées :</td></tr>
+        {% for col_letter, col_name in f.colonnes.items() %}
+        <tr>
+          <td>Col. {{ col_letter }}</td>
+          <td>{{ col_name }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+      <div style="margin-top:8px;font-size:.75rem;color:#888">
+        📊 Format cellule : <code>{{ f.format }}</code>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Nomenclatures -->
+<div class="card">
+  <div class="card-header">
+    <h2>🏷 Conventions de nommage (nomenclatures)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size:.85rem;color:#555;margin-bottom:16px">
+      Respecter ces conventions garantit le bon fonctionnement des formules de liaison entre onglets
+      (SUMIF, VLOOKUP, etc.).
+    </p>
+    <table class="nomen-table">
+      <thead>
+        <tr>
+          <th>Champ</th>
+          <th>Patron (pattern)</th>
+          <th>Exemples</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for field, n in nomenclatures.items() %}
+        <tr>
+          <td><strong>{{ field }}</strong></td>
+          <td><span class="code-chip">{{ n.pattern }}</span></td>
+          <td style="color:#555">{{ n.exemple }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Colonnes protégées -->
+    <div style="margin-top:24px">
+      <h3 style="font-size:.95rem;margin-bottom:12px;color:#1F3864">🔒 Colonnes protégées (formules) par onglet</h3>
+      <table class="nomen-table">
+        <thead>
+          <tr><th>Onglet</th><th>Colonne(s) protégée(s)</th><th>Raison</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SESSIONS</td>
+            <td><span class="code-chip">Colonne K – Taux_Réalisation</span></td>
+            <td>Formule calculée automatiquement</td>
+          </tr>
+          <tr>
+            <td>RESERVATIONS</td>
+            <td><span class="code-chip">Colonne K – Durée (h)</span> &nbsp; <span class="code-chip">Colonne L – Capacité_Salle</span></td>
+            <td>Formules calculées automatiquement</td>
+          </tr>
+          <tr>
+            <td>BILANS</td>
+            <td>Toutes les colonnes</td>
+            <td>Onglet entièrement calculé, aucune saisie manuelle</td>
+          </tr>
+          <tr>
+            <td>ACCUEIL</td>
+            <td>Toutes les colonnes</td>
+            <td>Page de navigation / légende, non modifiable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Valeurs de liste -->
+    <div style="margin-top:24px">
+      <h3 style="font-size:.95rem;margin-bottom:12px;color:#1F3864">📋 Valeurs autorisées (listes déroulantes)</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px">
+        {% set lists = [
+          ('Type_Formation',    ['Initiale','Continue','Recyclage']),
+          ('Statut_Session',    ['Planifiée','En cours','Terminée','Annulée','Reportée']),
+          ('Type_Public',       ['Étudiants EMSP','Agents hospitaliers','Formateurs EMSP','Mixte','Externe']),
+          ('Statut_Salle',      ['En service','Hors service','En rénovation','Réservée']),
+          ('Type_Salle',        ['Amphi','TP','Simulation','Cours','Réunion','Laboratoire']),
+          ('Statut_Formateur',  ['Interne EMSP','Intervenant externe','Expert projet','Enseignant UDC','Vacataire']),
+          ('Niveau_Qualification',['Licence','Master','Doctorat','Spécialiste','DES','DESC']),
+          ('Rôle_Intervention', ['Responsable','Co-formateur','Intervenant externe','Tuteur stage','Observateur']),
+          ('Nature_Dépense',    ['Intervenants','Supports pédagogiques','Matériel TP','Hébergement','Transport','Collations','Location matériel','Fournitures administratives','Autre']),
+          ('Mode_Paiement',     ['Virement','Chèque','Espèces','Prélèvement','Bon de commande']),
+          ('Source_Financement',['ODS','Budget EMSP','Projet','Partenariat','Autofinancement']),
+          ('Taux_Disponibilité',['Plein temps','Temps partiel','Occasionnel','Vacataire']),
+        ] %}
+        {% for list_name, list_vals in lists %}
+        <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:6px;padding:12px">
+          <div style="font-weight:700;font-size:.82rem;color:#1F3864;margin-bottom:8px">{{ list_name }}</div>
+          {% for v in list_vals %}
+          <span class="tag tag-grey" style="margin:2px 2px 2px 0;display:inline-block">{{ v }}</span>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

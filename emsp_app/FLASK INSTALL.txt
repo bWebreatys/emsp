@@ -1,0 +1,1 @@
+pip install flask openpyxl   # une seule fois dans le shell

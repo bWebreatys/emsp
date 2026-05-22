@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}{{ cfg.label }} – EMSP{% endblock %}
+{% block page_title %}{{ cfg.icon }} {{ cfg.label }}{% endblock %}
+{% block breadcrumb %}EMSP / {{ cfg.label }}{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('sheet_new', sheet_name=sheet_name) }}" class="btn btn-success">
+  ＋ Nouveau
+</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Légende -->
+<div class="legend">
+  <div class="legend-item">
+    <span class="legend-dot" style="background:#1F3864"></span>
+    <span style="color:#1F3864;font-weight:600">NOIR</span> = cahier des charges
+  </div>
+  <div class="legend-item">
+    <span class="legend-dot" style="background:#CC0000"></span>
+    <span style="color:#CC0000;font-weight:600">ROUGE</span> = ajout complémentaire
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Liste des enregistrements
+      <span class="tag tag-blue" style="margin-left:8px;font-size:.75rem">{{ rows|length }} ligne(s)</span>
+    </h2>
+    <a href="{{ url_for('sheet_new', sheet_name=sheet_name) }}" class="btn btn-success btn-sm">＋ Ajouter</a>
+  </div>
+
+  {% if rows %}
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          {% for h in headers %}
+          <th>{{ h }}</th>
+          {% endfor %}
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        {% set row_excel = loop.index + 1 %}
+        <tr>
+          <td style="color:#aaa;font-size:.75rem">{{ loop.index }}</td>
+          {% for cell in row %}
+          <td>
+            {% if cell is not none and cell != '' %}
+              {% if cell.startswith('0.') or (cell.endswith('%') ) %}
+                <span class="tag tag-blue">{{ cell }}</span>
+              {% elif cell in ['Planifiée','Prévu'] %}
+                <span class="tag tag-blue">{{ cell }}</span>
+              {% elif cell in ['En cours','Confirmé'] %}
+                <span class="tag tag-orange">{{ cell }}</span>
+              {% elif cell in ['Terminée','Réalisé','En service'] %}
+                <span class="tag tag-green">{{ cell }}</span>
+              {% elif cell in ['Annulée','Annulé','Hors service','Non résolue'] %}
+                <span class="tag tag-red">{{ cell }}</span>
+              {% elif cell in ['Reportée','Reporté'] %}
+                <span class="tag tag-grey">{{ cell }}</span>
+              {% elif cell in ['Initiale','Continue','Recyclage'] %}
+                <span class="tag tag-purple">{{ cell }}</span>
+              {% else %}
+                {{ cell }}
+              {% endif %}
+            {% endif %}
+          </td>
+          {% endfor %}
+          <td>
+            <div class="td-actions">
+              <a href="{{ url_for('sheet_edit', sheet_name=sheet_name, row_idx=row_excel) }}"
+                 class="btn btn-warning btn-sm" title="Modifier">✏️</a>
+              <button type="button" class="btn btn-danger btn-sm" title="Supprimer"
+                onclick="confirmDelete('{{ url_for('sheet_delete', sheet_name=sheet_name, row_idx=row_excel) }}')">🗑</button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card-body" style="text-align:center;padding:40px;color:#aaa;">
+    <p style="font-size:2rem">📭</p>
+    <p>Aucun enregistrement pour le moment.</p>
+    <a href="{{ url_for('sheet_new', sheet_name=sheet_name) }}" class="btn btn-success" style="margin-top:12px">
+      ＋ Ajouter le premier
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

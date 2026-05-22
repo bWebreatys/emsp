@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}EMSP – Gestion Formation{% endblock %}</title>
+<style>
+/* ── Reset & base ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #F0F2F5;
+  color: #1a1a2e;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────────── */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+  background: #1F3864;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar-brand {
+  background: #162a4f;
+  padding: 18px 16px 14px;
+  border-bottom: 2px solid #D4A017;
+}
+.sidebar-brand .logo { font-size: 1.25rem; font-weight: 700; letter-spacing: .5px; }
+.sidebar-brand .sub  { font-size: .75rem; color: #a8c4e0; margin-top: 3px; }
+
+.sidebar-section { padding: 10px 0 4px 16px; font-size: .7rem; color: #7ba7cc; text-transform: uppercase; letter-spacing: 1px; }
+
+.sidebar a {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 16px;
+  color: #c8dff0;
+  text-decoration: none;
+  font-size: .88rem;
+  transition: background .15s;
+  border-left: 3px solid transparent;
+}
+.sidebar a:hover       { background: #2e5090; color: #fff; border-left-color: #D4A017; }
+.sidebar a.active      { background: #2e5090; color: #fff; border-left-color: #D4A017; font-weight: 700; }
+.sidebar a .badge {
+  margin-left: auto;
+  background: #D4A017;
+  color: #1F3864;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: .7rem;
+  font-weight: 700;
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px 16px;
+  font-size: .72rem;
+  color: #5a7fa0;
+  border-top: 1px solid #2e4d7a;
+}
+
+/* ── Main content ─────────────────────────────────────────────────────── */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid #dde3ee;
+  padding: 14px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.topbar h1 { font-size: 1.15rem; font-weight: 700; color: #1F3864; }
+.topbar .breadcrumb { font-size: .8rem; color: #888; margin-top: 2px; }
+
+.content { padding: 24px 28px; flex: 1; }
+
+/* ── Flash messages ───────────────────────────────────────────────────── */
+.flash-list { list-style: none; margin-bottom: 16px; }
+.flash-list li {
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: .9rem;
+  font-weight: 500;
+}
+.flash-success { background: #E2EFDA; color: #375623; border-left: 4px solid #70AD47; }
+.flash-error   { background: #FFC7CE; color: #9C0006; border-left: 4px solid #C00000; }
+.flash-info    { background: #D9E1F2; color: #1F3864; border-left: 4px solid #2E75B6; }
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #dde3ee;
+  box-shadow: 0 1px 6px rgba(0,0,0,.05);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid #dde3ee;
+  background: #fafbfd;
+}
+.card-header h2 { font-size: 1rem; font-weight: 700; color: #1F3864; }
+.card-body { padding: 20px; }
+
+/* ── Tables ───────────────────────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+thead tr { background: #1F3864; color: #fff; }
+thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
+tbody tr:nth-child(even) { background: #f5f7fb; }
+tbody tr:hover { background: #EBF0FA; }
+tbody td { padding: 8px 12px; border-bottom: 1px solid #e9ecf3; vertical-align: middle; }
+.td-actions { white-space: nowrap; display: flex; gap: 6px; }
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 16px;
+  border-radius: 5px;
+  border: none; cursor: pointer;
+  font-size: .85rem; font-weight: 600;
+  text-decoration: none;
+  transition: filter .15s, transform .1s;
+}
+.btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-primary   { background: #1F3864; color: #fff; }
+.btn-success   { background: #70AD47; color: #fff; }
+.btn-warning   { background: #D4A017; color: #fff; }
+.btn-danger    { background: #C00000; color: #fff; }
+.btn-secondary { background: #6c757d; color: #fff; }
+.btn-sm { padding: 4px 10px; font-size: .78rem; }
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid currentColor;
+}
+.btn-outline.btn-primary { color: #1F3864; }
+
+/* ── Forms ────────────────────────────────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px 24px;
+}
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full-width { grid-column: 1 / -1; }
+
+.form-label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #333;
+}
+.form-label .required { color: #C00000; margin-left: 2px; }
+.form-label .added {
+  font-size: .7rem;
+  color: #CC0000;
+  font-weight: 400;
+  margin-left: 4px;
+  font-style: italic;
+}
+
+.form-control {
+  padding: 8px 12px;
+  border: 1.5px solid #c8d0e0;
+  border-radius: 5px;
+  font-size: .88rem;
+  color: #1a1a2e;
+  background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+}
+.form-control:focus {
+  outline: none;
+  border-color: #2E75B6;
+  box-shadow: 0 0 0 3px rgba(46,117,182,.12);
+}
+.form-control.spec   { border-left: 3px solid #1F3864; }
+.form-control.added  { border-left: 3px solid #CC0000; }
+select.form-control  { appearance: auto; }
+textarea.form-control { resize: vertical; min-height: 72px; }
+
+.form-hint { font-size: .75rem; color: #888; margin-top: 2px; }
+
+/* ── Section separator ────────────────────────────────────────────────── */
+.section-sep {
+  grid-column: 1 / -1;
+  border: none;
+  border-top: 2px dashed #e0e6f0;
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-sep span {
+  background: #fff;
+  padding: 0 10px;
+  font-size: .75rem;
+  color: #888;
+  white-space: nowrap;
+}
+
+/* ── Legend chips ─────────────────────────────────────────────────────── */
+.legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 16px; font-size: .8rem;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot  { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ── Stat cards (accueil) ─────────────────────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #dde3ee;
+  padding: 16px 18px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow .2s, transform .15s;
+  border-top: 4px solid var(--color, #1F3864);
+}
+.stat-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.1); transform: translateY(-2px); }
+.stat-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.stat-label { font-size: .78rem; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.stat-value { font-size: 1.8rem; font-weight: 700; color: #1F3864; margin-top: 4px; }
+.stat-sub   { font-size: .72rem; color: #aaa; margin-top: 2px; }
+
+/* ── Tag badges ───────────────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 12px;
+  font-size: .73rem;
+  font-weight: 600;
+}
+.tag-blue   { background: #D9E1F2; color: #1F3864; }
+.tag-green  { background: #E2EFDA; color: #375623; }
+.tag-orange { background: #FDEBD0; color: #7D4E00; }
+.tag-red    { background: #FFC7CE; color: #9C0006; }
+.tag-grey   { background: #E9ECEF; color: #495057; }
+.tag-purple { background: #EDE7F6; color: #4A148C; }
+
+/* ── Formules page ────────────────────────────────────────────────────── */
+.formula-block {
+  background: #F8F9FA;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+}
+.formula-block h4 { font-size: .92rem; font-weight: 700; color: #1F3864; margin-bottom: 8px; }
+.formula-code {
+  font-family: "Courier New", Courier, monospace;
+  background: #1F3864;
+  color: #D4E6F1;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: .82rem;
+  margin: 8px 0;
+  overflow-x: auto;
+}
+.formula-block .desc { font-size: .83rem; color: #555; margin-top: 6px; }
+.formula-block .cols-table { margin-top: 8px; font-size: .78rem; }
+.formula-block .cols-table td { padding: 2px 8px; }
+.formula-block .cols-table td:first-child { font-weight: 700; color: #2E75B6; }
+
+.nomen-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.nomen-table th { background: #1F3864; color: #fff; padding: 9px 14px; text-align: left; }
+.nomen-table td { padding: 8px 14px; border-bottom: 1px solid #e9ecf3; }
+.nomen-table tr:nth-child(even) td { background: #f5f7fb; }
+.code-chip { font-family: monospace; background: #EEF2FF; color: #3730A3; padding: 2px 7px; border-radius: 4px; font-size: .82rem; }
+
+/* ── Confirm modal ────────────────────────────────────────────────────── */
+.modal-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 1000;
+  align-items: center; justify-content: center;
+}
+.modal-backdrop.show { display: flex; }
+.modal-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 28px 32px;
+  max-width: 400px; width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,.2);
+}
+.modal-box h3 { margin-bottom: 10px; }
+.modal-box p  { font-size: .9rem; color: #555; margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ── Responsive tweaks ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">🎓 EMSP</div>
+      <div class="sub">Gestion de la Formation</div>
+    </div>
+    <div style="height:8px"></div>
+    <a href="{{ url_for('index') }}" class="{% if request.endpoint=='index' %}active{% endif %}">
+      🏠 Accueil
+    </a>
+    <div class="sidebar-section">Référentiels</div>
+    <a href="{{ url_for('sheet_view', sheet_name='PARAM_FORMATIONS') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='PARAM_FORMATIONS' %}active{% endif %}">
+      📚 Formations
+    </a>
+    <a href="{{ url_for('sheet_view', sheet_name='PARAM_SALLES') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='PARAM_SALLES' %}active{% endif %}">
+      🏫 Salles
+    </a>
+    <a href="{{ url_for('sheet_view', sheet_name='FORMATEURS_RH') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='FORMATEURS_RH' %}active{% endif %}">
+      👩‍🏫 Formateurs
+    </a>
+    <div class="sidebar-section">Activité</div>
+    <a href="{{ url_for('sheet_view', sheet_name='SESSIONS') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='SESSIONS' %}active{% endif %}">
+      📅 Sessions
+    </a>
+    <a href="{{ url_for('sheet_view', sheet_name='INTERVENTIONS') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='INTERVENTIONS' %}active{% endif %}">
+      🔗 Interventions
+    </a>
+    <a href="{{ url_for('sheet_view', sheet_name='RESERVATIONS') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='RESERVATIONS' %}active{% endif %}">
+      🗓 Réservations
+    </a>
+    <div class="sidebar-section">Finance</div>
+    <a href="{{ url_for('sheet_view', sheet_name='DEPENSES') }}"
+       class="{% if request.view_args and request.view_args.get('sheet_name')=='DEPENSES' %}active{% endif %}">
+      💶 Dépenses
+    </a>
+    <div class="sidebar-section">Documentation</div>
+    <a href="{{ url_for('formules') }}"
+       class="{% if request.endpoint=='formules' %}active{% endif %}">
+      📐 Formules &amp; Nomenclatures
+    </a>
+    <div class="sidebar-footer">100% local · Aucun accès réseau</div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar h1">{% block page_title %}Tableau de bord{% endblock %}</div>
+        <div class="breadcrumb">{% block breadcrumb %}EMSP{% endblock %}</div>
+      </div>
+      {% block topbar_actions %}{% endblock %}
+    </div>
+
+    <div class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="flash-list">
+            {% for cat, msg in messages %}
+              <li class="flash-{{ cat }}">{{ msg }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmation suppression -->
+<div class="modal-backdrop" id="deleteModal">
+  <div class="modal-box">
+    <h3>⚠️ Confirmer la suppression</h3>
+    <p>Cette ligne sera définitivement supprimée du fichier Excel. Cette action est irréversible.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="document.getElementById('deleteModal').classList.remove('show')">Annuler</button>
+      <form id="deleteForm" method="POST" style="display:inline">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function confirmDelete(formAction) {
+  document.getElementById('deleteForm').action = formAction;
+  document.getElementById('deleteModal').classList.add('show');
+}
+// Fermer modal en cliquant backdrop
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,10 @@
+emsp_app/
+├── app.py                  ← serveur Flask + toute la logique
+├── data.xlsx               ← votre fichier Excel (copie de travail)
+├── lancer_application.py   ← double-clic pour démarrer + ouvrir le navigateur
+└── templates/
+    ├── base.html           ← layout commun (sidebar, CSS intégral, modal)
+    ├── index.html          ← tableau de bord avec stats par onglet
+    ├── sheet_list.html     ← liste des enregistrements avec badges couleur
+    ├── sheet_form.html     ← formulaire ajout/modification
+    └── formules.html       ← page documentation formules & nomenclatures
