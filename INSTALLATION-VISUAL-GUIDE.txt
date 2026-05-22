@@ -1,0 +1,179 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                   INSTALLATION VISUAL GUIDE - EMSP & GMAO                  ║
+║                          Comores 22 mai 2026                              ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─ PRÉREQUIS ─────────────────────────────────────────────────────────────┐
+│                                                                           │
+│  ✅ Python 3.10.x (RECOMMANDÉ)      ou    ✅ Python 3.9.x, 3.11.x       │
+│  ❌ Python 2.7.x                           ❌ Python 3.7 ou moins       │
+│  ⚠️  Python 3.12+ (70% OK, tester)        ❌ Python 3.5-3.6             │
+│                                                                           │
+│  Vérifier : python --version                                             │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ ARCHITECTURE RÉSEAU ────────────────────────────────────────────────────┐
+│                                                                           │
+│  ÉTABLISSEMENT COMORES                                                    │
+│  ┌─────────────────────────────────────────────────────────┐            │
+│  │                                                           │            │
+│  │  [SERVEUR]                   [CLIENTS]                   │            │
+│  │  ┌──────────────┐     ┌──────────┬──────────┐           │            │
+│  │  │ Windows/Linux│     │    PC    │  Tablette│           │            │
+│  │  │ IP: 192.x.x │────→│  Web     │  Web     │           │            │
+│  │  │   :5000      │     │Browser   │ Browser  │           │            │
+│  │  │              │     │          │          │           │            │
+│  │  │ • Python 3.10│     │ • Just   │ • Just   │           │            │
+│  │  │ • Flask      │     │   HTTP   │   HTTP   │           │            │
+│  │  │ • EMSP.xlsx  │     │ • No     │ • No     │           │            │
+│  │  │ • GMAO.xlsx  │     │  Python  │  Python  │           │            │
+│  │  └──────────────┘     └──────────┴──────────┘           │            │
+│  │         │                      │                         │            │
+│  │         └──────────────────────┘                         │            │
+│  │              Réseau local                                │            │
+│  │         (WiFi ou Ethernet)                               │            │
+│  │                                                           │            │
+│  └─────────────────────────────────────────────────────────┘            │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ INSTALLATION EN 5 PHASES ──────────────────────────────────────────────┐
+│                                                                          │
+│  PHASE 1: VÉRIFIER PYTHON         [████░░░░░░░░░░░░░░]  5 min          │
+│  └─ python --version                                                    │
+│                                                                          │
+│  PHASE 2: TÉLÉCHARGER APP         [████████░░░░░░░░░░]  10 min         │
+│  └─ git clone / ZIP décompresser                                        │
+│                                                                          │
+│  PHASE 3: INSTALLER PACKAGES      [██████████████░░░░]  15 min         │
+│  └─ python -m venv venv                                                 │
+│  └─ pip install -r requirements.txt                                     │
+│                                                                          │
+│  PHASE 4: TESTER EN LOCAL         [██████████████████░]  10 min         │
+│  └─ python app.py                                                       │
+│  └─ Navigateur: http://127.0.0.1:5000                                   │
+│                                                                          │
+│  PHASE 5: CONFIGURER RÉSEAU       [██████████████████░]  5 min          │
+│  └─ Éditer app.py: host='0.0.0.0'                                       │
+│  └─ Clients: http://[IP]:5000                                           │
+│                                                                          │
+│  TOTAL ESTIMÉ: 45 MINUTES                                               │
+│                                                                          │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ DROITS D'ACCÈS ────────────────────────────────────────────────────────┐
+│                                                                           │
+│  SERVEUR (1 compte utilisateur "service")                                │
+│  ├─ ✅ Lecture sur app.py, templates, requirements.txt                   │
+│  ├─ ✅ Lecture/Écriture sur EMSP.xlsx, GMAO.xlsx (sauvegardes)          │
+│  ├─ ✅ Lecture/Écriture sur dossier venv (packages Python)              │
+│  ├─ ✅ Port 5000 libre (pas bloquer pare-feu)                            │
+│  └─ ✅ Utilisateur local, pas invité                                     │
+│                                                                           │
+│  CLIENTS (n'importe quel compte)                                         │
+│  ├─ ✅ Navigateur web (Firefox, Chrome, Edge)                            │
+│  ├─ ✅ Accès réseau vers IP serveur:5000                                 │
+│  ├─ ❌ Python (pas besoin)                                               │
+│  ├─ ❌ Droits administrateur (pas besoin)                                │
+│  └─ ❌ Accès fichiers serveur (pas besoin)                               │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ FIREWALL ──────────────────────────────────────────────────────────────┐
+│                                                                           │
+│  WINDOWS                                                                  │
+│  ├─ Windows Defender > Pare-feu > Autoriser une app                      │
+│  ├─ Chercher python.exe                                                  │
+│  └─ Cocher "Private network"                                             │
+│                                                                           │
+│  LINUX                                                                    │
+│  ├─ sudo ufw allow 5000/tcp                                              │
+│  └─ sudo ufw reload                                                      │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ TROUBLESHOOTING RAPIDE ────────────────────────────────────────────────┐
+│                                                                           │
+│  ❌ "python: command not found"                                           │
+│     └─ ✅ Réinstaller Python avec "Add Python to PATH"                   │
+│                                                                           │
+│  ❌ "ModuleNotFoundError: No module named 'flask'"                        │
+│     └─ ✅ pip install -r requirements.txt                                │
+│                                                                           │
+│  ❌ "Port 5000 already in use"                                            │
+│     └─ ✅ Changer port app.py ou fermer autre app                        │
+│                                                                           │
+│  ❌ Clients voir "Connection refused"                                     │
+│     └─ ✅ Modifier app.py: host='0.0.0.0'                                │
+│                                                                           │
+│  ❌ "Permission denied" (Linux)                                           │
+│     └─ ✅ sudo chown -R $USER:$USER /path/to/app                         │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ GITHUB REPOSITORIES ───────────────────────────────────────────────────┐
+│                                                                           │
+│  EMSP (École de Médecine)                                                │
+│  └─ https://github.com/bWebreatys/emsp                                   │
+│     ├─ README.md                     ← Commencer ici                      │
+│     ├─ PREREQUISITES.md              ← Détails complets                   │
+│     ├─ INSTALLATION-STEP-BY-STEP.md  ← Pas à pas                         │
+│     ├─ EMSP_v0.1.xlsx                ← Données                           │
+│     ├─ app.py                        ← Code                              │
+│     ├─ lancer_application.py         ← Script de lancement               │
+│     └─ requirements.txt               ← Dépendances                       │
+│                                                                           │
+│  GMAO (Gestion Maintenance)                                              │
+│  └─ https://github.com/bWebreatys/gmao                                   │
+│     ├─ README.md                     ← Commencer ici                      │
+│     ├─ PREREQUISITES.md              ← Détails complets                   │
+│     ├─ INSTALLATION-STEP-BY-STEP.md  ← Pas à pas                         │
+│     ├─ GMAO_v0.1.xlsx                ← Données                           │
+│     ├─ app.py                        ← Code                              │
+│     ├─ lancer_gmao.py                ← Script de lancement               │
+│     └─ requirements.txt               ← Dépendances                       │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+┌─ CHECKLIST AVANT MISSION (JUIN) ────────────────────────────────────────┐
+│                                                                           │
+│  PRÉ-INSTALLATION                                                         │
+│  ☐ Python 3.8-3.11 disponible                                            │
+│  ☐ Serveur Windows 10+ ou Linux identifié                                │
+│  ☐ Accès administrateur                                                  │
+│  ☐ Réseau local configuré                                                │
+│  ☐ Port 5000 pas bloqué                                                  │
+│                                                                           │
+│  INSTALLATION TESTÉE                                                      │
+│  ☐ App lancée et accessible                                              │
+│  ☐ Données de test créées                                                │
+│  ☐ Écrans testés par utilisateurs                                        │
+│  ☐ Sauvegarde Excel documentée                                           │
+│  ☐ IP/Port documentés pour l'équipe                                      │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║  📌 POINTS CLÉS À RETENIR                                                 ║
+║                                                                            ║
+║  1. Python 3.10.x est RECOMMANDÉ                                          ║
+║  2. Créer un "virtual environment" (venv) ISOLÉ                           ║
+║  3. Serveur tourne sur 1 compte, clients accèdent par navigateur          ║
+║  4. Réseau local fonctionnant = SUCCESS                                   ║
+║  5. Pas besoin Python sur les postes clients (juste navigateur)           ║
+║  6. Port 5000 DOIT être libre et autorisé par pare-feu                    │
+║  7. Sauvegardes Excel = MANUEL (à prévoir)                                ║
+║                                                                            ║
+║  CONTACT: contact@webcreatys.com                                          ║
+║  MISSION: Juin-Juillet 2026 aux Comores                                   ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
