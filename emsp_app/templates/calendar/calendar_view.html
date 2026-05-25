@@ -1,0 +1,764 @@
+{% extends "base.html" %}
+
+{% block title %}Calendrier & Réservations{% endblock %}
+
+{% block style %}
+<style>
+body {
+    background-color: #ffffff;
+}
+
+/* Layout 3 zones */
+.calendar-container {
+    display: flex;
+    height: calc(100vh - 100px);
+    gap: 0;
+}
+
+.zone-calendrier {
+    width: 40%;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+.zone-timeline {
+    width: 40%;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+.zone-details {
+    width: 20%;
+    padding: 20px;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+/* ==== ZONE CALENDRIER ==== */
+
+.calendrier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mois-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.mois-nav button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.mois-nav button:hover {
+    background: #2980b9;
+}
+
+.mois-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.calendrier-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.jour-header {
+    text-align: center;
+    font-weight: bold;
+    color: #7f8c8d;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.jour-cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid #ecf0f1;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 12px;
+    min-height: 60px;
+}
+
+.jour-cell:hover {
+    background: #ecf0f1;
+}
+
+.jour-cell.selected {
+    background: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+.jour-cell.today {
+    border: 2px solid #e74c3c;
+}
+
+.jour-cell.other-month {
+    color: #bdc3c7;
+    background: #f8f9fa;
+}
+
+.jour-cell .jour-num {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.jour-cell .jour-indicator {
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.jour-cell .jour-count {
+    font-size: 10px;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.calendrier-footer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.calendrier-footer button {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.calendrier-footer button:hover {
+    background: #7f8c8d;
+}
+
+.calendrier-footer button.active {
+    background: #3498db;
+}
+
+.filtres {
+    background: #ecf0f1;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.filtre-group {
+    margin-bottom: 12px;
+}
+
+.filtre-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.filtre-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* ==== ZONE TIMELINE ==== */
+
+.timeline-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 0;
+}
+
+.timeline-heure {
+    font-size: 11px;
+    font-weight: bold;
+    color: #7f8c8d;
+    padding: 8px;
+    border-bottom: 1px solid #ecf0f1;
+    text-align: right;
+    background: #f8f9fa;
+}
+
+.timeline-slots {
+    position: relative;
+    min-height: 60px;
+    border-bottom: 1px solid #ecf0f1;
+    padding: 5px;
+    background: #ffffff;
+}
+
+.timeline-libre {
+    font-size: 10px;
+    color: #95a5a6;
+    padding: 8px;
+    text-align: center;
+    background: #ecf0f1;
+}
+
+.reservation-boite {
+    position: relative;
+    margin-bottom: 3px;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+    font-size: 11px;
+    color: white;
+}
+
+.reservation-boite:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.reservation-boite .salle-code {
+    font-weight: bold;
+}
+
+.reservation-boite .formation {
+    font-size: 10px;
+    opacity: 0.9;
+}
+
+.reservation-boite .horaire {
+    font-size: 9px;
+    opacity: 0.8;
+}
+
+/* ==== ZONE DÉTAILS ==== */
+
+.details-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.details-tab {
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    color: #7f8c8d;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.details-tab:hover {
+    color: #3498db;
+}
+
+.details-tab.active {
+    color: #3498db;
+    border-bottom-color: #3498db;
+}
+
+.details-panel {
+    display: none;
+}
+
+.details-panel.active {
+    display: block;
+}
+
+.detail-section {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 13px;
+    color: #2c3e50;
+}
+
+.detail-value a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.detail-value a:hover {
+    text-decoration: underline;
+}
+
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detail-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    border: 1px solid #bdc3c7;
+    background: #ffffff;
+    color: #2c3e50;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.detail-btn:hover {
+    background: #ecf0f1;
+    border-color: #3498db;
+}
+
+.detail-statut {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+
+.detail-statut.confirmee {
+    background: #2ecc71;
+}
+
+.detail-statut.attente {
+    background: #f39c12;
+}
+
+.detail-statut.annulee {
+    background: #e74c3c;
+}
+
+.detail-statut.reportee {
+    background: #f1c40f;
+    color: #2c3e50;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #95a5a6;
+    text-align: center;
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .zone-calendrier { width: 35%; }
+    .zone-timeline { width: 50%; }
+    .zone-details { width: 15%; }
+}
+
+@media (max-width: 768px) {
+    .calendar-container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .zone-calendrier, .zone-timeline, .zone-details {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        height: auto;
+    }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="calendar-container">
+    
+    <!-- ZONE 1 : CALENDRIER MENSUEL -->
+    <div class="zone-calendrier">
+        <div class="calendrier-header">
+            <div class="mois-nav">
+                <button onclick="previousMonth()">◀ Mois</button>
+                <span class="mois-title" id="mois-title">{{ month_data.month_name }} {{ month_data.year }}</span>
+                <button onclick="nextMonth()">Mois ▶</button>
+            </div>
+        </div>
+        
+        <!-- Grille calendrier -->
+        <div class="calendrier-grid" id="calendrier-grid">
+            <!-- En-têtes jours semaine -->
+            <div class="jour-header">Lun</div>
+            <div class="jour-header">Mar</div>
+            <div class="jour-header">Mer</div>
+            <div class="jour-header">Jeu</div>
+            <div class="jour-header">Ven</div>
+            <div class="jour-header">Sam</div>
+            <div class="jour-header">Dim</div>
+            
+            <!-- Jours du mois -->
+            {% for week in month_data.weeks %}
+                {% for day in week %}
+                    {% if day %}
+                        <div class="jour-cell {% if day.is_today %}today{% endif %} {% if day.is_selected %}selected{% endif %}"
+                             onclick="selectDay('{{ day.full_date }}')">
+                            <span class="jour-num">{{ day.date }}</span>
+                            {% if day.has_reservations %}
+                                <span class="jour-indicator">✓</span>
+                                <span class="jour-count">{{ day.num_reservations }}</span>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="jour-cell other-month"></div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+        
+        <!-- Contrôles -->
+        <div class="calendrier-footer">
+            <button onclick="viewSemaine()" class="active">Vue Semaine</button>
+            <button onclick="viewJour()">Vue Jour</button>
+            <button onclick="viewAujourdhui()">Aujourd'hui</button>
+        </div>
+        
+        <!-- Filtres -->
+        <div class="filtres">
+            <div class="filtre-group">
+                <div class="filtre-label">Filtre Salle</div>
+                <select onchange="filterBySalle(this.value)">
+                    <option value="">TOUTES</option>
+                    {% for salle in filters.salles %}
+                        <option value="{{ salle.code }}">{{ salle.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filtre-group">
+                <div class="filtre-label">Filtre Statut</div>
+                <select onchange="filterByStatut(this.value)">
+                    <option value="">TOUS</option>
+                    {% for statut in filters.statuts %}
+                        <option value="{{ statut }}">{{ statut }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filtre-group">
+                <div class="filtre-label">Filtre Formation</div>
+                <select onchange="filterByFormation(this.value)">
+                    <option value="">TOUTES</option>
+                    {% for formation in filters.formations %}
+                        <option value="{{ formation.code }}">{{ formation.titre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ZONE 2 : TIMELINE JOURNALIÈRE -->
+    <div class="zone-timeline">
+        <div class="timeline-header" id="timeline-header">
+            {{ timeline_data.day_name }}
+        </div>
+        
+        <div class="timeline-grid" id="timeline-grid">
+            <!-- Générée par JS -->
+        </div>
+    </div>
+    
+    <!-- ZONE 3 : DÉTAILS CONTEXTE -->
+    <div class="zone-details">
+        <div class="details-tabs">
+            <button class="details-tab active" onclick="switchTab('reservation')">Réservation</button>
+            <button class="details-tab" onclick="switchTab('salle')">Salle</button>
+        </div>
+        
+        <!-- Panel Réservation -->
+        <div id="panel-reservation" class="details-panel active">
+            <div class="empty-state">
+                <div class="empty-state-icon">📋</div>
+                <div>Cliquez sur une réservation</div>
+            </div>
+        </div>
+        
+        <!-- Panel Salle -->
+        <div id="panel-salle" class="details-panel">
+            <div class="empty-state">
+                <div class="empty-state-icon">🏛️</div>
+                <div>Cliquez sur une salle</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// État global
+let currentDate = new Date('{{ selected_date }}');
+let currentSalle = '{{ salle_code or "" }}';
+let timelineMode = 'jour';  // 'jour' ou 'salle'
+
+// Sélectionner un jour
+function selectDay(dateStr) {
+    currentDate = new Date(dateStr);
+    loadTimeline(dateStr);
+    updateCalendarUI();
+}
+
+// Charger timeline pour un jour
+function loadTimeline(dateStr) {
+    fetch(`/calendar/api/reservations/${dateStr}?salle=${currentSalle}`)
+        .then(r => r.json())
+        .then(data => {
+            renderTimeline(data);
+            document.getElementById('timeline-header').textContent = data.day_name;
+        });
+}
+
+// Afficher timeline
+function renderTimeline(data) {
+    const grid = document.getElementById('timeline-grid');
+    grid.innerHTML = '';
+    
+    const heures = document.createElement('div');
+    heures.className = 'timeline-grid';
+    
+    data.timeline.forEach(slot => {
+        // Colonne heure
+        const heureDiv = document.createElement('div');
+        heureDiv.className = 'timeline-heure';
+        heureDiv.textContent = slot.heure;
+        heures.appendChild(heureDiv);
+        
+        // Colonne réservations
+        const slotsDiv = document.createElement('div');
+        slotsDiv.className = 'timeline-slots';
+        
+        if (slot.is_free) {
+            const libre = document.createElement('div');
+            libre.className = 'timeline-libre';
+            libre.textContent = '░░░░░ LIBRE';
+            slotsDiv.appendChild(libre);
+        } else {
+            slot.boites.forEach(boite => {
+                const boiteDiv = document.createElement('div');
+                boiteDiv.className = 'reservation-boite';
+                boiteDiv.style.backgroundColor = boite.color;
+                boiteDiv.style.borderColor = boite.statut_color;
+                boiteDiv.innerHTML = `
+                    <div class="salle-code" onclick="showReservationDetail('${boite.id}')">${boite.salle_code}</div>
+                    <div class="formation">${boite.formation}</div>
+                    <div class="horaire">${boite.heure_debut} - ${boite.heure_fin}</div>
+                `;
+                boiteDiv.style.minHeight = boite.block_height + 'px';
+                slotsDiv.appendChild(boiteDiv);
+            });
+        }
+        
+        heures.appendChild(slotsDiv);
+    });
+    
+    grid.appendChild(heures);
+}
+
+// Afficher détails réservation
+function showReservationDetail(resId) {
+    fetch(`/calendar/api/reservation/${resId}`)
+        .then(r => r.json())
+        .then(data => {
+            const panel = document.getElementById('panel-reservation');
+            panel.innerHTML = generateReservationPanel(data);
+            switchTab('reservation');
+        });
+}
+
+// Générer panneau détails réservation
+function generateReservationPanel(res) {
+    return `
+        <div class="detail-section">
+            <div class="detail-label">Salle</div>
+            <div class="detail-value">
+                <strong>${res.salle_nom}</strong><br>
+                📍 ${res.localisation}<br>
+                <a href="#" onclick="showSalleDetail('${res.salle_code}')">Voir toutes réservations salle</a>
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">Formation</div>
+            <div class="detail-value">
+                <a href="#">${res.formation}</a>
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">Horaire</div>
+            <div class="detail-value">
+                ${res.date}<br>
+                <strong>${res.heure_debut} - ${res.heure_fin}</strong>
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">Statut</div>
+            <div class="detail-value">
+                <span class="detail-statut ${res.statut.toLowerCase()}">${res.statut}</span><br>
+                ${res.participants} participants
+            </div>
+        </div>
+        
+        <div class="detail-section detail-actions">
+            <button class="detail-btn">Modifier</button>
+            <button class="detail-btn">Annuler</button>
+            <button class="detail-btn">Imprimer</button>
+        </div>
+    `;
+}
+
+// Afficher détails salle
+function showSalleDetail(salleCode) {
+    fetch(`/calendar/api/salle/${salleCode}`)
+        .then(r => r.json())
+        .then(data => {
+            const panel = document.getElementById('panel-salle');
+            panel.innerHTML = generateSallePanel(data);
+            switchTab('salle');
+        });
+}
+
+// Générer panneau détails salle
+function generateSallePanel(salle) {
+    return `
+        <div class="detail-section">
+            <div class="detail-label">Salle</div>
+            <div class="detail-value">
+                <strong>${salle.nom}</strong><br>
+                ${salle.type}<br>
+                📍 ${salle.localisation}
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">Capacité</div>
+            <div class="detail-value">${salle.capacite} places</div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">Équipements</div>
+            <div class="detail-value">
+                ${salle.equipements.map(e => `✓ ${e}`).join('<br>')}
+            </div>
+        </div>
+        
+        <div class="detail-section">
+            <div class="detail-label">Responsable</div>
+            <div class="detail-value">${salle.responsable}</div>
+        </div>
+        
+        <div class="detail-section detail-actions">
+            <button class="detail-btn">Ajouter réservation</button>
+            <button class="detail-btn">Voir tous réservations</button>
+        </div>
+    `;
+}
+
+// Switch tab
+function switchTab(tab) {
+    document.querySelectorAll('.details-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.details-panel').forEach(p => p.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(`panel-${tab}`).classList.add('active');
+}
+
+// Filtres
+function filterBySalle(salleCode) {
+    currentSalle = salleCode;
+    loadTimeline(currentDate.toISOString().split('T')[0]);
+}
+
+function filterByStatut(statut) {
+    // TODO: Implémenter filtre statut
+}
+
+function filterByFormation(formation) {
+    // TODO: Implémenter filtre formation
+}
+
+// Navigation calendrier
+function previousMonth() {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    location.href = `/calendar/jour/${currentDate.toISOString().split('T')[0]}`;
+}
+
+function nextMonth() {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    location.href = `/calendar/jour/${currentDate.toISOString().split('T')[0]}`;
+}
+
+function viewSemaine() {
+    // TODO: Implémenter vue semaine
+}
+
+function viewJour() {
+    // TODO: Implémenter vue jour
+}
+
+function viewAujourdhui() {
+    const today = new Date().toISOString().split('T')[0];
+    location.href = `/calendar/jour/${today}`;
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+    loadTimeline('{{ selected_date }}');
+});
+
+</script>
+
+{% endblock %}
