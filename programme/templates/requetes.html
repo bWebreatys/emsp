@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; {{ info.libelle }}</div>
+<div class="page-head">
+  <i class="ti ti-zoom-question ic"></i>
+  <div>
+    <h1>Requetes &amp; analyses</h1>
+    <div class="sub">Interroger les donnees comme dans Excel — filtres, tri, croisements — et exporter chaque selection. Lecture seule.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Requetes <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p><b>Quand utiliser les requetes ?</b> Chaque ecran de donnees a deja sa <b>recherche</b>, ses <b>filtres par colonne</b> et son <b>export Excel</b> pour les cas simples. Reservez &laquo; Requetes &amp; analyses &raquo; aux <b>croisements multi-onglets</b> et aux <b>vues metier</b> enregistrees.</p>
+    <p>L'<b>explorateur</b> ouvre n'importe quelle table : on filtre (contient, egal, &gt;, &lt;, non vide&hellip;), on trie, on choisit les colonnes. Les <b>vues metier</b> repondent directement aux questions recurrentes (parfois en croisant plusieurs tables). Chaque resultat se <b>telecharge en Excel</b> ou s'imprime. Tout est en <b>lecture seule</b> : aucune donnee n'est modifiee.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div class="cards">
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-table-options"></i></div>
+      <div><div class="num">OUTIL</div><h2>Explorateur de tables</h2></div></div>
+    <div class="intro">Choisir une table, poser des filtres multicriteres, trier, selectionner les colonnes, puis exporter.</div>
+    <form method="get" action="{{ url_for('requetes_explorer') }}" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Table</label>
+        <select name="onglet">{% for t in tables %}<option value="{{ t.onglet }}">{{ t.libelle }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-arrow-right"></i> Ouvrir l'explorateur</button></div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-layout-grid"></i></div>
+      <div><div class="num">OUTIL</div><h2>Tableau croise (pivot)</h2></div></div>
+    <div class="intro">Croiser deux dimensions et une mesure (Nombre, Somme, Moyenne) — facon tableau croise dynamique.</div>
+    <a class="btn-action" style="margin-top:8px;display:inline-flex;align-items:center;gap:6px" href="{{ url_for('requetes_pivot') }}"><i class="ti ti-arrow-right"></i> Ouvrir le pivot</a>
+  </div>
+
+  {% for v in vues %}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti {{ v.icone }}"></i></div>
+      <div><div class="num">VUE METIER</div><h2>{{ v.libelle }}</h2></div></div>
+    <div class="intro">{{ v.description }}</div>
+    <a class="btn-action" style="margin-top:8px;display:inline-flex;align-items:center;gap:6px" href="{{ url_for('requetes_vue', vid=v.id) }}"><i class="ti ti-arrow-right"></i> Ouvrir</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

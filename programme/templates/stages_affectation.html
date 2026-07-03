@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Stages — affectation</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-map-pin i"></i><h3>Affecter une classe à un lieu de stage</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('stages_affectation') }}">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:170px">
+            <option value="">— choisir —</option>
+            {% for o in opt_filieres %}<option value="{{ o }}" {{ 'selected' if o==filtres.filiere else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for o in opt_niveaux %}<option value="{{ o }}" {{ 'selected' if o==filtres.niveau else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Année</label>
+          <select name="annee" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for o in opt_annees %}<option value="{{ o }}" {{ 'selected' if o==filtres.annee else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Séance (1-6)</label>
+          <input type="text" name="seance" value="{{ filtres.seance }}" style="width:8ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Session</label>
+          <select name="session" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            {% for o in ['Normale', 'Rattrapage'] %}<option value="{{ o }}" {{ 'selected' if o==filtres.session else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-eye"></i> Afficher</button>
+        {% if donnees %}
+        <a class="btn-action" style="margin-top:0" target="_blank"
+           href="{{ url_for('stages_affectation_imprimer', filiere=filtres.filiere, niveau=filtres.niveau, annee=filtres.annee, seance=filtres.seance, session=filtres.session) }}">
+          <i class="ti ti-printer"></i> Imprimer</a>
+        {% endif %}
+      </div>
+    </form>
+    <p style="margin:12px 0 0;color:var(--gris);font-size:12px"><i class="ti ti-info-circle"></i> Choisissez la classe, la séance et la session, puis cochez les élèves et affectez-les à un lieu. L'affectation respecte le quota de chaque lieu (dépassement possible avec signalement). En session Rattrapage, seuls les élèves ayant un stage en session Normale sur cette séance sont proposés ; la ligne Rattrapage coexiste avec la Normale. Les notes, dates et fiches retour existantes sont conservées.</p>
+  </div>
+</div>
+
+{% if donnees %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-dashboard i"></i><h3>Synthèse — {{ filtres.filiere }} {{ filtres.niveau }}, séance {{ filtres.seance }} ({{ donnees.session }})</h3></div>
+  <div class="pb">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      {% set cartes = [
+        ('Effectif', donnees.stats.effectif, 'ti-users'),
+        ('Affectés', donnees.stats.affectes, 'ti-map-pin-check'),
+        ('Non affectés', donnees.stats.non_affectes, 'ti-map-pin-off'),
+        ('Capacité (lieux)', donnees.stats.capacite, 'ti-building-hospital') ] %}
+      {% for lib, val, ico in cartes %}
+      <div style="flex:1 1 160px;border:1px solid var(--bord);border-radius:10px;padding:12px 14px;background:var(--bleu-pale)">
+        <div style="color:var(--gris);font-size:12px"><i class="ti {{ ico }}"></i> {{ lib }}</div>
+        <div style="font-size:24px;font-weight:700;color:var(--bleu)">{{ val }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-building-hospital i"></i><h3>Lieux de stage du niveau ({{ donnees.lieux|length }})</h3></div>
+  <div class="pb">
+    {% if donnees.lieux %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Lieu</th><th>Commune</th><th>Période de disponibilité</th><th style="text-align:right">Quota</th><th style="text-align:right">Occupé</th><th style="text-align:right">Restant</th></tr></thead>
+        <tbody>
+        {% for l in donnees.lieux %}
+          <tr><td>{{ l.lib }}</td><td>{{ l.commune or '—' }}</td><td>{{ l.periode or '—' }}</td>
+              <td style="text-align:right">{{ l.quota }}</td>
+              <td style="text-align:right">{{ l.occupe }}</td>
+              <td style="text-align:right;{{ 'color:var(--rouge);font-weight:700' if l.restant==0 else '' }}">{{ l.restant }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}<p style="color:var(--gris);font-size:14px;margin:0">Aucun lieu de stage pour ce niveau (S2_Lieux_stage).</p>{% endif %}
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-list-check i"></i><h3>Affecter les élèves cochés</h3></div>
+  <div class="pb">
+    {% if donnees.roster %}
+    <form method="post" action="{{ url_for('stages_affectation_groupe') }}"
+          onsubmit="return confirm('Affecter les élèves cochés au lieu choisi ?');">
+      <input type="hidden" name="filiere" value="{{ filtres.filiere }}">
+      <input type="hidden" name="niveau" value="{{ filtres.niveau }}">
+      <input type="hidden" name="annee" value="{{ filtres.annee }}">
+      <input type="hidden" name="seance" value="{{ filtres.seance }}">
+      <input type="hidden" name="session" value="{{ donnees.session }}">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Lieu de stage</label>
+          <select name="lieu" required style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:260px">
+            <option value="">— choisir —</option>
+            {% for l in donnees.lieux %}<option value="{{ l.lib }}">{{ l.lib }} (restant : {{ l.restant }})</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Date de début</label>
+          <input type="text" name="date_debut" placeholder="JJ/MM/AAAA" required style="width:13ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Date de fin</label>
+          <input type="text" name="date_fin" placeholder="JJ/MM/AAAA" required style="width:13ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:6px">
+          <input type="checkbox" name="depassement" value="1">
+          Autoriser le dépassement de quota
+        </label>
+        <button type="submit" class="btn-action" style="margin-top:0;background:#157347"><i class="ti ti-map-pin-plus"></i> Affecter les cochés</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr>
+            <th style="width:36px"><input type="checkbox" onclick="for(var c of document.querySelectorAll('input[name=matricules]'))c.checked=this.checked"></th>
+            <th>Matricule</th><th>Nom</th><th>Prénom</th><th>Affectation actuelle</th>
+          </tr></thead>
+          <tbody>
+          {% for e in donnees.roster %}
+            <tr>
+              <td style="text-align:center"><input type="checkbox" name="matricules" value="{{ e.matricule }}"></td>
+              <td>{{ e.matricule }}</td><td>{{ e.nom or '—' }}</td><td>{{ e.prenom or '—' }}</td>
+              <td style="font-size:13px">
+                {% if e.affecte %}<span style="color:var(--bleu)"><i class="ti ti-map-pin-check"></i> {{ e.lieu_actuel }}</span>
+                {% else %}<span style="color:var(--gris)">non affecté</span>{% endif %}
+                {% if donnees.session=='Rattrapage' and e.normal_lieu %}<span style="color:var(--gris);font-size:12px"> · normal : {{ e.normal_lieu }}</span>{% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </form>
+    {% else %}<p style="color:var(--gris);font-size:14px;margin:0">Aucun élève pour cette sélection{% if donnees.session=='Rattrapage' %} (en session Rattrapage, seuls les élèves ayant un stage Normal sur cette séance sont listés){% endif %}.</p>{% endif %}
+  </div>
+</div>
+
+{% if donnees.sections %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-users-group i"></i><h3>Affectations en place ({{ donnees.session }})</h3></div>
+  <div class="pb">
+    {% for s in donnees.sections %}
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;color:var(--bleu);margin-bottom:4px"><i class="ti ti-map-pin"></i> {{ s.lieu }} — {{ s.eleves|length }} élève(s)</div>
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr><th>Matricule</th><th>Nom</th><th>Prénom</th><th>Début</th><th>Fin</th></tr></thead>
+          <tbody>
+          {% for m in s.eleves %}<tr><td>{{ m.matricule }}</td><td>{{ m.nom or '—' }}</td><td>{{ m.prenom or '—' }}</td><td>{{ m.debut or '—' }}</td><td>{{ m.fin or '—' }}</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+DEPOSEZ ICI le Python "embeddable" officiel (une seule fois) :
+
+    python-3.12.10-embed-amd64.zip
+
+Telechargement (depuis une machine connectee) :
+    https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+
+- Ne renommez pas le fichier.
+- Ne le decompressez pas : laissez le .zip tel quel dans ce dossier.
+- C'est le SEUL element a recuperer ; tout le reste du socle est deja fourni.
+
+Une fois le zip depose ici, lancez :  socle\1_Installer_le_socle.bat

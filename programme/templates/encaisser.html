@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('etudiant', matricule=fiche.matricule) }}">Fiche étudiant</a> &rsaquo; Encaisser un droit d'inscription</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-receipt i"></i><h3>Encaisser un droit d'inscription — {{ fiche.nom_complet }}</h3></div>
+  <div class="pb">
+    <table class="fiche-tbl" style="margin-bottom:14px">
+      <tr><td class="fiche-lib">Matricule</td><td class="fiche-val">{{ fiche.matricule }}</td></tr>
+      <tr><td class="fiche-lib">Niveau</td><td class="fiche-val">{{ droits.niveau or '—' }}</td></tr>
+      <tr><td class="fiche-lib">Poste budgétaire</td><td class="fiche-val">{{ droits.poste_complet or '—' }}</td></tr>
+      <tr><td class="fiche-lib">Dû / Payé / Reste dû</td><td class="fiche-val">
+        {{ droits.tarif_fmt }} / {{ droits.paye_fmt }} / <b>{{ droits.reste_fmt }}</b> KMF</td></tr>
+    </table>
+
+    {% if not droits.tarif_defini %}
+    <p style="margin:0;color:var(--rouge)"><i class="ti ti-alert-triangle"></i>
+      Tarif non défini pour le niveau « {{ droits.niveau or '—' }} ». Renseignez-le dans
+      <a href="{{ url_for('module', onglet='P0_Parametres') }}">Paramètres</a> avant d'encaisser.</p>
+    {% else %}
+    <form method="post" action="{{ url_for('etudiant_encaisser', matricule=fiche.matricule) }}">
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div class="saisie-champ"><label>Montant (KMF)</label>
+          <input type="number" name="montant" min="1" step="1"
+                 value="{{ droits.reste if droits.reste > 0 else droits.tarif }}" required
+                 style="width:16ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px"></div>
+        <div class="saisie-champ"><label>Année académique</label>
+          <select name="annee" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            {% for a in annees %}<option value="{{ a }}" {{ 'selected' if a==droits.annee else '' }}>{{ a }}</option>{% endfor %}
+            {% if droits.annee and droits.annee not in annees %}<option value="{{ droits.annee }}" selected>{{ droits.annee }}</option>{% endif %}
+          </select></div>
+        <div class="saisie-champ"><label>Compte / caisse <span style="color:var(--rouge)">*</span></label>
+          <select name="compte" required style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for c in comptes %}<option value="{{ c.nom }}">{{ c.nom }}</option>{% endfor %}
+          </select></div>
+        <div class="saisie-champ"><label>Mode de paiement <span style="color:var(--rouge)">*</span></label>
+          <select name="mode" required style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for m in modes %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+          </select></div>
+        <div class="saisie-champ"><label>Référence / N° pièce</label>
+          <input type="text" name="reference"
+                 style="width:18ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px"></div>
+      </div>
+      <p style="font-size:13px;color:var(--gris);margin:10px 0 14px">
+        La catégorie comptable est laissée vide : la comptabilité la complétera dans la trésorerie.
+        Le sens (Recette) et le poste {{ droits.poste_code }} sont posés automatiquement.</p>
+      <div style="display:flex;gap:10px">
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-device-floppy"></i> Enregistrer l'encaissement</button>
+        <a class="btn-action" style="margin-top:0;background:var(--bleu-pale);color:var(--texte)"
+           href="{{ url_for('etudiant', matricule=fiche.matricule) }}"><i class="ti ti-x"></i> Annuler</a>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.fiche-tbl{border-collapse:collapse;width:100%}
+.fiche-tbl td{padding:6px 8px;border-bottom:1px solid var(--bord);font-size:14px;vertical-align:top}
+.fiche-lib{color:var(--gris);width:190px;font-weight:600}
+.fiche-val{color:var(--texte)}
+.saisie-champ{display:flex;flex-direction:column;gap:4px}
+.saisie-champ label{font-weight:600;font-size:13px;color:var(--texte)}
+</style>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; <a href="{{ url_for('requetes') }}">Requetes</a> &rsaquo; {{ spec.libelle }}</div>
+<div class="page-head">
+  <i class="ti {{ spec.icone }} ic"></i>
+  <div>
+    <h1>{{ spec.libelle }}</h1>
+    <div class="sub">{{ res.sous_titre }}</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+<form method="get" action="{{ url_for('requetes_vue', vid=vid) }}">
+<div class="panel">
+  <div class="ph"><i class="ti ti-adjustments i"></i><h3>Criteres</h3></div>
+  <div class="pb">
+    <div class="saisie-grid">
+      {% if vid == 'equip_loc' %}
+        <div class="saisie-champ"><label>Salle</label><select name="salle"><option value="">Toutes</option>{% for s in options.salles %}<option {{ 'selected' if args.get('salle')==s else '' }}>{{ s }}</option>{% endfor %}</select></div>
+        <div class="saisie-champ"><label>Bailleur</label><select name="bailleur"><option value="">Tous</option>{% for b in options.bailleurs %}<option {{ 'selected' if args.get('bailleur')==b else '' }}>{{ b }}</option>{% endfor %}</select></div>
+        <div class="saisie-champ"><label>Categorie</label><select name="categorie"><option value="">Toutes</option>{% for c in options.categories %}<option {{ 'selected' if args.get('categorie')==c else '' }}>{{ c }}</option>{% endfor %}</select></div>
+      {% elif vid == 'equip_bailleur' %}
+        <div class="saisie-champ"><label>Bailleur</label><select name="bailleur"><option value="">Tous</option>{% for b in options.bailleurs %}<option {{ 'selected' if args.get('bailleur')==b else '' }}>{{ b }}</option>{% endfor %}</select></div>
+      {% elif vid == 'salle_occupation' %}
+        <div class="saisie-champ"><label>Salle</label><select name="salle"><option value="">Toutes</option>{% for s in options.salles %}<option {{ 'selected' if args.get('salle')==s else '' }}>{{ s }}</option>{% endfor %}</select></div>
+      {% elif vid == 'ens_ecart' %}
+        <div class="saisie-champ"><label>Du mois</label><select name="mois_debut"><option value="">Debut</option>{% for m in options.mois %}<option {{ 'selected' if args.get('mois_debut')==m else '' }}>{{ m }}</option>{% endfor %}</select></div>
+        <div class="saisie-champ"><label>Au mois</label><select name="mois_fin"><option value="">Fin</option>{% for m in options.mois %}<option {{ 'selected' if args.get('mois_fin')==m else '' }}>{{ m }}</option>{% endfor %}</select></div>
+      {% elif vid == 'absences' %}
+        <div class="saisie-champ"><label>Etudiant</label><select name="matricule"><option value="">Tous</option>{% for e in options.etudiants %}<option value="{{ e.matricule }}" {{ 'selected' if args.get('matricule')==e.matricule else '' }}>{{ e.libelle }}</option>{% endfor %}</select></div>
+        <div class="saisie-champ"><label>Origine</label><select name="origine"><option value="">Tout</option><option value="cours" {{ 'selected' if args.get('origine')=='cours' else '' }}>Cours seulement</option><option value="stage" {{ 'selected' if args.get('origine')=='stage' else '' }}>Stage seulement</option></select></div>
+      {% endif %}
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-search"></i> Appliquer</button></div>
+    </div>
+    <div class="saisie-actions">
+      <button class="btn-action" type="submit" name="export" value="xlsx" style="background:var(--vert,#2e7d32)"><i class="ti ti-file-spreadsheet"></i> Exporter Excel</button>
+      <span class="saisie-note">{{ res.nb }} ligne(s)</span>
+    </div>
+  </div>
+</div>
+</form>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-table i"></i><h3>{{ res.titre }} &mdash; {{ res.nb }} ligne(s)</h3></div>
+  <div class="pb">
+    {% if res.lignes %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr>{% for c in res.colonnes %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+        <tbody>{% for lig in res.lignes %}<tr>{% for v in lig %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide"><i class="ti ti-database-off i"></i> Aucune ligne pour ces criteres.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

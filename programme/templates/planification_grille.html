@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; {{ info.libelle }}</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti {{ info.icone }} i"></i><h3>Grille hebdomadaire d'une classe</h3></div>
+  <div class="pb">
+    <p style="margin:0 0 12px;color:var(--gris);font-size:13px">Emploi du temps hebdomadaire récurrent (gabarit) par classe. On pose chaque matière dans un créneau et un jour, avec sa salle, son enseignant (ou un n° de professeur) et son volume horaire programmé. Le compteur compare les <b>heures placées</b> aux <b>heures dues</b> de la maquette (R1). Les volumes dus se consultent sur « Planification — volumes par classe ».</p>
+    <form method="get" action="{{ url_for('planification_grille') }}">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:180px">
+            <option value="">— choisir —</option>
+            {% for o in vopts.filieres %}<option value="{{ o }}" {{ 'selected' if o==filtres.filiere else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for o in vopts.niveaux %}<option value="{{ o }}" {{ 'selected' if o==filtres.niveau else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Semestre</label>
+          <select name="semestre" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">tous</option>
+            {% for o in vopts.semestres %}<option value="{{ o }}" {{ 'selected' if o==filtres.semestre else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Section</label>
+          <input type="text" name="section" value="{{ filtres.section }}" placeholder="(option)" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:110px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Année</label>
+          <input type="text" name="annee" value="{{ filtres.annee }}" placeholder="(option)" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:120px">
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-eye"></i> Afficher</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if data %}
+{% if data.conflits %}
+<div class="panel" style="border-left:4px solid var(--rouge)">
+  <div class="pb" style="color:var(--rouge)"><i class="ti ti-alert-triangle"></i> <b>Conflits détectés :</b>
+    <ul style="margin:6px 0 0">{% for c in data.conflits %}<li>{{ c }}</li>{% endfor %}</ul>
+  </div>
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <span style="display:flex;align-items:center;gap:8px"><i class="ti ti-calendar-week i"></i><h3 style="margin:0">{{ filtres.filiere }} {{ filtres.niveau }}{% if filtres.section %} / {{ filtres.section }}{% endif %}{% if filtres.semestre %} — S{{ filtres.semestre }}{% endif %} : {{ data.seances|length }} séance(s)</h3></span>
+    {% if data.creneaux %}<a class="btn-action" style="margin-top:0;text-decoration:none" target="_blank" href="{{ url_for('planification_grille_imprimer', **filtres) }}"><i class="ti ti-printer"></i> Imprimer la grille</a>{% endif %}
+  </div>
+  <div class="pb">
+    {% if data.creneaux %}
+    <div class="tbl-wrap">
+      <table class="data" style="table-layout:fixed">
+        <thead><tr><th style="width:90px">Créneau</th>{% for j in data.jours %}<th>{{ j }}</th>{% endfor %}</tr></thead>
+        <tbody>
+        {% for cr in data.creneaux %}
+          <tr>
+            <td style="font-weight:600;color:var(--bleu)">{{ cr[0] }}<br>{{ cr[1] }}</td>
+            {% for j in data.jours %}
+            <td style="vertical-align:top">
+              {% for s in data.grille[cr][j] if data.grille[cr] and j in data.grille[cr] %}
+              <div style="background:var(--bleu-pale);border:1px solid var(--bord);border-radius:6px;padding:4px 6px;margin-bottom:4px;font-size:12px">
+                <b>{{ s.matiere or '—' }}</b><br>
+                <span style="color:var(--gris)">{{ s.salle or '—' }} · {{ s.enseignant or '—' }}{% if s.vol %} · {{ '%g'|format(s.vol) }}h{% endif %}</span>
+                {% if peut_ecrire %}
+                <form method="post" action="{{ url_for('planification_grille_supprimer') }}" style="display:inline" onsubmit="return confirm('Supprimer cette séance ?')">
+                  <input type="hidden" name="sid" value="{{ s.id }}">
+                  {% for k,v in filtres.items() %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+                  <button type="submit" title="Supprimer" style="border:0;background:none;color:var(--rouge);cursor:pointer;padding:0;font-size:12px"><i class="ti ti-trash"></i></button>
+                </form>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0 0 4px">Aucune séance placée pour cette classe. Ajoutez-en une ci-dessous.</p>
+    {% endif %}
+    <div style="border-top:2px solid var(--bleu);margin-top:10px;padding-top:8px;text-align:right;font-weight:700;color:var(--bleu)">
+      Placé : {{ '%g'|format(data.total_place) }} h &nbsp;·&nbsp; Dû : {{ '%g'|format(data.total_dues) }} h &nbsp;·&nbsp;
+      <span style="color:{{ 'var(--rouge)' if data.reste_total < 0 else 'var(--bleu)' }}">Reste à placer : {{ '%g'|format(data.reste_total) }} h</span>
+    </div>
+  </div>
+</div>
+
+{% if peut_ecrire %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-plus i"></i><h3>Ajouter une séance</h3></div>
+  <div class="pb">
+    <form method="post" action="{{ url_for('planification_grille_ajouter') }}">
+      {% for k,v in filtres.items() %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+      <div style="display:flex;gap:10px 14px;flex-wrap:wrap;align-items:flex-end">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Matière</label>
+          <input list="mats" name="matiere" required style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px;min-width:230px">
+          <datalist id="mats">{% for m in data.options.matieres %}<option value="{{ m }}">{% endfor %}</datalist>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Jour</label>
+          <select name="jour" style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px">
+            {% for j in data.options.jours %}<option value="{{ j }}">{{ j }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Début</label>
+          <input type="time" name="debut" required style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Fin</label>
+          <input type="time" name="fin" required style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Salle</label>
+          <select name="salle" style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px">
+            <option value="">—</option>
+            {% for s in data.options.salles %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Enseignant / n°</label>
+          <input list="ens" name="enseignant" placeholder="Prof 1, …" style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px;min-width:160px">
+          <datalist id="ens">{% for e in data.options.enseignants %}<option value="{{ e }}">{% endfor %}</datalist>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <label style="font-weight:600;font-size:12px">Vol. h prog.</label>
+          <input type="number" name="vol_prog" min="0" step="0.5" value="0" style="padding:6px 8px;border:1px solid var(--bord);border-radius:8px;width:90px">
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-plus"></i> Ajouter</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-list-numbers i"></i><h3>Compteur d'heures par matière</h3></div>
+  <div class="pb">
+    {% if data.compteur %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Matière</th><th style="text-align:right">Placé (h)</th><th style="text-align:right">Dû (h)</th><th style="text-align:right">Reste (h)</th></tr></thead>
+        <tbody>
+        {% for c in data.compteur %}
+          <tr>
+            <td>{{ c.matiere }}</td>
+            <td style="text-align:right">{{ '%g'|format(c.place) }}</td>
+            <td style="text-align:right">{{ '%g'|format(c.dues) if c.dues is not none else '—' }}</td>
+            <td style="text-align:right;{{ 'color:var(--rouge);font-weight:600' if c.reste is not none and c.reste < 0 else '' }}">{{ '%g'|format(c.reste) if c.reste is not none else '—' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--gris);font-size:12px;margin:8px 0 0">« Reste » = heures dues (maquette) − heures placées. Une valeur négative signale un dépassement ; « — » indique une matière non rattachée à la maquette.</p>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucune matière placée pour l'instant.</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

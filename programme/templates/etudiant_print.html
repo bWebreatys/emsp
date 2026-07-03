@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  .doc-page.paysage { width: 297mm; }
+  .ident { display: flex; gap: 22px; align-items: flex-start; margin-top: 14px; }
+  .ident .photo { flex: 0 0 auto; width: 120px; height: 120px; border: 1px solid var(--bord);
+                  border-radius: 8px; object-fit: cover; background: #eef3f8; }
+  table.fiche { border-collapse: collapse; flex: 1 1 auto; font-size: 13px; }
+  table.fiche td { border: 1px solid var(--bord); padding: 6px 9px; vertical-align: top; }
+  table.fiche td.lib { background: #f1f5f9; font-weight: 600; width: 200px; color: var(--bleu); }
+  h2.sect { font-size: 14px; color: var(--bleu); margin: 18px 0 4px; }
+  table.imp td.r, table.imp th.r { text-align: right; }
+  .droits { display: flex; gap: 14px; margin-top: 6px; font-size: 13px; }
+  .droits .c { border: 1px solid var(--bord); border-radius: 6px; padding: 8px 12px; min-width: 150px; }
+  .droits .c .l { color: var(--gris); font-size: 12px; }
+  .droits .c .v { font-weight: 700; font-size: 15px; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page paysage">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Fiche etudiant &mdash; {{ fiche.nom_complet or '(sans nom)' }}
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+
+    <div class="ident">
+      <img class="photo" src="{{ url_for('etudiant_photo', matricule=fiche.matricule) }}" alt="Photo">
+      <table class="fiche">
+        {% set lignes = [
+          ('Matricule', fiche.Matricule), ('Genre', fiche.Genre),
+          ('Nom', fiche.Nom), ('Prenom', fiche.Prenom),
+          ('Date de naissance', fiche['Date naissance']), ('Lieu de naissance', fiche['Lieu naissance']),
+          ('Origine / lieu actuel', fiche['Origine / lieu actuel']),
+          ('Filiere', fiche.Filiere), ('Niveau', fiche.Niveau), ('Section', fiche.Section),
+          ('Annee academique', fiche['Annee acad.']), ('Statut', fiche.Statut),
+          ('Date inscription', fiche['Date inscription']) ] %}
+        {% for lib, val in lignes %}
+        <tr><td class="lib">{{ lib }}</td><td>{{ val or '—' }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    {% if droits and droits.tarif_defini %}
+    <h2 class="sect">Droits d'inscription ({{ droits.niveau }}, {{ droits.annee or 'annee en cours' }})</h2>
+    <div class="droits">
+      <div class="c"><div class="l">Du</div><div class="v">{{ droits.tarif_fmt }} KMF</div></div>
+      <div class="c"><div class="l">Paye</div><div class="v">{{ droits.paye_fmt }} KMF</div></div>
+      <div class="c"><div class="l">Reste du</div><div class="v">{{ droits.reste_fmt }} KMF</div></div>
+    </div>
+    {% if droits.versements %}
+    <table class="imp" style="margin-top:8px">
+      <thead><tr><th>Date</th><th>Annee acad.</th><th>Reference</th><th class="r">Montant (KMF)</th></tr></thead>
+      <tbody>
+      {% for v in droits.versements %}
+        <tr><td>{{ v.date }}</td><td>{{ v.annee }}</td><td>{{ v.reference }}</td><td class="r">{{ v.montant_fmt }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+    {% endif %}
+
+    <h2 class="sect">Stages</h2>
+    {% if stages %}
+    <table class="imp">
+      <thead><tr><th>Annee</th><th>N° seance</th><th>Lieu</th><th>Debut</th><th>Fin</th><th class="r">Note /20</th><th>Fiche retour</th></tr></thead>
+      <tbody>
+      {% for s in stages %}
+        <tr><td>{{ s.annee }}</td><td>{{ s.seance }}</td><td>{{ s.lieu }}</td><td>{{ s.debut }}</td><td>{{ s.fin }}</td><td class="r">{{ s.note or '' }}</td><td>{{ s.retour or '' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p style="font-size:13px;color:var(--gris)">Aucun stage enregistre.</p>{% endif %}
+  </div>
+</div>
+</body>
+</html>

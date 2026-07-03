@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil">
+  <a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; Bibliotheque documentaire
+</div>
+<div class="page-head">
+  <i class="ti ti-books ic"></i>
+  <div>
+    <h1>Bibliotheque documentaire</h1>
+    <div class="sub">Documents importants : strategiques, officiels, supports de cours. Rangement libre en dossiers, 100&nbsp;% hors ligne.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+
+<div class="fil-biblio">
+  <a href="{{ url_for('bibliotheque') }}"><i class="ti ti-folders"></i> Bibliotheque</a>
+  {% set chemin = '' %}
+  {% if c.sous %}{% for seg in c.sous.split('/') %}{% set chemin = (chemin ~ '/' ~ seg) if chemin else seg %}
+    <span class="sep">&rsaquo;</span><a href="{{ url_for('bibliotheque', d=chemin) }}">{{ seg }}</a>{% endfor %}{% endif %}
+</div>
+
+<div class="panel">
+  <div class="pb">
+    {% if c.parent is not none %}
+    <a class="biblio-parent" href="{{ url_for('bibliotheque', d=c.parent) }}"><i class="ti ti-arrow-up"></i> Dossier parent</a>
+    {% endif %}
+
+    {% if c.dossiers %}
+    <ul class="biblio-dossiers">
+      {% for d in c.dossiers %}
+      <li><a href="{{ url_for('bibliotheque', d=d.rel) }}"><i class="ti ti-folder"></i> {{ d.nom }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if c.fichiers %}
+    <table class="mini biblio-fichiers">
+      <thead>
+        <tr><th>Document</th><th class="col-type">Type</th>{% if peut_supprimer %}<th class="col-act">Action</th>{% endif %}</tr>
+      </thead>
+      <tbody>
+        {% for f in c.fichiers %}
+        <tr>
+          <td><a class="biblio-fichier" href="{{ url_for('bibliotheque_fichier', relpath=f.rel) }}" target="_blank"><i class="ti ti-file"></i> {{ f.nom }}</a></td>
+          <td class="col-type muted">{{ f.ext or '—' }}</td>
+          {% if peut_supprimer %}
+          <td class="col-act">
+            <form method="post" action="{{ url_for('bibliotheque_supprimer') }}" style="display:inline"
+                  onsubmit="return confirm('Supprimer definitivement « {{ f.nom }} » de la bibliotheque ?');">
+              <input type="hidden" name="rel" value="{{ f.rel }}">
+              <button type="submit" class="lien-suppr"><i class="ti ti-trash"></i> Supprimer</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% elif not c.dossiers %}
+    <div class="vide-mini">Ce dossier est vide.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% if peut_deposer and not poste_secondaire %}
+<div class="biblio-actions">
+  <div class="panel">
+    <div class="ph"><i class="ti ti-upload i"></i><h3>Deposer un document ici</h3></div>
+    <div class="pb">
+      <form method="post" action="{{ url_for('bibliotheque_deposer') }}" enctype="multipart/form-data">
+        <input type="hidden" name="sous" value="{{ c.sous }}">
+        <label class="biblio-lbl">Fichier<input type="file" name="fichier" required></label>
+        <button type="submit" class="btn-go"><i class="ti ti-upload"></i> Deposer dans {{ c.sous or 'la racine' }}</button>
+      </form>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph"><i class="ti ti-folder-plus i"></i><h3>Creer un sous-dossier</h3></div>
+    <div class="pb">
+      <form method="post" action="{{ url_for('bibliotheque_dossier') }}">
+        <input type="hidden" name="sous" value="{{ c.sous }}">
+        <label class="biblio-lbl">Nom du dossier<input type="text" name="nom" required placeholder="ex. Sequence 3 — epidemiologie"></label>
+        <button type="submit" class="btn-go"><i class="ti ti-folder-plus"></i> Creer le dossier</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

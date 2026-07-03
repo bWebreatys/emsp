@@ -1,0 +1,36 @@
+ENVIRONNEMENT DE FORMATION — EMSP
+=================================
+
+Principe (base de code UNIQUE)
+------------------------------
+C'est EXACTEMENT le meme logiciel qu'en production. La difference tient a un
+seul fichier-drapeau local : instance\formation.flag
+  - present  -> mode FORMATION : bandeau rouge en haut, filigrane "FORMATION"
+                sur les impressions, plafond indicatif de 50 lignes par onglet
+                (simple alerte, jamais bloquant), donnees fictives.
+  - absent   -> production normale.
+
+ISOLATION : utilisez un DOSSIER SEPARE pour la formation (ex. EMSP_FORMATION\),
+distinct du dossier de production (ex. EMSP\). Les deux ne partagent aucun
+fichier : ce qui est saisi en formation ne touche JAMAIS les vraies donnees.
+
+Mettre en place un poste de formation
+-------------------------------------
+1. Copier tout le dossier du logiciel dans un dossier a part (ex. EMSP_FORMATION).
+2. Double-cliquer sur  formation\INSTALLER_FORMATION.bat
+   (cree le drapeau + installe le jeu d'exemples).
+3. Lancer l'application comme d'habitude : le bandeau rouge confirme le mode.
+
+Reinitialiser entre deux sessions de formation
+----------------------------------------------
+Double-cliquer sur  formation\REINITIALISER_FORMATION.bat
+  -> restaure le jeu d'exemples d'origine,
+  -> efface toutes les saisies des stagiaires,
+  -> efface les UTILISATEURS crees pendant la formation (comptes + journal).
+Le script refuse de s'executer si le drapeau de formation est absent : il ne
+peut donc jamais effacer un dossier de production.
+
+Regenerer le jeu d'exemples (si la structure evolue)
+----------------------------------------------------
+  python formation\seed_formation.py formation\seed\EMSP_V1.xlsx
+(a lancer apres avoir remis dans formation\seed\ une copie du classeur VIDE.)

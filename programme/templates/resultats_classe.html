@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Résultats par classe (synthèse)</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-filter i"></i><h3>Classe & période</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('resultats_classe') }}">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:170px">
+            <option value="">— choisir —</option>
+            {% for o in opt_filieres %}<option value="{{ o }}" {{ 'selected' if o==filtres.filiere else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for o in opt_niveaux %}<option value="{{ o }}" {{ 'selected' if o==filtres.niveau else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Section <span style="color:var(--gris);font-weight:400">(option.)</span></label>
+          <select name="section" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— toutes —</option>
+            {% for o in opt_sections %}<option value="{{ o }}" {{ 'selected' if o==filtres.section else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Année</label>
+          <select name="annee" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for o in opt_annees %}<option value="{{ o }}" {{ 'selected' if o==filtres.annee else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Période</label>
+          <select name="periode" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for s in semestres %}<option value="{{ s }}" {{ 'selected' if filtres.periode==s else '' }}>Semestre {{ s }}</option>{% endfor %}
+            <option value="annuel" {{ 'selected' if filtres.periode|lower=='annuel' else '' }}>Annuel (récap)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-list-check"></i> Afficher</button>
+        {% if data %}
+        <a class="btn-action" style="margin-top:0" target="_blank"
+           href="{{ url_for('resultats_classe_imprimer', filiere=filtres.filiere, niveau=filtres.niveau, section=filtres.section, annee=filtres.annee, periode=filtres.periode) }}">
+          <i class="ti ti-printer"></i> Imprimer la liste</a>
+        {% endif %}
+      </div>
+      <p style="margin:10px 0 0;color:var(--gris);font-size:12px">Choisissez d'abord la filière et le niveau ; la période s'adapte à la classe. Les moyennes et décisions sont <b>proposées</b> (calcul décret 05-106) ; la délibération reste validée à la main.</p>
+    </form>
+  </div>
+</div>
+
+{% if delib %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-gavel i"></i><h3>Délibération &amp; attestations de passage</h3></div>
+  <div class="pb">
+    <form method="post" action="{{ url_for('resultats_deliberation') }}" style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+      <input type="hidden" name="filiere" value="{{ filtres.filiere }}">
+      <input type="hidden" name="niveau" value="{{ filtres.niveau }}">
+      <input type="hidden" name="section" value="{{ filtres.section }}">
+      <input type="hidden" name="annee" value="{{ filtres.annee }}">
+      <input type="hidden" name="periode" value="{{ filtres.periode }}">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-weight:600;font-size:13px">Date de délibération (conseil des professeurs)</label>
+        <input type="text" name="date_deliberation" value="{{ delib.date }}" placeholder="JJ/MM/AAAA" {{ 'disabled' if not peut_deliberer else '' }}
+               style="width:14ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+      </div>
+      {% if peut_deliberer %}<button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-device-floppy"></i> Enregistrer</button>{% endif %}
+    </form>
+    <p style="margin:10px 0 0;font-size:13px">
+      {% if delib.date %}
+        {% if delib.liberable %}
+        <span style="color:#157347;font-weight:600"><i class="ti ti-circle-check"></i> Attestations libérées</span>
+        — délibéré le {{ delib.date }}, délai de contestation de {{ delib.delai_jours }} jours expiré le {{ delib.date_liberation }}.
+        {% else %}
+        <span style="color:var(--rouge);font-weight:600"><i class="ti ti-clock"></i> Délai de contestation en cours</span>
+        — délibéré le {{ delib.date }} ; attestations libérables le <b>{{ delib.date_liberation }}</b> ({{ delib.jours_restants }} jour(s) restant(s)).
+        {% endif %}
+      {% else %}
+        <span style="color:var(--gris)"><i class="ti ti-info-circle"></i> Aucune délibération enregistrée : saisissez la date pour ouvrir le délai de contestation ({{ delib.delai_jours }} jours) avant libération des attestations.</span>
+      {% endif %}
+    </p>
+    {% if delib.liberable and filtres.periode in ['annuel', 'Annuel', 'annee', 'année'] %}
+    <a class="btn-action" style="margin-top:10px;display:inline-flex;align-items:center;gap:6px"
+       href="{{ url_for('resultats_attestations_lot', filiere=filtres.filiere, niveau=filtres.niveau, section=filtres.section, annee=filtres.annee, periode=filtres.periode) }}">
+      <i class="ti ti-files"></i> Générer le lot (classe) — ZIP des élèves admis</a>
+    {% elif delib.liberable %}
+    <p style="margin:10px 0 0;color:var(--gris);font-size:12px"><i class="ti ti-info-circle"></i> Les attestations de passage se génèrent en vue <b>annuelle</b> (sélectionnez la période « annuel »).</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% if data %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-dashboard i"></i><h3>Synthèse de la classe</h3></div>
+  <div class="pb">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      {% set cartes = [
+        ('Effectif', data.stats.effectif, 'ti-users'),
+        ('Admis (proposé)', data.stats.admis, 'ti-circle-check'),
+        ('Ajournés (proposé)', data.stats.ajourne, 'ti-circle-x'),
+        ('Moyenne de classe', (data.stats.moyenne_classe or '—'), 'ti-chart-bar') ] %}
+      {% for lib, val, ico in cartes %}
+      <div style="flex:1 1 160px;border:1px solid var(--bord);border-radius:10px;padding:12px 14px;background:var(--bleu-pale)">
+        <div style="color:var(--gris);font-size:12px"><i class="ti {{ ico }}"></i> {{ lib }}</div>
+        <div style="font-size:24px;font-weight:700;color:var(--bleu)">{{ val }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if data.stats.incomplet %}
+    <p style="margin:10px 0 0;color:var(--gris);font-size:12px"><i class="ti ti-alert-triangle"></i> {{ data.stats.incomplet }} élève(s) avec des notes incomplètes : moyenne et décision encore partielles.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-table i"></i><h3>Résultats ({{ data.lignes|length }} élèves)</h3></div>
+  <div class="pb">
+    {% if data.lignes %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>N°</th><th>Matricule</th><th>Nom</th><th>Prénom</th><th style="text-align:right">Moyenne</th><th>Mention</th><th>Décision</th>{% if not data.stats.annuel %}<th>ECTS</th>{% endif %}<th>Obs.</th>{% if data.stats.annuel and delib and delib.liberable %}<th>Attestation</th>{% endif %}</tr></thead>
+        <tbody>
+        {% for l in data.lignes %}
+          <tr>
+            <td>{{ l.n }}</td><td>{{ l.matricule }}</td><td>{{ l.nom or '—' }}</td><td>{{ l.prenom or '—' }}</td>
+            <td style="text-align:right">{{ l.moyenne or '—' }}</td><td>{{ l.mention or '—' }}</td>
+            <td style="{{ 'color:var(--rouge)' if l.decision=='Ajourne' else ('color:#157347' if l.decision=='Admis' else '') }}">{{ l.decision }}</td>
+            {% if not data.stats.annuel %}<td>{{ l.ects or '—' }}</td>{% endif %}
+            <td style="color:var(--gris);font-size:12px">{{ l.note or '' }}</td>
+            {% if data.stats.annuel and delib and delib.liberable %}
+            <td>{% if l.decision=='Admis' %}<a href="{{ url_for('resultats_attestation', matricule=l.matricule, filiere=filtres.filiere, niveau=filtres.niveau, section=filtres.section, annee=filtres.annee, periode=filtres.periode) }}" style="display:inline-flex;align-items:center;gap:4px;color:var(--bleu)"><i class="ti ti-file-download"></i> PDF</a>{% else %}<span style="color:var(--gris)">—</span>{% endif %}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucun élève pour cette classe (vérifiez filière / niveau / section).</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

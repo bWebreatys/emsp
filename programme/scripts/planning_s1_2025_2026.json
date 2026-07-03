@@ -1,0 +1,6472 @@
+{
+ "annee": "2025-2026",
+ "source": "plnfiction_du_semestre_1_20252026__OK.xlsx",
+ "semaines": 16,
+ "semestre_cursus": {
+  "L1": "1",
+  "L2": "3",
+  "L3": "5"
+ },
+ "seances": [
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Microbiologie",
+   "volume_h": 30
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Besoins fondamentaux du patient",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Généralité sur la SP/SC",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Liquides et életrolytes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Procédure d’admission",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Système cardiovasculaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Besoins fondamentaux du patient",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examens de laboratoire",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Généralités sur la pharmacologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Methodes statistiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Système cardiovasculaire",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Généralités sur la pharmacologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Langue chinoise",
+   "volume_h": 28
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système endocrinien",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système nerveux",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Appareil locomoteur",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Disposition d’un environnement sûr",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Anatomie des organes de sens",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démographie",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "L’infirmier dans l’environnement sanitaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Perceptions en matière de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Disposition d’un environnement sûr",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Perceptions en matière de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Appareil urogénital",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Communication",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Methodes statistiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Théories, modèles et interaction",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Théories, modèles et interaction",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie des organes de sens",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Anatomie du système Respiratoire et digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Généralités sur la pharmacologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé et environnement",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD  L’infirmier dans l’environnement sanitaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Besoins fondamentaux du patient",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Santé et environnement",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "contrôle Anatomie des organes de sens et système nerveux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Biochimie",
+   "volume_h": 30
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Généralité sur la SP/SC",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Système de disoense de soins aux Comores",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Système de dispense de soins aux Comores",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Appareil urogénital",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examens de laboratoire",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Le sang",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Santé et environnement",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Appareil urogénital",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Théories, modèles et interaction",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie du système nerveux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle  Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Disposition d’un environnement sûr et besoins fondamentaux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Le sang",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Liquides et életrolytes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Procédure d’admission",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Anatomie du système nerveux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système endocrinien",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Appareil locomoteur",
+   "volume_h": 22
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Le sang",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Besoins fondamentaux du patient",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Contrôle Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Disposition d’un environnement sûr",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "L’infirmier dans l’environnement sanitaire",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Perceptions en matière de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Procédure d’admission",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Besoins fondamentaux du patient",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Anatomie des organes de sens",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Communication",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Généralités sur la pharmacologie",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Methodes statistiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Système cardiovasculaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Anatomie des organes de sens",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anglais professionnel",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Expression française",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Liquides et életrolytes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Observation du malade",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins de base prodigués au patient",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Anglais professionnel",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Liquides et életrolytes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Observation du malade",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système endocrinien",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Appareil locomoteur",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Contrôle  Appareil locomoteur",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Anatomie du système endocrinien",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Appareil locomoteur",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anglais professionnel",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle  Anglais professionnel",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Appareil urogénital",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Expression française",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Expression française",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Observation du malade",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins de base prodigués au patient",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L1",
+   "section": "S.I",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Consultation prénatale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Préparation à l’accouchement normal",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Puériculture",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Puériculture",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "PCIME",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Psychologie de l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pédiatrie & pédopsychiatrie",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Pédiatrie & pédopsychiatrie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Consultation prénatale",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pathologies Digestifs",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge en post partum immédiat et précoce",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Préparation à l’accouchement normal",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Psychologie de l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Consultation prénatale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Pathologies Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Protocoles de prise en charge en post partum immédiat et précoce",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "PCIME",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologie chirurgicale pédiatrique",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD PCIME",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Pathologie chirurgicale pédiatrique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pathologies Digestifs",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pédiatrie & pédopsychiatrie",
+   "volume_h": 18
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Examen physique",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Obstétrique Normale",
+   "volume_h": 22
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pathologie chirurgicale pédiatrique",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Obstétrique Normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Consultation prénatale",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Principes d’accueil, d’orientation et de prise en charge respectueuse et bienveillante de la femme",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Principes d’accueil, d’orientation et de prise en charge respectueuse et bienveillante de la femme",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Examen physique",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Gynécologie",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "PCIME",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge en post partum immédiat et précoce",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Préparation à l’accouchement normal",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Puériculture",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Préparation à l’accouchement normal",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Examen de santé",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologie chirurgicale pédiatrique",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Examen de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Psychologie de l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Obstétrique Normale",
+   "volume_h": 22
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Psychologie de l'enfant",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pédiatrie & pédopsychiatrie",
+   "volume_h": 18
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examen de santé",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Gynécologie",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Gynécologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Soins en pediatrie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L2",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Contrôle Endocrinologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Démographie en SRMNIA",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Endocrinologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pathologies dermatologiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Ophtalmologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Compétences pratiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démographie en SRMNIA",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Initiation à la recherche en sciences infirmière",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en ORL",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Initiation à la recherche en sciences infirmière",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Participation communautaire",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pathologies dermatologiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Compétences pratiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle  Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ophtalmologiques",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Psychologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Compétences pratiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en ORL",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Stomatologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Cancerologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Gestion des catastrophes/Fléaux sociaux",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Participation communautaire",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pathologies dermatologiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Gestion des catastrophes/Fléaux sociaux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Endocrinologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies dermatologiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I Ophtalmologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Endocrinologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Compétences pratiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pathologies ORL",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Psychologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Sociologie & Athropologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Initiation à la recherche en sciences infirmière",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Stomatologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Initiation à la recherche en sciences infirmière",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Cancerologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Gestion des catastrophes/Fléaux sociaux",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Imagerie médicale",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Psychologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ophtalmologiques",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Pathologies ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD athologies ophtalmologiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Compétences pratiques",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Démographie en SRMNIA",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pathologies dermatologiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Cancerologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Psychologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Sociologie & Athropologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Stomatologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Cancerologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Sociologie & Athropologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Stomatologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Imagerie médicale",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 18
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Endocrinologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ORL",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I Ophtalmologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en ORL",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Endocrinologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins infirmiers",
+   "niveau": "L3",
+   "section": "S.I",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Microbiologie",
+   "volume_h": 30
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Besoins fondamentaux du patient",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Généralité sur la SP/SC",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Liquides et életrolytes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Procédure d’admission",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Système cardiovasculaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Besoins fondamentaux du patient",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examens de laboratoire",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Généralités sur la pharmacologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Methodes statistiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Système cardiovasculaire",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Généralités sur la pharmacologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Langue chinoise",
+   "volume_h": 28
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système endocrinien",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système nerveux",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Appareil locomoteur",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Disposition d’un environnement sûr",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Anatomie des organes de sens",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démographie",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "L’infirmier dans l’environnement sanitaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Perceptions en matière de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Disposition d’un environnement sûr",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Perceptions en matière de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Appareil urogénital",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Communication",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Methodes statistiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Théories, modèles et interaction",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Théories, modèles et interaction",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie des organes de sens",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Anatomie du système Respiratoire et digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Généralités sur la pharmacologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé et environnement",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD  L’infirmier dans l’environnement sanitaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Besoins fondamentaux du patient",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Santé et environnement",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "contrôle Anatomie des organes de sens et système nerveux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Biochimie",
+   "volume_h": 30
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Généralité sur la SP/SC",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Système de disoense de soins aux Comores",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Système de dispense de soins aux Comores",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Appareil urogénital",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examens de laboratoire",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Le sang",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Santé et environnement",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Appareil urogénital",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Théories, modèles et interaction",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anatomie du système nerveux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Conntrôle Le sang",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Disposition d’un environnement sûr et besoins fondamentaux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Liquides et életrolytes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Procédure d’admission",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Anatomie du système nerveux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système endocrinien",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Appareil locomoteur",
+   "volume_h": 22
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Le sang",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Anatomie du système Respiratoire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Anatomie  du système digestif",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Besoins fondamentaux du patient",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Contrôle Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Disposition d’un environnement sûr",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Immunité",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "L’infirmier dans l’environnement sanitaire",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Perceptions en matière de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Procédure d’admission",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Besoins fondamentaux du patient",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Démarche de soins et Projet de soins",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Anatomie des organes de sens",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Communication",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Epidémiologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Généralités sur la pharmacologie",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Methodes statistiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Système cardiovasculaire",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Anatomie des organes de sens",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anglais professionnel",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Expression française",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Liquides et életrolytes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Observation du malade",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins de base prodigués au patient",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Anglais professionnel",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Liquides et életrolytes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Observation du malade",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Anatomie du système endocrinien",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Appareil locomoteur",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Contrôle  Appareil locomoteur",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Anatomie du système endocrinien",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Appareil locomoteur",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Introduction du corps humain",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Anglais professionnel",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Anglais professionnel",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Appareil urogénital",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Expression française",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Expression française",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Observation du malade",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins de base prodigués au patient",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L1",
+   "section": "S.O",
+   "jour": "Vendredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Sémiologie médicochirurgicale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Consultation prénatale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Préparation à l’accouchement normal",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Puériculture",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Puériculture",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "PCIME",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Psychologie de l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pédiatrie & pédopsychiatrie",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Pédiatrie & pédopsychiatrie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Consultation prénatale",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pathologies Digestifs",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge en post partum immédiat et précoce",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Préparation à l’accouchement normal",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Psychologie de l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Consultation prénatale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Pathologies Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Protocoles de prise en charge en post partum immédiat et précoce",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Mme Halima Abdallah",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "PCIME",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologie chirurgicale pédiatrique",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD PCIME",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Pathologie chirurgicale pédiatrique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pathologies Digestifs",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pédiatrie & pédopsychiatrie",
+   "volume_h": 18
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Examen physique",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Obstétrique Normale",
+   "volume_h": 22
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pathologie chirurgicale pédiatrique",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Obstétrique Normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Consultation prénatale",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Principes d’accueil, d’orientation et de prise en charge respectueuse et bienveillante de la femme",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Principes d’accueil, d’orientation et de prise en charge respectueuse et bienveillante de la femme",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Stratégies conventionnelles et novatrices de communication",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Examen physique",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Gynécologie",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "PCIME",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Protocoles de prise en charge en post partum immédiat et précoce",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Préparation à l’accouchement normal",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Puériculture",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Protocoles de prise en charge de la grossesse normale",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Préparation à l’accouchement normal",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Examen de santé",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "PEC psychologique des enfants ou couple  victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologie chirurgicale pédiatrique",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Examen de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Psychologie de l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Obstétrique Normale",
+   "volume_h": 22
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "SI Affections Digestifs",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Psychologie de l'enfant",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pédiatrie & pédopsychiatrie",
+   "volume_h": 18
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Santé sexuelle et reproductive et droits connexes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Examen de santé",
+   "volume_h": 16
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Kinésithérapie respiratoire chez l'enfant",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "PTD EC psychologique des enfants victimes ou de tentatifes d'agression",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Examen physique",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Gynécologie",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Patologies orthopédiques et traumatologiqes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pharmacologie et thérapeutiques spécifiques à la pathologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Soins en pediatrie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Gynécologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Soins en pediatrie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L2",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "soins infirmiers en orthopédie et truamatologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Démographie en SRMNIA",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "TD Compétences pratiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Urgences obstétricales",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Démographie en SRMNIA",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Initiation à la recherche en sciences infirmière",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en ORL",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Initiation à la recherche en sciences infirmière",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "SONUB",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Compétences pratiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Contrôle Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ophtalmologiques",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Jeudi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Psychologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Compétences pratiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en ORL",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Stomatologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Cancerologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Gestion des catastrophes/Fléaux sociaux",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "SONUB",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "TD Gestion des catastrophes/Fléaux sociaux",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Urgences obstétricales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Lundi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Urgences obstétricales",
+   "volume_h": 14
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Compétences pratiques",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Pathologies ORL",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Psychologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Sociologie & Athropologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Initiation à la recherche en sciences infirmière",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Stomatologie",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Initiation à la recherche en sciences infirmière",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Cancerologie",
+   "volume_h": 8
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Gestion des catastrophes/Fléaux sociaux",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Imagerie médicale",
+   "volume_h": 12
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Psychologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ophtalmologiques",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Pathologies ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Pathologies ophtalmologiques",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mardi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Compétences pratiques",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Démographie en SRMNIA",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Maladies et problèmes communs liés à la santé sexuelle et reproductive",
+   "volume_h": 6
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I Stomatologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "S.I en ORL",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Santé sexuelle et reproductive et droit connexes",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "10h05",
+   "fin": "12h05",
+   "matiere": "Urgences obstétricales",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Cancerologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Psychologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I en oncologies",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "S.I endocrinilogie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Sociologie & Athropologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "Stomatologie",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Cancerologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Sociologie & Athropologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "13h00",
+   "fin": "15h00",
+   "matiere": "TD Stomatologie",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Imagerie médicale",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "15h05",
+   "fin": "17h05",
+   "matiere": "Pharmacologie et thérapeutiques des pathologies spéciales",
+   "volume_h": 18
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Pathologies ORL",
+   "volume_h": 10
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "S.I en ORL",
+   "volume_h": 4
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "TD Gestion des services de santé",
+   "volume_h": 2
+  },
+  {
+   "filiere": "Soins obstétricaux",
+   "niveau": "L3",
+   "section": "S.O",
+   "jour": "Mercredi",
+   "debut": "8h00",
+   "fin": "10h00",
+   "matiere": "Urgences obstétricales",
+   "volume_h": 12
+  }
+ ]
+}

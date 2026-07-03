@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  .doc-page.paysage { width: 297mm; }
+  .ident { display: flex; gap: 22px; align-items: flex-start; margin-top: 14px; }
+  .ident .photo { flex: 0 0 auto; width: 120px; height: 120px; border: 1px solid var(--bord);
+                  border-radius: 8px; object-fit: cover; background: #eef3f8; }
+  table.fiche { border-collapse: collapse; flex: 1 1 auto; font-size: 13px; }
+  table.fiche td { border: 1px solid var(--bord); padding: 6px 9px; vertical-align: top; }
+  table.fiche td.lib { background: #f1f5f9; font-weight: 600; width: 200px; color: var(--bleu); }
+  h2.sect { font-size: 14px; color: var(--bleu); margin: 18px 0 4px; }
+  table.imp td.r, table.imp th.r { text-align: right; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page paysage">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Fiche enseignant &mdash; {{ fiche.nom_complet or '(sans nom)' }}
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+
+    <div class="ident">
+      <img class="photo" src="{{ url_for('enseignant_photo', matricule=fiche.matricule) }}" alt="Photo">
+      <table class="fiche">
+        {% set lignes = [
+          ('Matricule ens.', fiche['Matricule ens.']), ('Genre', fiche.Genre),
+          ('Nom', fiche.Nom), ('Prenom', fiche.Prenom),
+          ('Statut', fiche['Statut']),
+          ('Matieres enseignees', fiche['Matieres enseignees']),
+          ('Qualifications', fiche.Qualifications),
+          ('Departement', fiche.Departement),
+          ('Chef de dept validant', fiche['Chef dept validant']) ] %}
+        {% for lib, val in lignes %}
+        <tr><td class="lib">{{ lib }}</td><td>{{ val or '—' }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <h2 class="sect">Heures (releve E2)</h2>
+    {% if heures and heures.lignes %}
+    <table class="imp">
+      <thead><tr><th>Mois / Annee</th><th class="r">Vol. programme</th><th class="r">Vol. constate</th><th class="r">Total a payer</th></tr></thead>
+      <tbody>
+      {% for h in heures.lignes %}
+        <tr><td>{{ h.mois or '' }}</td><td class="r">{{ h.prog }}</td><td class="r">{{ h.constate }}</td><td class="r">{{ h.a_payer }}</td></tr>
+      {% endfor %}
+      </tbody>
+      <tfoot><tr class="total"><td>Total</td><td class="r">{{ heures.tot_prog }}</td><td class="r">{{ heures.tot_constate }}</td><td class="r">{{ heures.tot_a_payer }}</td></tr></tfoot>
+    </table>
+    {% else %}<p style="font-size:13px;color:var(--gris)">Aucune heure relevee.</p>{% endif %}
+
+    <h2 class="sect">Seances planifiees (A3)</h2>
+    {% if seances %}
+    <table class="imp">
+      <thead><tr><th>Annee</th><th>Filiere</th><th>Niveau</th><th>Matiere</th><th>Jour</th><th>Debut</th><th>Fin</th><th>Salle</th><th>Type</th><th class="r">Vol.</th></tr></thead>
+      <tbody>
+      {% for s in seances %}
+        <tr><td>{{ s.annee }}</td><td>{{ s.filiere }}</td><td>{{ s.niveau }}</td><td>{{ s.matiere }}</td><td>{{ s.jour }}</td><td>{{ s.debut }}</td><td>{{ s.fin }}</td><td>{{ s.salle }}</td><td>{{ s.type }}</td><td class="r">{{ s.vol }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p style="font-size:13px;color:var(--gris)">Aucune seance planifiee.</p>{% endif %}
+
+    {% if faites %}
+    <h2 class="sect">Seances realisees / exceptions (E3)</h2>
+    <table class="imp">
+      <thead><tr><th>Date</th><th>Session / Matiere</th><th>Creneau</th><th>Etat</th><th>Matiere reelle</th><th class="r">Vol. constate</th><th>Motif</th></tr></thead>
+      <tbody>
+      {% for s in faites %}
+        <tr><td>{{ s.date }}</td><td>{{ s.session }}</td><td>{{ s.creneau }}</td><td>{{ s.etat }}</td><td>{{ s.matiere }}</td><td class="r">{{ s.vol }}</td><td>{{ s.motif }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>

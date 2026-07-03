@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Fiche enseignant</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-search i"></i><h3>Rechercher un enseignant</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">Saisissez le <b>matricule</b> (ou le nom) puis affichez la fiche. La saisie filtre directement, sans longue liste.</p>
+    <form method="get" action="{{ url_for('enseignant') }}" id="form-rech" autocomplete="off">
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px;color:var(--texte)">Matricule ou nom</label>
+          <input type="text" id="rech" name="matricule" list="dl-ens" value="{{ matricule }}"
+                 placeholder="ex. NC-1 ou Dr Mbae" autofocus
+                 style="width:calc(28ch + 26px);padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+          <datalist id="dl-ens">
+            {% for e in enseignants %}<option value="{{ e.label }}"></option>{% endfor %}
+          </datalist>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-user-search"></i> Afficher la fiche</button>
+      </div>
+    </form>
+    {% if introuvable %}
+    <p style="margin-top:12px;color:var(--rouge)"><i class="ti ti-alert-triangle"></i> Aucun enseignant avec le matricule « {{ matricule }} ».</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if fiche %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-id-badge-2 i"></i><h3>Fiche de {{ fiche.nom_complet or '(sans nom)' }}</h3>
+    <a class="btn-action" style="margin-left:auto;margin-top:0" target="_blank"
+       href="{{ url_for('enseignant_imprimer', matricule=fiche.matricule) }}">
+      <i class="ti ti-printer"></i> Imprimer la fiche</a>
+  </div>
+  <div class="pb">
+    <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:0 0 auto;text-align:center;width:150px">
+        <img src="{{ url_for('enseignant_photo', matricule=fiche.matricule) }}" alt="Photo"
+             style="width:128px;height:128px;border-radius:10px;border:1px solid var(--bord);object-fit:cover;background:var(--bleu-pale)">
+        {% if peut_modifier and not poste_secondaire %}
+        <div style="margin-top:10px;border-top:1px dashed var(--bord);padding-top:10px">
+          <form method="post" id="form-photo" enctype="multipart/form-data"
+                action="{{ url_for('enseignant_photo_televerser', matricule=fiche.matricule) }}">
+            <input type="file" name="photo" id="photo-file" accept="image/jpeg,image/png" style="display:none"
+                   onchange="if(this.files.length){this.form.submit();}">
+            <button type="button" class="btn-action" style="margin-top:0;width:100%"
+                    onclick="document.getElementById('photo-file').click()">
+              <i class="ti ti-upload"></i> {{ 'Changer la photo' if fiche.a_photo else 'Choisir une photo…' }}
+            </button>
+          </form>
+          <div style="font-size:12px;color:var(--gris);margin-top:5px">JPEG ou PNG &middot; 1 Mo max</div>
+          {% if fiche.a_photo %}
+          <form method="post" style="margin-top:6px"
+                action="{{ url_for('enseignant_photo_retirer', matricule=fiche.matricule) }}"
+                onsubmit="return confirm('Retirer la photo de cet enseignant ?');">
+            <button type="submit" class="btn-action danger" style="margin-top:0;width:100%">
+              <i class="ti ti-trash"></i> Retirer la photo
+            </button>
+          </form>
+          {% endif %}
+        </div>
+        {% elif not fiche.a_photo %}
+        <div style="margin-top:6px;font-size:12px;color:var(--gris)"><i class="ti ti-camera-off"></i> Aucune photo</div>
+        {% endif %}
+      </div>
+      <div style="flex:1 1 320px;min-width:280px">
+        <table class="fiche-tbl">
+          {% set lignes = [
+            ('Matricule ens.', fiche['Matricule ens.']), ('Genre', fiche.Genre),
+            ('Nom', fiche.Nom), ('Prénom', fiche.Prenom),
+            ('Statut', fiche['Statut']),
+            ('Matières enseignées', fiche['Matieres enseignees']),
+            ('Qualifications', fiche.Qualifications),
+            ('Département', fiche.Departement),
+            ('Chef de dépt validant', fiche['Chef dept validant']) ] %}
+          {% for lib, val in lignes %}
+          <tr><td class="fiche-lib">{{ lib }}</td><td class="fiche-val">{{ val or '—' }}</td></tr>
+          {% endfor %}
+        </table>
+        {% if peut_modifier and not poste_secondaire %}
+        <div style="margin-top:14px">
+          <a class="btn-action" href="{{ url_for('module', onglet='E1_Enseignants', modifier=fiche.matricule) }}#form-saisie">
+            <i class="ti ti-edit"></i> Modifier dans le module</a>
+          <span style="font-size:12px;color:var(--gris);margin-left:8px">La création / modification se fait dans le module Enseignants.</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-arrow-guide i"></i><h3>Accès direct</h3></div>
+  <div class="pb">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn-action" style="margin-top:0" target="_blank"
+         href="{{ url_for('enseignant_heures_imprimer', matricule=fiche.matricule) }}">
+        <i class="ti ti-file-invoice"></i> État des heures à payer</a>
+      <a class="btn-action" style="margin-top:0" href="{{ url_for('calendrier') }}">
+        <i class="ti ti-calendar-event"></i> Calendrier / séances</a>
+      <a class="btn-action" style="margin-top:0" href="{{ url_for('heures_constatees') }}">
+        <i class="ti ti-clock-check"></i> Heures constatées</a>
+      <a class="btn-action" style="margin-top:0" target="_blank"
+         href="{{ url_for('enseignant_imprimer', matricule=fiche.matricule) }}">
+        <i class="ti ti-printer"></i> Imprimer la fiche</a>
+    </div>
+    <p style="margin:10px 0 0;color:var(--gris);font-size:12px">Séances planifiées → réalisées → heures → état des heures : le détail figure ci-dessous. La compta paie sur le relevé d'heures, selon les contrats signés.</p>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-clock-hour-4 i"></i><h3>Heures (relevé E2)</h3></div>
+  <div class="pb">
+    {% if heures and heures.lignes %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Mois / Année</th><th style="text-align:right">Vol. programmé</th><th style="text-align:right">Vol. constaté</th><th style="text-align:right">Total à payer</th></tr></thead>
+        <tbody>
+        {% for h in heures.lignes %}
+          <tr><td>{{ h.mois or '—' }}</td><td style="text-align:right">{{ h.prog }}</td><td style="text-align:right">{{ h.constate }}</td><td style="text-align:right">{{ h.a_payer }}</td></tr>
+        {% endfor %}
+        </tbody>
+        <tfoot><tr style="font-weight:700;background:#EAF1F8">
+          <td>Total</td><td style="text-align:right">{{ heures.tot_prog }}</td>
+          <td style="text-align:right">{{ heures.tot_constate }}</td><td style="text-align:right">{{ heures.tot_a_payer }}</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucune heure relevée pour cet enseignant.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-calendar-event i"></i><h3>Séances planifiées (A3)</h3></div>
+  <div class="pb">
+    {% if seances %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Année</th><th>Filière</th><th>Niveau</th><th>Matière</th><th>Jour</th><th>Début</th><th>Fin</th><th>Salle</th><th>Type</th><th style="text-align:right">Vol.</th></tr></thead>
+        <tbody>
+        {% for s in seances %}
+          <tr><td>{{ s.annee or '—' }}</td><td>{{ s.filiere or '—' }}</td><td>{{ s.niveau or '—' }}</td>
+              <td>{{ s.matiere or '—' }}</td><td>{{ s.jour or '—' }}</td><td>{{ s.debut or '—' }}</td>
+              <td>{{ s.fin or '—' }}</td><td>{{ s.salle or '—' }}</td><td>{{ s.type or '—' }}</td>
+              <td style="text-align:right">{{ s.vol }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucune séance planifiée au nom de cet enseignant.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-clipboard-check i"></i><h3>Séances réalisées / exceptions (E3)</h3></div>
+  <div class="pb">
+    {% if faites %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Date</th><th>Session / Matière</th><th>Créneau</th><th>État</th><th>Matière réelle</th><th style="text-align:right">Vol. constaté</th><th>Motif</th></tr></thead>
+        <tbody>
+        {% for s in faites %}
+          <tr><td>{{ s.date or '—' }}</td><td>{{ s.session or '—' }}</td><td>{{ s.creneau or '—' }}</td>
+              <td>{{ s.etat or '—' }}</td><td>{{ s.matiere or '—' }}</td>
+              <td style="text-align:right">{{ s.vol }}</td><td>{{ s.motif or '—' }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucune séance d'exception enregistrée pour cet enseignant.</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<style>
+.fiche-tbl{border-collapse:collapse;width:100%}
+.fiche-tbl td{padding:6px 8px;border-bottom:1px solid var(--bord);font-size:14px;vertical-align:top}
+.fiche-lib{color:var(--gris);width:190px;font-weight:600}
+.fiche-val{color:var(--texte)}
+</style>
+<script>
+(function(){
+  var f=document.getElementById('form-rech'), inp=document.getElementById('rech');
+  if(!f||!inp) return;
+  // Extrait le matricule d'un libelle complet 'matricule — Nom Prenom (...)'
+  // choisi dans la liste deroulante (sinon renvoie la saisie nettoyee).
+  function matriculeDe(v){
+    v=(v||'').trim();
+    var i=v.indexOf('—');
+    if(i>=0) v=v.slice(0,i);
+    return v.trim();
+  }
+  // Clic sur le bouton : le submit natif passe ici -> on nettoie avant l'envoi.
+  f.addEventListener('submit',function(){ inp.value=matriculeDe(inp.value); });
+  // Selection dans la liste : nettoyer PUIS envoyer (form.submit() natif ne
+  // declenche pas le handler 'submit', d'ou le nettoyage explicite ici).
+  inp.addEventListener('change',function(){
+    if((inp.value||'').indexOf('—')<0) return;   // seulement si un libelle a ete choisi
+    inp.value=matriculeDe(inp.value);
+    if(!inp.value) return;
+    if(f.requestSubmit){ f.requestSubmit(); } else { f.submit(); }
+  });
+})();
+</script>
+{% endblock %}

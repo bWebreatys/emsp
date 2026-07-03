@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Saisie des notes par classe</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-table i"></i><h3>Classe &amp; matière</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('saisie_notes_classe') }}" id="form-sel" autocomplete="off">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">—</option>
+            {% for v in filieres %}<option value="{{ v }}" {{ 'selected' if v==filiere else '' }}>{{ v }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:9ch">
+            <option value="">—</option>
+            {% for v in niveaux %}<option value="{{ v }}" {{ 'selected' if v==niveau else '' }}>{{ v }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Section</label>
+          <select name="section" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:9ch">
+            <option value="" {{ 'selected' if not section else '' }}>(toutes)</option>
+            {% for v in sections %}<option value="{{ v }}" {{ 'selected' if v==section else '' }}>{{ v }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Année</label>
+          <select name="annee" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:13ch">
+            {% for v in annees %}<option value="{{ v }}" {{ 'selected' if v==annee else '' }}>{{ v }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Semestre</label>
+          <select name="semestre" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:8ch">
+            {% if not semestres %}<option value="">—</option>{% endif %}
+            {% for s in semestres %}<option value="{{ s }}" {{ 'selected' if s==semestre else '' }}>{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Session</label>
+          <select name="session" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:18ch">
+            <option value="1" {{ 'selected' if session=='1' else '' }}>Session 1 (normale)</option>
+            <option value="2" {{ 'selected' if session=='2' else '' }}>Session 2 (rattrapage)</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1 1 280px">
+          <label style="font-weight:600;font-size:13px">Matière</label>
+          <select name="matiere" onchange="this.form.submit()" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir une matière —</option>
+            {% for m in matieres %}
+            <option value="{{ m.num_ue }}|||{{ m.matiere }}" {{ 'selected' if (m.num_ue ~ '|||' ~ m.matiere)==matiere_cle else '' }}>UE {{ m.num_ue }} — {{ m.matiere }} (coef {{ m.coef }})</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </form>
+    {% if filiere and niveau and semestre and not section %}
+    <p style="margin-top:10px;color:var(--gris);font-size:13px"><i class="ti ti-info-circle"></i> Astuce : précisez une section pour cibler une classe (sinon tous les inscrits du niveau).</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if grille and grille.ok %}
+{% if grille.nb == 0 %}
+<div class="panel"><div class="pb"><p style="color:var(--gris)"><i class="ti ti-info-circle"></i> Aucun étudiant pour cette sélection (filière / niveau / section / année).</p></div></div>
+{% else %}
+<form method="post" action="{{ url_for('saisie_notes_classe_enregistrer') }}" id="form-grille">
+  <input type="hidden" name="filiere" value="{{ filiere }}">
+  <input type="hidden" name="niveau" value="{{ niveau }}">
+  <input type="hidden" name="section" value="{{ section }}">
+  <input type="hidden" name="annee" value="{{ annee }}">
+  <input type="hidden" name="semestre" value="{{ semestre }}">
+  <input type="hidden" name="session" value="{{ session }}">
+  <input type="hidden" name="num_ue" value="{{ num_ue }}">
+  <input type="hidden" name="matiere" value="{{ matiere }}">
+  <input type="hidden" name="payload" id="payload">
+
+  <div class="panel">
+    <div class="ph" style="display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-pencil i"></i>
+        <h3 style="margin:0">{{ matiere }} — {{ filiere }} {{ niveau }}{% if section %} {{ section }}{% endif %} · S{{ semestre }} · Session {{ session }}</h3></div>
+      <div style="font-size:13px;color:var(--gris)">UE {{ num_ue }} — {{ grille.intitule_ue }} · {{ grille.nb }} étudiant(s)</div>
+    </div>
+    <div class="pb">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <span style="font-size:13px;color:var(--gris)">Contrôles :</span>
+        <button type="button" id="del-ctrl" class="btn-mini"><i class="ti ti-minus"></i></button>
+        <span id="nbc" style="font-weight:600;min-width:18px;text-align:center"></span>
+        <button type="button" id="add-ctrl" class="btn-mini"><i class="ti ti-plus"></i> ajouter un contrôle</button>
+        <span style="font-size:12px;color:var(--gris)">coef par défaut 1, modifiable par colonne · CC = moyenne pondérée · Moyenne = ¼ CC + ¾ examen (décret 05-106, art. 8)</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="grille" style="border-collapse:collapse;width:100%;min-width:620px;font-size:13px"></table>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
+        <a class="btn-action" style="background:#fff;color:#1F4E79" target="_blank"
+           href="{{ url_for('impr_feuille_notes', filiere=filiere, niveau=niveau, section=section, annee=annee, semestre=semestre, session=session, num_ue=num_ue, matiere=matiere) }}"><i class="ti ti-printer"></i> Éditer</a>
+        <button type="submit" class="btn-action"><i class="ti ti-device-floppy"></i> Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<style>
+.btn-mini{padding:4px 10px;border:1px solid var(--bord);background:#fff;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px}
+.btn-mini:hover{background:#f3f6fb}
+#grille th{background:#1F4E79;color:#fff;font-weight:600;padding:7px 5px;font-size:12px}
+#grille td{border-top:1px solid var(--bord);padding:4px 5px}
+#grille input{width:46px;height:30px;text-align:center;padding:2px;border:1px solid var(--bord);border-radius:6px;font-family:inherit;font-size:13px}
+#grille input.coef{width:34px;height:22px;font-size:11px}
+</style>
+<script id="data" type="application/json">{{ grille|tojson }}</script>
+<script>
+(function(){
+  var G = JSON.parse(document.getElementById('data').textContent);
+  var nums = G.nums.slice();
+  var coefs = G.coefs.slice();
+  var eleves = G.eleves.map(function(e){ return {matricule:e.matricule, nom:e.nom,
+      controles:(e.controles||[]).slice(), examen:(e.examen||'')}; });
+  var tbl = document.getElementById('grille');
+
+  function toNum(v){ v=(''+v).replace(',','.').trim(); return v===''||isNaN(Number(v))?null:Number(v); }
+  function r2(x){ return x===null?null:Math.round(x*100)/100; }
+  function cc(ctrls){ var sn=0,sp=0; for(var i=0;i<coefs.length;i++){ var n=toNum(ctrls[i]); if(n!==null){ var c=Number(coefs[i])||1; sn+=n*c; sp+=c; } } return sp>0?sn/sp:null; }
+  function moyenne(c,ex){ var e=toNum(ex); if(c!==null&&e!==null) return 0.25*c+0.75*e; if(e!==null) return e; if(c!==null) return c; return null; }
+  function fmt(x){ return x===null?'—':r2(x).toFixed(2).replace('.',','); }
+
+  function render(){
+    document.getElementById('nbc').textContent = coefs.length;
+    var h='<thead><tr><th style="width:26px">N°</th><th style="width:84px;text-align:left">Matricule</th><th style="text-align:left">Nom et prénom</th>';
+    for(var i=0;i<coefs.length;i++){
+      h+='<th>C'+nums[i]+'<br><span style="font-weight:400;font-size:10px">coef </span><input class="coef" data-coef="'+i+'" inputmode="numeric" value="'+coefs[i]+'"></th>';
+    }
+    h+='<th style="width:54px">CC /20</th><th style="width:58px">Examen /20</th><th style="width:56px">Moyenne</th></tr></thead>';
+    var b='<tbody>';
+    for(var r=0;r<eleves.length;r++){
+      var el=eleves[r], c=cc(el.controles), m=moyenne(c, el.examen);
+      b+='<tr>'+
+        '<td style="text-align:center;color:var(--gris)">'+(r+1)+'</td>'+
+        '<td style="font-family:monospace;font-size:12px">'+el.matricule+'</td>'+
+        '<td>'+el.nom+'</td>';
+      for(var i=0;i<coefs.length;i++){
+        var v = el.controles[i]===undefined?'':el.controles[i];
+        b+='<td style="text-align:center"><input data-r="'+r+'" data-c="'+i+'" inputmode="decimal" value="'+v+'"></td>';
+      }
+      b+='<td style="text-align:center;font-weight:600;color:#1F4E79">'+(c!==null?fmt(c):'—')+'</td>'+
+         '<td style="text-align:center"><input data-ex="'+r+'" inputmode="decimal" value="'+(el.examen||'')+'"></td>'+
+         '<td style="text-align:center;font-weight:600;color:'+(m!==null?'#1F4E79':'var(--gris)')+'">'+fmt(m)+'</td></tr>';
+    }
+    b+='</tbody>';
+    tbl.innerHTML=h+b;
+    tbl.querySelectorAll('input[data-coef]').forEach(function(inp){ inp.addEventListener('input',function(e){ coefs[+e.target.dataset.coef]=e.target.value; render(); }); });
+    tbl.querySelectorAll('input[data-r]').forEach(function(inp){ inp.addEventListener('input',function(e){ eleves[+e.target.dataset.r].controles[+e.target.dataset.c]=e.target.value; var tr=e.target.closest('tr'); var el=eleves[+e.target.dataset.r]; var c=cc(el.controles),m=moyenne(c,el.examen); var tds=tr.querySelectorAll('td'); tds[tds.length-3].textContent=(c!==null?fmt(c):'—'); tds[tds.length-1].textContent=fmt(m); }); });
+    tbl.querySelectorAll('input[data-ex]').forEach(function(inp){ inp.addEventListener('input',function(e){ var r=+e.target.dataset.ex; eleves[r].examen=e.target.value; var tr=e.target.closest('tr'); var c=cc(eleves[r].controles),m=moyenne(c,eleves[r].examen); tr.querySelectorAll('td')[tr.querySelectorAll('td').length-1].textContent=fmt(m); }); });
+  }
+  document.getElementById('add-ctrl').addEventListener('click',function(){ if(coefs.length<8){ nums.push((nums[nums.length-1]||0)+1); coefs.push(1); eleves.forEach(function(e){ e.controles.push(''); }); render(); } });
+  document.getElementById('del-ctrl').addEventListener('click',function(){ if(coefs.length>1){ nums.pop(); coefs.pop(); eleves.forEach(function(e){ e.controles.pop(); }); render(); } });
+  document.getElementById('form-grille').addEventListener('submit',function(){
+    document.getElementById('payload').value = JSON.stringify({coefs:coefs, eleves:eleves.map(function(e){ return {matricule:e.matricule, controles:e.controles, examen:e.examen}; })});
+  });
+  render();
+})();
+</script>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% set ancre = (jour.date_iso if vue=='jour' else (semaine.ancre if vue=='semaine' else mois.ancre)) %}
+{% macro lien(v, d) -%}
+{{ url_for('calendrier', vue=v, date=d) }}{% if demo %}&demo=1{% endif %}
+{%- endmacro %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Calendrier</div>
+<div class="page-head">
+  <i class="ti ti-calendar-month ic"></i>
+  <div>
+    <h1>Calendrier</h1>
+    <div class="sub">Emploi du temps hebdomadaire projete sur mois / semaine / jour. Affichage seul.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Calendrier <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li>L'emploi du temps des seances (page <b>Seances &amp; planning</b>) est <b>hebdomadaire recurrent</b> : il se repete chaque semaine. Les vues ci-dessous le <b>projettent</b> sur le calendrier.</li>
+      <li><b>Mois</b> : vue d'ensemble, le nombre de seances du jour-type est indique. <b>Semaine</b> : grille Lundi&ndash;Samedi par horaire. <b>Jour</b> : detail d'une journee (seances, salles occupees, presences).</li>
+      <li>Cliquez une journee pour l'ouvrir en vue <b>Jour</b>.</li>
+      <li>Le lien <b>Donnees de demonstration</b> affiche un exemple tant que le classeur est vide.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div class="cal-toolbar">
+  <div class="cal-vues">
+    <a class="{{ 'on' if vue=='mois' else '' }}" href="{{ lien('mois', ancre) }}"><i class="ti ti-calendar-month"></i> Mois</a>
+    <a class="{{ 'on' if vue=='semaine' else '' }}" href="{{ lien('semaine', ancre) }}"><i class="ti ti-calendar-week"></i> Semaine</a>
+    <a class="{{ 'on' if vue=='jour' else '' }}" href="{{ lien('jour', ancre) }}"><i class="ti ti-calendar"></i> Jour</a>
+  </div>
+  <div class="cal-nav">
+    {% if vue=='mois' %}{% set p=mois.prev %}{% set n=mois.next %}{% set lib=mois.libelle %}
+    {% elif vue=='jour' %}{% set p=jour.prev %}{% set n=jour.next %}{% set lib=jour.jour_nom+' '+jour.date_fr %}
+    {% else %}{% set p=semaine.prev %}{% set n=semaine.next %}{% set lib=semaine.libelle %}{% endif %}
+    <a class="btn" href="{{ lien(vue, p) }}" title="Precedent"><i class="ti ti-chevron-left"></i></a>
+    <a class="btn" href="{{ lien(vue, '') }}">Aujourd'hui</a>
+    <a class="btn" href="{{ lien(vue, n) }}" title="Suivant"><i class="ti ti-chevron-right"></i></a>
+    <span class="cal-periode">{{ lib }}</span>
+  </div>
+  <div class="cal-demo">
+    {% if demo %}<a class="btn demo-on" href="{{ url_for('calendrier', vue=vue, date=ancre) }}"><i class="ti ti-eye-off"></i> Masquer la demonstration</a>
+    {% else %}<a class="btn" href="{{ url_for('calendrier', vue=vue, date=ancre) }}&demo=1"><i class="ti ti-eye"></i> Donnees de demonstration</a>{% endif %}
+  </div>
+</div>
+
+{% if demo %}<div class="bandeau-demo"><i class="ti ti-info-circle"></i> Donnees de demonstration (valeurs fictives) — desactivez pour revenir au classeur.</div>{% endif %}
+
+{# ===================== VUE MOIS ===================== #}
+{% if vue=='mois' %}
+<div class="panel"><div class="pb">
+  <table class="cal-mois">
+    <thead><tr>{% for j in mois.entetes %}<th>{{ j[:3] }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for sem in mois.semaines %}
+      <tr>
+        {% for c in sem %}
+        <td class="{{ 'hors-mois' if not c.dans_mois }} {{ 'auj' if c.est_aujourdhui }}">
+          <a href="{{ lien('jour', c.date_iso) }}">
+            <span class="num">{{ c.num }}</span>
+            {% if c.nb_seances %}<span class="pastille">{{ c.nb_seances }} seance(s)</span>{% endif %}
+          </a>
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div></div>
+
+{# ===================== VUE SEMAINE ===================== #}
+{% elif vue=='semaine' %}
+<div class="panel"><div class="pb">
+  <div class="sem-grille" style="--hmin:{{ semaine.heure_min }};--hmax:{{ semaine.heure_max }}">
+    <div class="sem-axe">
+      <div class="sem-coin"></div>
+      {% for h in range(semaine.heure_min, semaine.heure_max+1) %}
+      <div class="sem-heure"><span>{{ h }}h</span></div>
+      {% endfor %}
+    </div>
+    {% for jd in semaine.jours %}
+    <div class="sem-col {{ 'auj' if jd.est_aujourdhui }}">
+      <div class="sem-tete"><a href="{{ lien('jour', jd.date_iso) }}">{{ jd.nom }}<small>{{ jd.date_fr }}</small></a></div>
+      <div class="sem-corps">
+        {% for h in range(semaine.heure_min, semaine.heure_max+1) %}<div class="sem-ligne"></div>{% endfor %}
+        {% for s in jd.seances %}
+          {% if s.deb_min is not none and s.fin_min is not none %}
+          {% set top = (s.deb_min - semaine.heure_min*60) * 0.9 %}
+          {% set haut = ((s.fin_min - s.deb_min) * 0.9) %}
+          <div class="bloc type-{{ s.type|lower }}" style="top:{{ top }}px;height:{{ haut if haut>22 else 22 }}px">
+            <b>{{ s.matiere }}</b>
+            <span class="meta">{{ s.debut }}&ndash;{{ s.fin }} · {{ s.salle }}</span>
+            <span class="meta">{{ s.enseignant }}</span>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="note-axe">Les seances sans horaire exploitable ne sont pas positionnees sur la grille.</p>
+</div></div>
+
+{# ===================== VUE JOUR ===================== #}
+{% else %}
+<div class="jour-cols">
+  <div class="panel">
+    <div class="ph"><i class="ti ti-calendar i"></i><h3>Seances &mdash; {{ jour.jour_nom }} {{ jour.date_fr }}</h3></div>
+    <div class="pb">
+      {% if jour.seances %}
+      <ul class="jour-liste">
+        {% for s in jour.seances %}
+        <li>
+          <span class="hr">{{ s.debut }}&ndash;{{ s.fin }}</span>
+          <span class="co">
+            <b>{{ s.matiere }}</b>
+            <small>{{ s.enseignant }} · {{ s.groupe }} · {{ s.type }}</small>
+          </span>
+          <span class="sa">{% if s.salle %}<a href="{{ url_for('salle_detail', salle_id=s.salle) }}{% if demo %}?demo=1{% endif %}"><i class="ti ti-door"></i> {{ s.salle }}</a>{% endif %}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="vide"><i class="ti ti-calendar-off i"></i> Aucune seance ce jour ({{ jour.jour_nom }}).</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="jour-aside">
+    <div class="panel">
+      <div class="ph"><i class="ti ti-door i"></i><h3>Salles occupees</h3></div>
+      <div class="pb">
+        {% if jour.salles_occupees %}
+        <div class="puces">
+          {% for sa in jour.salles_occupees %}
+          <a class="puce" href="{{ url_for('salle_detail', salle_id=sa) }}{% if demo %}?demo=1{% endif %}"><i class="ti ti-door"></i> {{ sa }}</a>
+          {% endfor %}
+        </div>
+        {% else %}<div class="vide-mini">Aucune salle occupee.</div>{% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><i class="ti ti-checklist i"></i><h3>Presences du jour</h3></div>
+      <div class="pb">
+        {% if jour.presences %}
+        <table class="mini">
+          <thead><tr><th>Creneau</th><th>Presents</th><th>Total</th><th>Taux</th></tr></thead>
+          <tbody>
+          {% for cr, v in jour.presences.items() %}
+          <tr><td>{{ cr }}</td><td>{{ v.present }}</td><td>{{ v.total }}</td>
+              <td>{{ ((100*v.present/v.total)|round(0)|int) if v.total else 0 }}%</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% else %}<div class="vide-mini">Aucune presence saisie pour cette date.</div>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

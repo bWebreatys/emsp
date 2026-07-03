@@ -1,0 +1,798 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; {{ info.libelle }}</div>
+<div class="page-head">
+  <i class="ti {{ info.icone }} ic"></i>
+  <div>
+    <h1>{{ info.libelle }}</h1>
+    <div class="sub">{{ data.titre }}</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — {{ info.libelle }} <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    {% if onglet == 'P0_Parametres' %}
+      <p>Renseignez ici toutes les listes de reference. <b>Commencez par cet onglet</b> : toutes les listes deroulantes des autres pages en dependent.</p>
+    {% elif onglet == 'A1_Etudiants' %}
+      <p>Le <b>matricule</b> est la cle qui relie l'etudiant a toutes les autres pages : ne le modifiez pas apres saisie. Completez genre et origine s'ils manquent dans le CSV national.</p>
+    {% elif onglet == 'A2_Presences' %}
+      <p>Une ligne par etudiant, par seance et par creneau (10h, 12h, 15h, 17h). Pas d'absence partielle en V1.</p>
+    {% elif onglet == 'A3_Sessions' %}
+      <p>Une seance = un creneau hebdomadaire recurrent (matiere, enseignant, salle, jour, horaire). L'<b>enseignant</b> se choisit dans la liste des fiches <b>Enseignants &amp; vacataires (E1)</b> &mdash; <b>renseignez E1 d'abord</b>, sinon la liste est vide. La <b>salle</b> (facultative) se choisit dans la liste des <b>Salles (L1)</b>. Plus de saisie libre : on evite les fautes de frappe et on garantit les liens Seances &harr; formateurs et Seances &harr; salles. Une seance saisie apparait aussitot dans le <b>calendrier</b> et le <b>planning des salles</b>.</p>
+      <p><b>Trois vues des memes seances :</b> <i>Seances &amp; planning</i> (cet ecran) est la <b>saisie</b> de l'emploi du temps ; le <b>Calendrier</b> en est la vue mois / semaine / jour ; <i>Seances realisees (exceptions)</i> ne sert qu'a enregistrer les <b>ecarts</b> (remplacant, cours annule, duree). On saisit ici, on consulte au calendrier, on note les exceptions a part.</p>
+    {% elif onglet == 'A4_Documents_etud' %}
+      <p>Registre des documents remis aux etudiants (attestations de passage, bulletins, releves). Le <b>Statut</b> suit le cycle de validation : <i>En attente conseil</i> &rarr; <i>En attente delai</i> (contestation : 1 semaine) &rarr; <i>Imprimable</i> &rarr; <i>Remis</i>. Le statut et les dates sont saisis a la main ; la generation PDF et le passage automatique en imprimable sont des pistes possibles ensuite, sans engagement.</p>
+    {% elif onglet == 'S1_Stages' %}
+      <p>Une ligne par <b>affectation de stage</b> (6 seances/an, 1 mois chacune). Le <b>lieu</b> provient de la liste des etablissements (Parametres) ; renseignez-la d'abord si elle est vide. <i>Fiche retour</i> passe a O quand l'etablissement renvoie la fiche. Une note /20 et une observation libre suffisent ; la grille d'appreciation detaillee et la gestion fine des plaintes sont des pistes possibles ensuite, sans engagement.</p>
+      <p><b>Trois ecrans pour les stages :</b> <i>Stages &mdash; affectation &amp; fiches retour</i> (cet ecran) est l'<b>ecran de travail</b> (saisie d'une affectation et de la fiche retour) ; <i>Stages &mdash; affectation</i> propose une <b>repartition automatique</b> a ajuster ; <i>Stages &mdash; suivi &amp; tableau de bord</i> est la <b>vue de pilotage</b> (lecture). Parcours conseille : proposer (auto) &rarr; ajuster / saisir ici &rarr; suivre.</p>
+    {% elif onglet == 'E1_Enseignants' %}
+      <p>Une fiche par enseignant ou vacataire. Le <b>matricule</b> est la cle qui relie l'enseignant au releve des heures (E2) et, plus tard, aux seances. Si le matricule officiel n'existe pas encore, gardez le code provisoire <b>NC-&lt;n&gt;</b> propose automatiquement (NC-1, NC-2&hellip;) : il distingue chaque enseignant et sera remplace par le vrai matricule le jour ou il est connu. Renseignez <i>Titulaire</i> ou <i>Vacataire</i> ; les <i>matieres enseignees</i> peuvent etre listees dans un seul champ.</p>
+    {% elif onglet == 'L1_Salles' %}
+      <p>Creez ici vos salles : un <b>ID salle</b> court (pre-rempli en <b>SAL-&lt;n&gt;</b>, modifiable) et un <b>nom explicite</b> (ex. « Amphi A », « Labo TP 1 »). Choisissez le <b>type</b> (Amphitheatre, Cours, TD, TP&hellip; — la Direction peut completer la liste dans Parametres). Indiquez la capacite, les equipements (separes par <code>;</code>) et le batiment. Les salles saisies alimentent le <b>planning des salles</b>, la <b>fiche salle</b>, et deviennent selectionnables par les seances.</p>
+      <p><b>Au deploiement :</b> renseignez ce <b>referentiel des salles</b> en premier. Tant qu'il est vide, le planning <b>derive les salles des noms presents dans l'inventaire materiel (M1)</b> ; une fois L1 saisi, les salles ont une <b>source unique</b> et un descriptif complet (type, capacite, batiment).</p>
+    {% elif onglet == 'E2_Releve_heures' %}
+      <p>Un releve par enseignant et par periode de paie. L'<b>enseignant</b> se choisit dans la liste E1 (affichee « Matricule — Nom Prenom » ; c'est le <b>matricule</b> qui est enregistre). Indiquez le <i>Mois / Annee</i> (format <b>MM/AAAA</b>), le volume <i>programme</i> (optionnel) et le volume <i>constate</i> (obligatoire). Le <b>Total heures a payer</b> est calcule automatiquement : il reprend les heures constatees (heures seulement, sans taux) &mdash; colonne <span class="ro-tag">calcul</span>, non saisissable.</p>
+      <p><b>Deux chemins pour les heures :</b> ce <i>Releve des heures</i> est l'ecran de <b>saisie manuelle</b> (par enseignant et periode) ; l'ecran <i>Heures constatees (report paie)</i> peut <b>reporter automatiquement</b> les heures calculees a partir des seances realisees. Si le report automatique est disponible, utilisez-le ; sinon, saisissez ici.</p>
+    {% elif onglet == 'F2_Comptes' %}
+      <p>Un compte ou une caisse par ligne (ne pas dupliquer un compte). Choisissez le <b>Nom du compte</b> dans la liste (memes noms que F1, pour que le solde se calcule), le <b>Type</b> (Banque / Caisse / Autre) et le <b>Solde initial</b> (KMF). Le <b>Solde courant</b> se met a jour tout seul : solde initial + recettes &minus; depenses du compte (d'apres la tresorerie F1) &mdash; colonne <span class="ro-tag">calcul</span>, non saisissable. Renseignez d'abord la liste <code>Comptes_caisses</code> dans Parametres. Acces : Comptabilite et Direction.</p>
+    {% elif onglet == 'F1_Mouvements' %}
+      <p>Une ligne par mouvement de tresorerie (KMF). Renseignez le <b>Sens</b> (Recette / Depense), la <b>Categorie</b> (la liste reunit recettes et depenses), le <b>Compte / caisse</b> et un <b>Libelle</b>. Saisissez le montant dans la colonne correspondant au sens : <b>Recette &rArr; Montant Recette</b>, <b>Depense &rArr; Montant Depense</b> (l'autre doit rester vide ; controle automatique). La <b>Date operation</b> est pre-remplie au jour ; <b>Saisi par</b> est rempli automatiquement avec votre identifiant. Indiquez le <b>bailleur</b> (source de financement) pour la tracabilite AFD.</p>
+      <p><b>Avant de saisir</b> : la Direction / Comptabilite doit d'abord renseigner dans <i>Parametres</i> les listes <code>Cat_Recettes</code>, <code>Cat_Depenses</code> et <code>Comptes_caisses</code> (et, si utilise, <code>Postes_budgetaires</code>), sinon les listes deroulantes obligatoires sont vides. Acces reserve : Comptabilite et Direction (Acces financier = O).</p>
+    {% elif onglet == 'L2_Reservations' %}
+      <p>Reservez une salle <b>en dehors des cours</b> (reunion, examen, evenement, partenaire). Choisissez la <b>salle</b> (liste L1), la <b>date</b> et les <b>heures</b>, indiquez <b>qui reserve</b> et le <b>motif</b>. Le <b>Statut</b> (Demandee / Confirmee / Annulee) suit la demande. Contrairement aux seances (emploi du temps hebdomadaire recurrent), une reservation est <b>datee et ponctuelle</b> : c'est pour cela qu'elle est geree a part. La vue d'occupation d'une salle reunira les cours et ces reservations.</p>
+    {% elif onglet == 'M1_Equipements' %}
+      <p>Inventaire de pilotage des equipements (<b>sans maintenance</b> : pannes, contrats et pieces detachees relevent du futur GMAO, hors perimetre). Une ligne par equipement : <b>designation</b>, <b>categorie</b>, <b>salle / localisation</b> (liste L1), <b>date d'acquisition</b>, <b>bailleur</b> (AFD, Etat&hellip; liste partagee avec la tresorerie), <b>montant</b>, rappel de la <b>piece F1</b> liee, <b>etat</b> et <b>n&deg; d'inventaire</b>. Permettra de sortir, par exemple, les equipements finances par l'AFD et leur localisation.</p>
+      <p><b>Circuit depense &rarr; equipement :</b> le <b>montant</b>, le <b>bailleur</b> et la <b>reference de piece</b> proviennent de la <b>comptabilite</b> (depense F1), pas de l'inventaire. Pour une fiche complete : enregistrez d'abord la <b>depense en tresorerie (F1)</b>, puis reportez ici sa <b>reference de piece F1</b>. Une fiche sans ces champs reste valable pour le pilotage, le lien compta etant alors a completer a la main.</p>
+    {% elif onglet == 'IMPORT_zone' %}
+      <p>Collez le CSV national. La colonne <b>Statut vs base</b> indique NOUVEAU ou EXISTANT : ne recopiez dans la fiche etudiants que les lignes NOUVEAU.</p>
+    {% elif onglet == 'R1_Maquettes' %}
+      <p>Referentiel des formations (consultation). Reprend les <b>maquettes officielles</b> des 5 filieres : pour chaque <b>UE / module</b> et chaque <b>matiere</b>, le volume horaire (<b>CM / TD / TP / total</b>), le <b>credit (ECTS)</b> et le <b>coefficient</b>, par <b>niveau</b> et <b>semestre</b>. Il sert de socle : choix des matieres dans les seances, volume horaire programme pour le suivi des heures, et structure UE pour les relev(e)s de notes. Page en lecture seule (filtrable et exportable en Excel).</p>
+    {% elif onglet == 'N1_Bareme_UE' %}
+      <p>Le <b>barème</b> de référence pour le calcul des moyennes : pour chaque <b>filière / niveau / semestre</b>, les UE, leurs matières, leur <b>coefficient</b> et leurs <b>ECTS</b>. La moyenne du semestre est la moyenne des UE pondérée par le coefficient ; renseignez ce barème avant toute saisie de notes.</p>
+      <p><b>Barème provisoire :</b> seul le barème <i>L2 Soins infirmiers</i> est confirmé (coefficients réels, colonne <b>Coef confirmé = Oui</b>). Pour les autres filières, la structure UE/matières est reprise des maquettes mais le <b>coefficient est à 1 par défaut</b> (<b>Coef confirmé = Non</b>) : il devra être corrigé d'après le document de référence officiel pour que les moyennes soient conformes aux exigences de passage. Tant que <b>Coef confirmé = Non</b>, le relevé porte la mention « barème provisoire ».</p>
+    {% endif %}
+
+    <div class="legende-prov" style="margin-top:6px">
+      <span><span class="dot" style="background:var(--tdr)"></span> Champ TDR</span>
+      <span><span class="dot" style="background:var(--init)"></span> ★ Initiative Webcreatys (*)</span>
+      <span><span class="dot" style="background:var(--hors)"></span> ★ Ajout hors TDR (**)</span>
+    </div>
+
+    {% if dico %}
+    <p style="margin-top:10px"><b>Champs de cette page :</b></p>
+    {% for d in dico %}
+      <div class="champ"><b>{{ d.Champ }}</b><span>{{ d.Description }}{% if d.Obligatoire=='Oui' %} <i>(obligatoire)</i>{% endif %}</span></div>
+    {% endfor %}
+    {% endif %}
+    <p style="margin-top:10px;font-size:13px">Les colonnes <span class="ro-tag">calcul</span> sont protegees : ne jamais les saisir a la main.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+{% if coherence_bareme %}
+{# R1 (V1.99.38) — controle de coherence du bareme ECTS, non bloquant, en tete de l'ecran d'edition N1_Bareme_UE. #}
+<section class="coherence-bareme" style="margin-bottom:14px">
+  {% if coherence_bareme.ok %}
+  <div style="border:1px solid #2E6CA4;border-left:5px solid #2E6CA4;border-radius:6px;padding:10px 14px;background:#EAF1F8;color:#1F4E79">
+    <i class="ti ti-circle-check i"></i> <b>Barème cohérent.</b> {{ coherence_bareme.nb_ue }} UE contrôlées : 30 crédits par semestre, 60 par niveau, coefficients présents et confirmés.
+  </div>
+  {% else %}
+  <details class="aide" open>
+    <summary style="color:#9B2C2C"><i class="ti ti-alert-triangle i"></i> <b>Cohérence du barème — {{ coherence_bareme.nb }} point(s) à vérifier</b> <i class="ti ti-chevron-right chev"></i></summary>
+    <div class="corps">
+      <p style="color:#595959;margin-top:0">Signalement non bloquant : la saisie et les calculs restent possibles. Corrigez les UE concernées ci-dessous, puis les anomalies disparaissent.</p>
+      {% if coherence_bareme.semestres %}
+      <p style="color:#9B2C2C;margin-bottom:4px"><b>Crédits par semestre &ne; 30 :</b></p>
+      <ul style="margin-top:0">
+        {% for s in coherence_bareme.semestres %}
+        <li>{{ s.filiere }} &middot; {{ s.niveau }} &middot; {{ s.semestre }} : <b>{{ '%g'|format(s.somme) }}</b> crédits (écart {{ '%+g'|format(s.ecart) }})</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if coherence_bareme.niveaux %}
+      <p style="color:#9B2C2C;margin-bottom:4px"><b>Crédits par niveau &ne; 60 :</b></p>
+      <ul style="margin-top:0">
+        {% for n in coherence_bareme.niveaux %}
+        <li>{{ n.filiere }} &middot; {{ n.niveau }} : <b>{{ '%g'|format(n.somme) }}</b> crédits (écart {{ '%+g'|format(n.ecart) }})</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if coherence_bareme.ues %}
+      <p style="color:#9B2C2C;margin-bottom:4px"><b>Coefficients à corriger :</b></p>
+      <ul style="margin-top:0">
+        {% for u in coherence_bareme.ues %}
+        <li>{{ u.filiere }} &middot; {{ u.niveau }} &middot; {{ u.semestre }} &middot; <b>{{ u.ue }}</b> {{ u.intitule }} &mdash; {{ u.probleme }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if coherence_bareme.non_confirmes %}
+      <p style="color:#9B2C2C;margin-bottom:4px"><b>Coefficients non confirmés ({{ coherence_bareme.non_confirmes|length }}) :</b> passez « Coef confirme » à <i>Oui</i> une fois vérifiés.</p>
+      <ul style="margin-top:0">
+        {% for u in coherence_bareme.non_confirmes %}
+        <li>{{ u.filiere }} &middot; {{ u.niveau }} &middot; {{ u.semestre }} &middot; <b>{{ u.ue }}</b> {{ u.intitule }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </details>
+  {% endif %}
+  <div style="margin-top:10px;border:1px solid #BFD3E6;border-radius:6px;padding:10px 14px;background:#F5F9FD">
+    <div style="font-weight:600;color:#1F4E79"><i class="ti ti-adjustments-alt i"></i> Seuil de passage conditionnel</div>
+    <p style="color:#595959;margin:4px 0 8px">Écart de crédits ECTS toléré pour un passage « Admis conditionnel » (au-delà : « Ajourné »). Actuellement : <b>{{ '%g'|format(seuil_passage) }}</b> crédit(s).</p>
+    {% if peut_ecrire %}
+    <form method="post" action="{{ url_for('bareme_seuil') }}" style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">
+      <div><label style="display:block;font-size:13px;color:#595959">Nouveau seuil (crédits)</label>
+        <input type="number" name="seuil" min="0" step="1" value="{{ '%g'|format(seuil_passage) }}" style="width:120px"></div>
+      <button class="btn-action" type="submit"><i class="ti ti-device-floppy"></i> Enregistrer le seuil</button>
+    </form>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+{% if pa_kpis %}
+{# V1.99.33 (#19) — synthese du plan d'action en tete de l'ecran de saisie (ecran unique). #}
+<section class="pa-synthese">
+  <div class="kpis">
+    <div class="kpi"><div class="v">{{ pa_kpis.total }}</div><div class="l">Actions au total</div></div>
+    <div class="kpi green"><div class="v">{{ pa_kpis.acheve }}</div><div class="l">Achevees</div></div>
+    <div class="kpi"><div class="v">{{ pa_kpis.pct_acheve }} %</div><div class="l">Taux d'achevement</div></div>
+    <div class="kpi red"><div class="v">{{ pa_kpis.retard }}</div><div class="l">En retard</div></div>
+  </div>
+  {% if pa_kpis.total > 0 %}
+  <details class="aide" open>
+    <summary><i class="ti ti-chart-pie i"></i> Graphiques de suivi <i class="ti ti-chevron-right chev"></i></summary>
+    <div class="corps">
+      <div class="grid-charts">
+        <div class="chart-card"><div class="chart-head"><i class="ti ti-progress i"></i> Par etat d'avancement</div>
+          <div class="chart-body"><div class="canvas-box"><canvas id="cv_pa_etat"></canvas></div></div></div>
+        <div class="chart-card"><div class="chart-head"><i class="ti ti-flag i"></i> Par priorite</div>
+          <div class="chart-body"><div class="canvas-box"><canvas id="cv_pa_prio"></canvas></div></div></div>
+        <div class="chart-card"><div class="chart-head"><i class="ti ti-category i"></i> Par axe / theme</div>
+          <div class="chart-body"><div class="canvas-box"><canvas id="cv_pa_axe"></canvas></div></div></div>
+      </div>
+    </div>
+  </details>
+  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+  <script>
+  (function () {
+    var ETAT={{ pa_kpis.par_etat|tojson }}, PRIO={{ pa_kpis.par_prio|tojson }}, AXE={{ pa_kpis.par_axe|tojson }};
+    var BLEU="#1F4E79", PAL=["#1F4E79","#2e6da4","#5b9bd5","#9cc3e6","#c9def0","#8aa0b6","#b7c4d1"];
+    var opt={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}};
+    function lab(a){return a.map(function(x){return x[0];});}
+    function val(a){return a.map(function(x){return x[1];});}
+    new Chart(document.getElementById("cv_pa_etat"),{type:"doughnut",
+      data:{labels:lab(ETAT),datasets:[{data:val(ETAT),backgroundColor:PAL}]},options:opt});
+    new Chart(document.getElementById("cv_pa_prio"),{type:"bar",
+      data:{labels:lab(PRIO),datasets:[{data:val(PRIO),backgroundColor:BLEU}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});
+    new Chart(document.getElementById("cv_pa_axe"),{type:"bar",
+      data:{labels:lab(AXE),datasets:[{data:val(AXE),backgroundColor:PAL}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});
+  })();
+  </script>
+  {% endif %}
+  <p class="pa-synthese-note"><i class="ti ti-arrow-down i"></i> Saisie et gestion des actions ci-dessous. Pour l'imprimer : Impressions &rsaquo; Plan d'action.</p>
+</section>
+{% endif %}
+{% if bandeau and (bandeau.supporte.filiere or bandeau.supporte.niveau or bandeau.supporte.annee or bandeau.supporte.periode) %}
+  {% set bandeau_action = url_for('module', onglet=onglet) %}
+  {% set bandeau_action_imp = url_for('module_imprimer', onglet=onglet) %}
+  {% include "_bandeau_filtres.html" %}
+{% endif %}
+{% if onglet == 'P0_Parametres' %}
+  {% if peut_ecrire %}
+  <div class="panel">
+    <div class="ph"><i class="ti ti-pencil i"></i><h3>Editer les listes de reference</h3></div>
+    <div class="pb">
+      <p style="margin-top:0;color:var(--gris);font-size:14px">Ces listes alimentent toutes les listes deroulantes des autres pages. Ajoutez ou retirez des valeurs ; la modification est ecrite directement dans le classeur via la couche d'acces.</p>
+      <div class="param-grid">
+        {% for p in parametres %}
+        <div class="param-carte">
+          <div class="pc-tete {{ p.prov_info.classe }}">
+            {{ p.libelle }}{% if p.prov_info.etoile %}<span class="etoile">&#9733;</span>{% endif %}
+          </div>
+          <div class="pc-corps">
+            {% if p.valeurs %}
+            <div class="param-vals">
+              {% for v in p.valeurs %}
+              <span class="param-chip">{{ v }}
+                <form method="post" action="{{ url_for('parametres_supprimer') }}" style="display:inline">
+                  <input type="hidden" name="colonne" value="{{ p.brut }}">
+                  <input type="hidden" name="valeur" value="{{ v }}">
+                  <button type="submit" title="Retirer">&times;</button>
+                </form>
+              </span>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="param-vide">Liste vide.</div>
+            {% endif %}
+            <form class="param-ajout" method="post" action="{{ url_for('parametres_ajouter') }}">
+              <input type="hidden" name="colonne" value="{{ p.brut }}">
+              <input type="text" name="valeur" placeholder="Nouvelle valeur" maxlength="80">
+              <button type="submit"><i class="ti ti-plus"></i> Ajouter</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="lecture-seule-note"><i class="ti ti-lock"></i> Votre role ({{ role_courant.role }}) n'autorise pas la modification des parametres. Cet ecran est reserve a la Direction.</div>
+  {% endif %}
+{% endif %}
+
+{% if onglet in cfg.ONGLETS_SAISIE_ACTIVE %}
+  {% if peut_ecrire %}
+  <div class="panel">
+    <div class="ph"><i class="ti ti-row-insert-bottom i"></i><h3 id="saisie-titre">Ajouter une ligne</h3></div>
+    <div class="pb">
+      {% if data.lignes and onglet in cfg.ONGLETS_EDITION_LIGNE %}
+      <div class="edit-pick" style="margin-bottom:12px;padding:8px 10px;background:#EAF1F8;border-left:4px solid #1F4E79;border-radius:4px">
+        <label style="font-weight:600">Modifier une fiche existante :
+          <select id="edit-select" style="margin-left:6px;min-width:240px"><option value="">— choisir une ligne —</option></select>
+        </label>
+        <button type="button" id="edit-charger" class="btn-action"><i class="ti ti-edit"></i> Charger pour modification</button>
+      </div>
+      {% endif %}
+      <form id="form-saisie" method="post"
+            action="{{ url_for('module_ajouter', onglet=onglet) }}"
+            data-url-ajout="{{ url_for('module_ajouter', onglet=onglet) }}"
+            data-url-modif="{{ url_for('module_modifier', onglet=onglet) }}">
+        <input type="hidden" name="_index" id="f-index" value="">
+        <div class="saisie-grid">
+          {% for ch in champs %}
+          <div class="saisie-champ" style="--w:{{ ch.largeur }}ch">
+            <label>{{ ch.libelle }}{% if ch.prov_info.etoile %}<span class="etoile">&#9733;</span>{% endif %}{% if ch.obligatoire %} <span class="oblig">*</span>{% endif %}</label>
+            {% if ch.options is not none %}
+              <select name="{{ ch.brut }}">
+                <option value="">{{ '— choisir —' if ch.obligatoire else '(vide)' }}</option>
+                {% for o in ch.options %}<option value="{{ o.value }}" {{ 'selected' if o.value==ch.defaut else '' }}>{{ o.label }}</option>{% endfor %}
+              </select>
+            {% elif ch.type == 'number' %}
+              <input type="number" name="{{ ch.brut }}" step="any" value="{{ ch.defaut }}">
+            {% elif ch.type == 'date_fr' %}
+              <input type="text" name="{{ ch.brut }}" placeholder="JJ/MM/AAAA" value="{{ ch.defaut }}">
+            {% elif ch.datalist %}
+              <input type="text" name="{{ ch.brut }}" list="{{ ch.datalist }}" value="{{ ch.defaut }}" autocomplete="off">
+              <datalist id="{{ ch.datalist }}"></datalist>
+            {% else %}
+              <input type="text" name="{{ ch.brut }}" value="{{ ch.defaut }}">
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <div class="saisie-actions">
+          <button type="submit" id="saisie-submit" class="btn-action"><i class="ti ti-plus"></i> Enregistrer la ligne</button>
+          <button type="button" id="saisie-annuler" class="btn-action" style="display:none;background:#6b7280"><i class="ti ti-x"></i> Annuler la modification</button>
+          <span class="saisie-note"><span class="oblig">*</span> champ obligatoire &middot; les listes proviennent de l'onglet Parametres</span>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <div class="lecture-seule-note"><i class="ti ti-lock"></i> Votre role ({{ role_courant.role }}) n'autorise pas la saisie sur cet onglet.</div>
+  {% endif %}
+  {% if peut_ecrire and data.lignes %}
+  <script>
+  (function () {
+    var form = document.getElementById('form-saisie'); if (!form) return;
+    var BRUTS = {{ data.entetes | map(attribute='brut') | list | tojson }};
+    var ROWS = {{ data.lignes | tojson }};
+    var sel = document.getElementById('edit-select');
+    ROWS.forEach(function (row, idx) {
+      var lbl = row.filter(function (v) { return String(v).trim() !== ''; }).slice(0, 4).join(' · ');
+      if (lbl.length > 70) lbl = lbl.slice(0, 70) + '…';
+      var o = document.createElement('option'); o.value = idx; o.textContent = lbl || ('Ligne ' + (idx + 1));
+      sel.appendChild(o);
+    });
+    function setChamp(brut, val) {
+      for (var k = 0; k < form.elements.length; k++) {
+        if (form.elements[k].name === brut) { form.elements[k].value = (val == null ? '' : val); return; }
+      }
+    }
+    function charger() {
+      var idx = sel.value; if (idx === '') return;
+      var row = ROWS[idx]; if (!row) return;
+      BRUTS.forEach(function (b, j) { setChamp(b, row[j]); });
+      document.getElementById('f-index').value = idx;
+      form.setAttribute('action', form.getAttribute('data-url-modif'));
+      document.getElementById('saisie-titre').textContent = 'Modifier la fiche selectionnee';
+      document.getElementById('saisie-submit').innerHTML = '<i class="ti ti-device-floppy"></i> Enregistrer les modifications';
+      document.getElementById('saisie-annuler').style.display = '';
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function annuler() {
+      form.reset(); document.getElementById('f-index').value = '';
+      form.setAttribute('action', form.getAttribute('data-url-ajout'));
+      document.getElementById('saisie-titre').textContent = 'Ajouter une ligne';
+      document.getElementById('saisie-submit').innerHTML = '<i class="ti ti-plus"></i> Enregistrer la ligne';
+      document.getElementById('saisie-annuler').style.display = 'none';
+      sel.value = '';
+    }
+    document.getElementById('edit-charger').addEventListener('click', charger);
+    document.getElementById('saisie-annuler').addEventListener('click', annuler);
+    // Deep-link "Modifier dans le module" : ?modifier=<valeur> pre-selectionne
+    // la ligne dont une cellule vaut exactement <valeur> (ex. matricule).
+    try {
+      var cible = new URLSearchParams(window.location.search).get('modifier');
+      if (cible) {
+        cible = String(cible).trim().toLowerCase();
+        for (var r = 0; r < ROWS.length; r++) {
+          if (ROWS[r].some(function (v) { return String(v == null ? '' : v).trim().toLowerCase() === cible; })) {
+            sel.value = r; charger(); break;
+          }
+        }
+      }
+    } catch (e) {}
+  })();
+  </script>
+  {% endif %}
+
+  {% if peut_ecrire and maquette_cfg is defined and maquette_cfg %}
+  <script>
+  (function () {
+    var CFG = {{ maquette_cfg|tojson }};
+    var LIGNES = {{ maquette_lignes|tojson }};
+    var form = document.querySelector('form[action$="/ajouter"]') ||
+               document.querySelector('.saisie-grid') &&
+               document.querySelector('.saisie-grid').closest('form');
+    if (!form) { return; }
+    function champ(brut) { return form.querySelector('[name="' + brut + '"]'); }
+    var elMat = champ(CFG.matiere), elVol = champ(CFG.volume),
+        elFil = champ(CFG.filiere), elNiv = champ(CFG.niveau),
+        elSem = champ(CFG.semestre),
+        dl = document.getElementById(CFG.id);
+    if (!elMat || !dl) { return; }
+    function norm(v) { return (v == null ? '' : String(v)).trim().toLowerCase(); }
+    // S1/S2 (annee) + niveau L1/L2/L3 -> semestre cursus 1..6 de la maquette.
+    function semCursus() {
+      var n = norm(elNiv && elNiv.value), s = norm(elSem && elSem.value);
+      var base = {l1: 0, l2: 2, l3: 4};
+      if (!(n in base)) { return null; }
+      if (s === 's1' || s === '1') { return String(base[n] + 1); }
+      if (s === 's2' || s === '2') { return String(base[n] + 2); }
+      return null;
+    }
+    function lignesFiltrees() {
+      var f = norm(elFil && elFil.value), n = norm(elNiv && elNiv.value),
+          sc = semCursus();
+      return LIGNES.filter(function (r) {
+        if (f && norm(r.f) !== f) { return false; }
+        if (n && norm(r.n) !== n) { return false; }
+        if (sc && String(r.s).trim() !== sc) { return false; }
+        return true;
+      });
+    }
+    function majDatalist() {
+      var vus = {}, html = '';
+      lignesFiltrees().forEach(function (r) {
+        if (r.m && !vus[r.m]) { vus[r.m] = 1;
+          html += '<option value="' + r.m.replace(/"/g, '&quot;') + '">'; }
+      });
+      dl.innerHTML = html;
+    }
+    function preremplirVolume() {
+      if (!elVol) { return; }
+      if (elVol.value !== null && String(elVol.value).trim() !== '') { return; }
+      var m = norm(elMat.value);
+      if (!m) { return; }
+      var tot = 0, trouve = false;
+      lignesFiltrees().forEach(function (r) {
+        if (norm(r.m) === m) { tot += (parseFloat(r.h) || 0); trouve = true; }
+      });
+      if (trouve) { elVol.value = tot; }
+    }
+    [elFil, elNiv, elSem].forEach(function (el) {
+      if (el) { el.addEventListener('change', majDatalist);
+                el.addEventListener('input', majDatalist); }
+    });
+    elMat.addEventListener('change', preremplirVolume);
+    elMat.addEventListener('blur', preremplirVolume);
+    majDatalist();
+  })();
+  </script>
+  {% endif %}
+{% endif %}
+{% if stages_cfg is defined and stages_cfg %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-building-hospital i"></i><h3>Occupation des lieux de stage</h3></div>
+  <div class="pb">
+    <div class="stages-filtres">
+      <label>Annee academique <select id="st-annee"></select></label>
+      <label>Seance <select id="st-seance"></select></label>
+    </div>
+    <p id="st-compteurs" class="stages-cpt"></p>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Lieu</th><th>Niveau</th><th>Quota</th><th>Occupes</th><th>Restants</th></tr></thead>
+        <tbody id="st-tbody"></tbody>
+      </table>
+    </div>
+    <p class="saisie-note">Le quota est le nombre maximum de stagiaires par seance. L'occupation est indicative ; la decision reste manuelle.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var CFG = {{ stages_cfg|tojson }};
+  var LIEUX = {{ stages_lieux|tojson }};
+  var AFF = {{ stages_affectations|tojson }};
+  function n(v) { return (v == null ? '' : String(v)).trim(); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var byLib = {}; LIEUX.forEach(function (l) { byLib[l.lib] = l; });
+  function occ(lib, annee, seance) {
+    var c = 0; AFF.forEach(function (a) {
+      if (a.lieu === lib && n(a.annee) === n(annee) && n(a.seance) === n(seance)) { c++; }
+    }); return c;
+  }
+  var selA = document.getElementById('st-annee'), selS = document.getElementById('st-seance'),
+      tb = document.getElementById('st-tbody'), cpt = document.getElementById('st-compteurs');
+  function addOpt(sel, v, t) { var o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o); }
+  var annees = []; AFF.forEach(function (a) { if (n(a.annee) && annees.indexOf(n(a.annee)) < 0) { annees.push(n(a.annee)); } });
+  annees.sort();
+  if (selA) {
+    if (!annees.length) { addOpt(selA, '', '(aucune affectation)'); }
+    annees.forEach(function (a) { addOpt(selA, a, a); });
+    selA.value = annees.length ? annees[annees.length - 1] : '';
+  }
+  if (selS) { for (var i = 1; i <= 6; i++) { addOpt(selS, String(i), 'Seance ' + i); } selS.value = '1'; }
+  function taux(o, q) { return q > 0 ? Math.round(100 * o / q) + ' %' : '—'; }
+  function majPanneau() {
+    if (!tb) { return; }
+    var an = selA ? selA.value : '', se = selS ? selS.value : '', html = '', qtot = 0, otot = 0;
+    LIEUX.forEach(function (l) {
+      var o = occ(l.lib, an, se), q = l.quota || 0, r = q - o; qtot += q; otot += o;
+      html += '<tr' + (r <= 0 ? ' class="st-plein"' : '') + '><td>' + esc(l.lib) + '</td><td>' +
+              esc(l.niveau || 'Tous') + '</td><td>' + q + '</td><td>' + o + '</td><td>' + r + '</td></tr>';
+    });
+    tb.innerHTML = html || '<tr><td colspan="5">Aucun lieu dans le referentiel (a saisir au deploiement).</td></tr>';
+    if (cpt) {
+      var etu = {}; AFF.forEach(function (a) {
+        if (n(a.annee) === n(an) && n(a.seance) === n(se) && a.matricule) { etu[a.matricule] = 1; } });
+      cpt.textContent = 'Lieux : ' + LIEUX.length + '  -  Etudiants affectes : ' + Object.keys(etu).length +
+                        '  -  Places : ' + otot + ' / ' + qtot + ' occupees  -  Taux : ' + taux(otot, qtot);
+    }
+  }
+  if (selA) { selA.addEventListener('change', majPanneau); }
+  if (selS) { selS.addEventListener('change', majPanneau); }
+  majPanneau();
+  // Indicateur de places restantes a la saisie (non bloquant, controle humain)
+  var form = document.querySelector('form[action$="/ajouter"]');
+  if (form) {
+    var elL = form.querySelector('[name="' + CFG.lieu + '"]'),
+        elA = form.querySelector('[name="' + CFG.annee + '"]'),
+        elS = form.querySelector('[name="' + CFG.seance + '"]');
+    if (elL) {
+      var span = document.createElement('span'); span.className = 'st-places';
+      elL.insertAdjacentElement('afterend', span);
+      function majPlaces() {
+        var lib = n(elL.value), l = byLib[lib];
+        if (!l) { span.textContent = ''; span.className = 'st-places'; return; }
+        var se = elS ? elS.value : '';
+        if (!n(se)) { span.textContent = 'Indiquer la seance pour voir les places restantes.'; span.className = 'st-places'; return; }
+        var o = occ(lib, elA ? elA.value : '', se), q = l.quota || 0, r = q - o;
+        span.textContent = 'Places restantes : ' + r + ' / ' + q + (r <= 0 ? ' (complet)' : '');
+        span.className = 'st-places' + (r <= 0 ? ' plein' : '');
+      }
+      [elL, elA, elS].forEach(function (e) {
+        if (e) { e.addEventListener('change', majPlaces); e.addEventListener('input', majPlaces); } });
+      majPlaces();
+    }
+  }
+})();
+</script>
+{% endif %}
+{% if peut_ecrire and notes_assist is defined and notes_assist %}
+<script>
+(function () {
+  var B = {{ notes_assist.bareme|tojson }}, ETU = {{ notes_assist.etu|tojson }}, C = {{ notes_assist.cfg|tojson }};
+  function n(v) { return (v == null ? '' : String(v)).trim(); }
+  function lc(v) { return n(v).toLowerCase(); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var form = document.querySelector('form[action$="/ajouter"]'); if (!form) { return; }
+  function ch(b) { return form.querySelector('[name="' + b + '"]'); }
+  var elMat = ch(C.matricule), elSem = ch(C.semestre), elUE = ch(C.ue), elM = ch(C.matiere);
+  var dlUE = document.getElementById(C.dl_ue), dlM = document.getElementById(C.dl_mat);
+  function fn() { var e = ETU[n(elMat && elMat.value)] || {}; return {f: lc(e.f || ''), n: lc(e.n || '')}; }
+  function filtres() {
+    var x = fn(), s = n(elSem && elSem.value);
+    return B.filter(function (r) {
+      if (x.f && lc(r.f) !== x.f) { return false; }
+      if (x.n && lc(r.n) !== x.n) { return false; }
+      if (s && n(r.s) !== s) { return false; }
+      return true;
+    });
+  }
+  function maj() {
+    var rows = filtres(), vu = {}, vm = {}, hu = '', hm = '';
+    rows.forEach(function (r) {
+      if (r.ue && !vu[r.ue]) { vu[r.ue] = 1; hu += '<option value="' + esc(r.ue) + '">'; }
+      if (r.m && !vm[r.m]) { vm[r.m] = 1; hm += '<option value="' + esc(r.m) + '">'; }
+    });
+    if (dlUE) { dlUE.innerHTML = hu; }
+    if (dlM) { dlM.innerHTML = hm; }
+  }
+  function preUE() {
+    if (!elUE || !elM || n(elUE.value) !== '') { return; }
+    var m = lc(elM.value), row = filtres().filter(function (r) { return lc(r.m) === m; })[0];
+    if (row) { elUE.value = row.ue; }
+  }
+  [elMat, elSem].forEach(function (e) { if (e) { e.addEventListener('change', maj); e.addEventListener('input', maj); } });
+  if (elM) { elM.addEventListener('change', preUE); elM.addEventListener('blur', preUE); }
+  maj();
+})();
+</script>
+{% endif %}
+
+{% if onglet in cfg.ONGLETS_SAISIE_LOT %}
+  {% if peut_ecrire %}
+  <div class="panel">
+    <div class="ph"><i class="ti ti-checklist i"></i><h3>Saisie par seance</h3></div>
+    <div class="pb">
+      <p style="margin-top:0;color:var(--gris);font-size:14px">La saisie des presences se fait <b>par seance</b> : choisissez une seance, une date et un creneau, puis cochez les etudiants presents. L'effectif est tire de la fiche etudiants. Re-saisir une seance corrige les valeurs sans creer de doublon.</p>
+      <a class="btn-action" href="{{ url_for(cfg.ONGLETS_SAISIE_LOT[onglet]) }}"><i class="ti ti-clipboard-check"></i> Ouvrir la saisie par seance</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="lecture-seule-note"><i class="ti ti-lock"></i> Votre role ({{ role_courant.role }}) n'autorise pas la saisie des presences.</div>
+  {% endif %}
+{% endif %}
+
+{% if onglet == 'A1_Etudiants' %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-printer i"></i><h3>Impression</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">Editer une <b>liste d'etudiants</b> (filtrable par filiere / niveau / section / annee) ou une <b>attestation de passage</b>.</p>
+    <a class="btn-action" style="display:inline-flex;align-items:center;gap:6px" href="{{ url_for('impressions') }}"><i class="ti ti-printer"></i> Ouvrir les impressions</a>
+  </div>
+</div>
+{% elif onglet == 'F1_Mouvements' and role_courant.financier == 'O' %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-table-options i"></i><h3>Saisie</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">Pour saisir <b>plusieurs mouvements d'un coup</b> (comme le registre papier), utilisez la <b>saisie en grille</b> : un compte, plusieurs lignes, le solde se met a jour en direct, un seul enregistrement.</p>
+    <a class="btn-action" style="display:inline-flex;align-items:center;gap:6px" href="{{ url_for('tresorerie') }}"><i class="ti ti-table-options"></i> Saisie en grille (registre)</a>
+  </div>
+</div>
+<div class="panel">
+  <div class="ph"><i class="ti ti-receipt i"></i><h3>Impression</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">Editer un <b>recu de paiement numerote</b> a partir d'une recette de cette tresorerie.</p>
+    <a class="btn-action" style="display:inline-flex;align-items:center;gap:6px" href="{{ url_for('impressions') }}"><i class="ti ti-printer"></i> Ouvrir les impressions</a>
+  </div>
+</div>
+{% endif %}
+
+{% if onglet == 'H1_Biblio_docs' and docs_groupes %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-books i"></i><h3>Documents par catégorie</h3></div>
+  <div class="pb">
+    <div class="docs-nav">
+      {% for g in docs_groupes %}<a href="#cat-{{ loop.index }}" class="docs-chip">{{ g.categorie }} <span>{{ g.documents|length }}</span></a>{% endfor %}
+    </div>
+    {% for g in docs_groupes %}
+    <div class="docs-cat" id="cat-{{ loop.index }}">
+      <div class="docs-cat-titre"><i class="ti ti-folder i"></i> {{ g.categorie }} <span class="docs-cnt">{{ g.documents|length }}</span></div>
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr><th>Titre</th><th>Référence</th><th>Mise à jour</th><th>Responsable</th><th>Chemin / lien local</th></tr></thead>
+          <tbody>
+            {% for d in g.documents %}
+            <tr>
+              <td><b>{{ d.titre }}</b></td>
+              <td>{{ d.reference or '—' }}</td>
+              <td>{{ d.date or '—' }}</td>
+              <td>{{ d.responsable or '—' }}</td>
+              <td>{% if d.chemin %}<span class="docs-chemin">{{ d.chemin }}</span> <button type="button" class="btn-mini docs-copy" data-chemin="{{ d.chemin }}"><i class="ti ti-copy"></i> Copier</button>{% else %}—{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+    <p class="saisie-note">L'ouverture directe d'un fichier depuis le navigateur est bloquée pour des raisons de sécurité. Copiez le chemin avec « Copier », puis ouvrez-le depuis l'explorateur de fichiers.</p>
+  </div>
+</div>
+<script>
+(function () {
+  document.querySelectorAll('.docs-copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-chemin') || '';
+      var done = function () { var o = b.innerHTML; b.innerHTML = '<i class="ti ti-check"></i> Copié'; setTimeout(function () { b.innerHTML = o; }, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done, done); }
+      else { var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta); done(); }
+    });
+  });
+})();
+</script>
+{% endif %}
+
+{% if onglet == 'M1_Equipements' and materiels_panne %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-alert-triangle i"></i><h3>Matériels indisponibles &mdash; {{ materiels_panne|length }}</h3></div>
+  <div class="pb">
+    <p class="saisie-note">Pour un matériel en panne ou hors service, créez une expression de besoin pré-remplie (équipement et type déjà renseignés).</p>
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Équipement</th><th>État</th><th>Salle</th><th></th></tr></thead>
+        <tbody>
+          {% for m in materiels_panne %}
+          <tr>
+            <td><b>{{ m.designation or m.id }}</b>{% if m.id and m.designation %} <span class="docs-chemin">{{ m.id }}</span>{% endif %}</td>
+            <td>{{ m.etat }}</td>
+            <td>{{ m.salle or '—' }}</td>
+            <td><a class="btn-mini" href="{{ url_for('module', onglet='L3_Besoins', equip=m.id, type='Matériel en panne') }}"><i class="ti ti-clipboard-plus"></i> Exprimer un besoin</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-table i"></i><h3>Donnees &mdash; {{ data.nb }} ligne(s)</h3></div>
+  <div class="pb">
+    {% if data.lignes %}
+    <div class="tbl-tools">
+      <div class="tbl-search"><i class="ti ti-search i"></i>
+        <input type="search" id="tblSearch" placeholder="Rechercher dans tout le tableau…" autocomplete="off"></div>
+      <button type="button" class="btn-mini" id="tblClear"><i class="ti ti-filter-off"></i> Effacer les filtres</button>
+      <label class="tbl-pp">Lignes&nbsp;
+        <select id="tblPP"><option value="20" selected>20</option><option value="40">40</option><option value="100">100</option><option value="0">Toutes</option></select>
+      </label>
+    </div>
+    <div class="tbl-wrap">
+      <table class="data" id="tblData">
+        <thead>
+          <tr>
+            {% for h in data.entetes %}
+            <th class="{{ h.prov_info.classe }}" title="{{ h.prov_info.libelle }}">
+              {{ h.libelle }}{% if h.prov_info.etoile %}<span class="etoile">★</span>{% endif %}
+              {% if h.readonly %}<span class="ro-tag">calcul</span>{% endif %}
+            </th>
+            {% endfor %}
+          </tr>
+          <tr class="tbl-filtres">
+            {% for h in data.entetes %}<th data-col="{{ loop.index0 }}"></th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% set ns = namespace(mi=-1, ni=-1) %}
+          {% if onglet == 'A1_Etudiants' %}
+            {% for h in data.entetes %}
+              {% if h.libelle == 'Matricule' %}{% set ns.mi = loop.index0 %}{% endif %}
+              {% if h.libelle == 'Nom' %}{% set ns.ni = loop.index0 %}{% endif %}
+            {% endfor %}
+          {% endif %}
+          {% for lig in data.lignes %}
+          <tr>{% for v in lig %}{% if onglet=='A1_Etudiants' and loop.index0==ns.ni and ns.mi>=0 and lig[ns.mi] %}<td><a href="{{ url_for('etudiant', matricule=lig[ns.mi]) }}" title="Ouvrir la fiche de l'étudiant">{{ v }}</a></td>{% else %}<td>{{ v }}</td>{% endif %}{% endfor %}</tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl-pager">
+      <button type="button" class="btn-mini" id="tblPrev"><i class="ti ti-chevron-left"></i> Précédent</button>
+      <span class="tbl-info" id="tblInfo"></span>
+      <button type="button" class="btn-mini" id="tblNext">Suivant <i class="ti ti-chevron-right"></i></button>
+    </div>
+    {% else %}
+    <div class="vide">
+      <i class="ti ti-database-off i"></i>
+      Aucune donnee saisie pour le moment.<br>
+      Les en-tetes ci-dessous montrent la structure attendue de cette page.
+      <div class="tbl-wrap" style="margin-top:18px">
+        <table class="data"><thead><tr>
+          {% for h in data.entetes %}
+          <th class="{{ h.prov_info.classe }}" title="{{ h.prov_info.libelle }}">{{ h.libelle }}{% if h.prov_info.etoile %}<span class="etoile">★</span>{% endif %}{% if h.readonly %}<span class="ro-tag">calcul</span>{% endif %}</th>
+          {% endfor %}
+        </tr></thead></table>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function () {
+  var table = document.getElementById('tblData');
+  if (!table) return;
+  var norm = function (s) {
+    return (s == null ? '' : String(s)).toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  };
+  var bodyRows = Array.prototype.slice.call(table.tBodies[0].rows);
+  var cache = bodyRows.map(function (tr) {
+    return Array.prototype.map.call(tr.cells, function (td) { return norm(td.textContent); });
+  });
+  var filterRow = table.querySelector('tr.tbl-filtres');
+  var SEUIL_SELECT = 30;
+  var controls = [];
+  Array.prototype.forEach.call(filterRow.cells, function (th, c) {
+    var vals = {};
+    bodyRows.forEach(function (tr) {
+      var raw = tr.cells[c] ? tr.cells[c].textContent.trim() : '';
+      if (raw !== '') vals[raw] = true;
+    });
+    var distinct = Object.keys(vals).sort(function (a, b) {
+      var na = parseFloat(a.replace(',', '.')), nb = parseFloat(b.replace(',', '.'));
+      if (!isNaN(na) && !isNaN(nb)) return na - nb;
+      return a.localeCompare(b, 'fr');
+    });
+    var el;
+    if (distinct.length > 1 && distinct.length <= SEUIL_SELECT) {
+      el = document.createElement('select');
+      el.innerHTML = '<option value="">(tous)</option>' +
+        distinct.map(function (v) { return '<option>' + v.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</option>'; }).join('');
+      el.dataset.kind = 'select';
+    } else {
+      el = document.createElement('input');
+      el.type = 'search'; el.placeholder = 'filtrer…'; el.autocomplete = 'off';
+      el.dataset.kind = 'text';
+    }
+    el.dataset.col = c;
+    el.addEventListener('input', function () { page = 1; apply(); });
+    el.addEventListener('change', function () { page = 1; apply(); });
+    th.appendChild(el);
+    controls.push(el);
+  });
+
+  var search = document.getElementById('tblSearch');
+  var ppSel = document.getElementById('tblPP');
+  var info = document.getElementById('tblInfo');
+  var prev = document.getElementById('tblPrev');
+  var next = document.getElementById('tblNext');
+  var clear = document.getElementById('tblClear');
+  var page = 1;
+
+  function matchRow(i) {
+    var g = norm(search.value);
+    if (g && cache[i].join(' ').indexOf(g) === -1) return false;
+    for (var k = 0; k < controls.length; k++) {
+      var el = controls[k], c = +el.dataset.col, v = el.value;
+      if (!v) continue;
+      if (el.dataset.kind === 'select') { if (cache[i][c] !== norm(v)) return false; }
+      else if (cache[i][c].indexOf(norm(v)) === -1) return false;
+    }
+    return true;
+  }
+  function apply() {
+    var pp = parseInt(ppSel.value, 10);
+    var visibles = [];
+    for (var i = 0; i < bodyRows.length; i++) {
+      if (matchRow(i)) visibles.push(i); else bodyRows[i].style.display = 'none';
+    }
+    var total = visibles.length;
+    var nbPages = pp === 0 ? 1 : Math.max(1, Math.ceil(total / pp));
+    if (page > nbPages) page = nbPages;
+    var start = pp === 0 ? 0 : (page - 1) * pp;
+    var end = pp === 0 ? total : Math.min(start + pp, total);
+    visibles.forEach(function (idx, rank) {
+      bodyRows[idx].style.display = (rank >= start && rank < end) ? '' : 'none';
+    });
+    if (total === 0) info.textContent = 'Aucune ligne ne correspond aux filtres';
+    else info.textContent = (start + 1) + '–' + end + ' sur ' + total +
+      (total !== bodyRows.length ? ' (filtré de ' + bodyRows.length + ')' : '');
+    prev.disabled = (page <= 1);
+    next.disabled = (page >= nbPages);
+  }
+  prev.addEventListener('click', function () { if (page > 1) { page--; apply(); } });
+  next.addEventListener('click', function () { page++; apply(); });
+  clear.addEventListener('click', function () {
+    search.value = '';
+    controls.forEach(function (el) { el.value = ''; });
+    page = 1; apply();
+  });
+  apply();
+})();
+</script>
+{% endblock %}

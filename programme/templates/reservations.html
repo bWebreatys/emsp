@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Réservations de salles</div>
+<div class="page-head">
+  <i class="ti ti-calendar-plus ic"></i>
+  <div>
+    <h1>Réservations de salles</h1>
+    <div class="sub">Réserver par date et créneau, sans saisie d'heures libres</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Réservations <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p>1) Choisissez la <b>date</b> (le jour même est proposé ; cliquez le calendrier pour une autre date).
+       2) Choisissez la <b>salle</b>, le <b>créneau</b> (10h/12h/15h/17h) et la <b>durée</b> (1 h ou 2 h) — les heures sont calculées automatiquement.
+       3) Enregistrez. La réservation apparaît aussitôt dans le planning des salles de cette date.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-calendar i"></i><h3>Date</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('reservations') }}" style="display:flex;gap:10px;align-items:center">
+      <input type="date" name="date" value="{{ date_iso }}" onchange="this.form.submit()">
+      <span style="color:var(--gris);font-size:13px">Réservations affichées pour le {{ date_fr }}</span>
+      <a class="btn-action" style="margin-top:0;margin-left:auto" target="_blank" href="{{ url_for('salles', date=date_fr) }}"><i class="ti ti-layout-grid"></i> Voir le planning</a>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-plus i"></i><h3>Ajouter une réservation</h3></div>
+  <div class="pb">
+    <form method="post" action="{{ url_for('reservations_creer') }}" class="exc-grid">
+      <input type="hidden" name="date" value="{{ date_iso }}">
+      <label>Salle <span class="oblig">*</span>
+        <select name="salle" required>
+          <option value="">— choisir —</option>
+          {% for s in salles_opt %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Créneau <span class="oblig">*</span>
+        <select name="creneau">
+          {% for c in creneaux %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Durée <span class="oblig">*</span>
+        <select name="duree">
+          <option value="1">1 h</option>
+          <option value="2" selected>2 h</option>
+        </select>
+      </label>
+      <label>Type
+        <select name="type">
+          {% for t in types_res %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Réservé par
+        <input type="text" name="reserve_par" placeholder="nom / service">
+      </label>
+      <label>Statut
+        <select name="statut">
+          {% for st in statuts_res %}<option value="{{ st }}" {{ 'selected' if st=='Confirmee' else '' }}>{{ st }}</option>{% endfor %}
+        </select>
+      </label>
+      <label class="exc-large">Motif / objet
+        <input type="text" name="motif" placeholder="ex. réunion pédagogique, examen L1…">
+      </label>
+      <div class="exc-large" style="text-align:right">
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-device-floppy"></i> Enregistrer la réservation</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-list i"></i><h3>Réservations du {{ date_fr }} &mdash; {{ reservations|length }}</h3></div>
+  <div class="pb">
+    {% if reservations %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>ID</th><th>Salle</th><th>Créneau</th><th>Type</th><th>Réservé par</th><th>Motif / objet</th><th>Statut</th></tr></thead>
+        <tbody>
+          {% for r in reservations %}
+          <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.salle }}</td>
+            <td>{{ r.h_debut }}{% if r.h_fin %}&ndash;{{ r.h_fin }}{% endif %}</td>
+            <td>{{ r.type or '—' }}</td>
+            <td>{{ r.reserve_par or '—' }}</td>
+            <td>{{ r.motif or '—' }}</td>
+            <td>{% if r.statut=='Annulee' %}<span class="badge-no">{{ r.statut }}</span>{% elif r.statut=='Confirmee' %}<span class="badge-ok">{{ r.statut }}</span>{% else %}<span class="badge-na">{{ r.statut or '—' }}</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide" style="margin:0"><i class="ti ti-calendar-off i"></i> Aucune réservation pour cette date.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

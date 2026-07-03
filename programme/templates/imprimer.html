@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+{% if doc.orientation == 'paysage' %}<style>@page { size: A4 landscape; margin: 10mm; } @media print { .doc-page { width: auto; } }</style>{% endif %}
+</head>
+<body>
+<div class="barre">
+  <b>{{ doc.titre }}</b>
+  <span class="aide">Vous pouvez retoucher le texte directement avant d'imprimer (modifications non enregistrees).</span>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="{{ url_for('impressions') }}">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+
+<div id="zone" contenteditable="true" spellcheck="false">
+{% for _ in range(doc.nb_copies) %}
+  <div class="doc-page{% if doc.orientation == 'paysage' %} paysage{% endif %}">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        {% for ligne in doc.entete.split('\n') %}<div>{{ ligne }}</div>{% endfor %}
+      </div>
+    </div>
+
+    <div class="doc-titre">
+      {{ doc.titre }}
+      {% if kind == 'liste' %}<span class="meta">{{ table.contexte.filiere }} · {{ table.contexte.niveau }} · Section {{ table.contexte.section }} · {{ table.contexte.annee }}</span>{% endif %}
+      {% if kind == 'recap' %}<span class="meta">Periode : {{ table.contexte.mois_annee }}</span>{% endif %}
+    </div>
+
+    <div class="doc-corps">
+      {% if kind == 'prose' %}
+        {% for para in doc.corps.split('\n') %}
+          {% if para.strip() %}<p>{{ para }}</p>{% else %}<p>&nbsp;</p>{% endif %}
+        {% endfor %}
+
+      {% elif kind == 'liste' %}
+        <p class="contexte"><b>Effectif :</b> {{ table.contexte.effectif }} etudiant(s) &nbsp;·&nbsp; Edite le {{ table.contexte.date_jour }}</p>
+        <table class="imp">
+          <thead><tr>{% for c in table.colonnes %}<th{% if loop.first %} class="num"{% endif %}>{{ c }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            {% for lig in table.lignes %}<tr>{% for v in lig %}<td{% if loop.first %} class="num"{% endif %}>{{ v }}</td>{% endfor %}</tr>{% endfor %}
+            {% if not table.lignes %}<tr><td colspan="{{ table.colonnes|length }}">Aucun etudiant pour ces criteres.</td></tr>{% endif %}
+          </tbody>
+        </table>
+
+      {% elif kind == 'recap' %}
+        <p class="contexte"><b>Enseignants :</b> {{ table.contexte.nb }} &nbsp;·&nbsp; Edite le {{ table.contexte.date_jour }} &nbsp;·&nbsp; Heures uniquement (sans taux)</p>
+        <table class="imp">
+          <thead><tr>{% for c in table.colonnes %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            {% for lig in table.lignes %}<tr>{% for v in lig %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}
+            {% if not table.lignes %}<tr><td colspan="{{ table.colonnes|length }}">Aucun releve pour cette periode.</td></tr>{% endif %}
+            <tr class="total">{% for v in table.total %}<td>{{ v }}</td>{% endfor %}</tr>
+          </tbody>
+        </table>
+
+      {% elif kind == 'presence' %}
+        <p class="contexte"><b>Classe :</b> {{ pv.contexte.classe }} &nbsp;·&nbsp; <b>Date :</b> {{ pv.contexte.date }} &nbsp;·&nbsp; <b>Horaire :</b> {{ pv.contexte.horaire }}</p>
+        <p class="contexte"><b>Matiere :</b> {{ pv.contexte.matiere }} &nbsp;·&nbsp; <b>Enseignant :</b> {{ pv.contexte.enseignant }} &nbsp;·&nbsp; <b>Effectif :</b> {{ pv.contexte.effectif }}</p>
+        <table class="imp grille">
+          <thead><tr>
+            <th class="num">N</th><th>Matricule</th><th>Noms et Prenoms</th><th class="sig">Emargement</th>
+          </tr></thead>
+          <tbody>
+            {% for lig in pv.lignes %}
+            <tr><td class="num">{{ lig[0] }}</td><td>{{ lig[1] }}</td><td>{{ lig[2] }}</td><td></td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if pv.vierge %}<p class="contexte">Aucun etudiant enregistre pour cette classe : grille a remplir a la main.</p>{% endif %}
+      {% elif kind == 'situation' %}
+        <p class="contexte"><b>Compte / caisse :</b> {{ table.contexte.compte }} &nbsp;·&nbsp; <b>Periode :</b> {{ table.contexte.periode }} &nbsp;·&nbsp; Edite le {{ table.contexte.date_jour }}</p>
+        <table class="imp">
+          <thead><tr>{% for c in table.colonnes %}<th{% if loop.first %} class="num"{% endif %}{% if loop.index >= table.colonnes|length - 2 %} style="text-align:right"{% endif %}>{{ c }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            <tr class="total"><td></td><td colspan="{{ table.colonnes|length - 2 }}">{{ table.ouverture.libelle }}</td><td></td><td style="text-align:right">{{ table.ouverture.solde }}</td></tr>
+            {% for lig in table.lignes %}<tr>{% for v in lig %}<td{% if loop.first %} class="num"{% endif %}{% if loop.index >= table.colonnes|length - 2 %} style="text-align:right"{% endif %}>{{ v }}</td>{% endfor %}</tr>{% endfor %}
+            {% if not table.lignes %}<tr><td colspan="{{ table.colonnes|length }}">Aucun mouvement sur cette periode.</td></tr>{% endif %}
+            <tr class="total"><td></td><td colspan="{{ table.colonnes|length - 2 }}">{{ table.cloture.libelle }}</td><td></td><td style="text-align:right">{{ table.cloture.solde }}</td></tr>
+          </tbody>
+        </table>
+      {% elif kind == 'presence_semaine' %}
+        <p class="contexte"><b>Departement :</b> {{ table.contexte.departement }} &nbsp;·&nbsp; <b>Niveau :</b> {{ table.contexte.niveau }} &nbsp;·&nbsp; <b>Section :</b> {{ table.contexte.section }} &nbsp;·&nbsp; <b>Annee :</b> {{ table.contexte.annee }}</p>
+        <p class="contexte">Semaine du ...... / ...... / ......&nbsp; au &nbsp;...... / ...... / ......</p>
+        <table class="imp grille presence-sem">
+          <thead>
+            <tr>
+              {% for c in table.fixes %}<th rowspan="2"{% if loop.first %} class="num"{% endif %}>{{ c }}</th>{% endfor %}
+              {% for j in table.jours %}<th colspan="{{ table.creneaux|length }}">{{ j }}</th>{% endfor %}
+            </tr>
+            <tr>
+              {% for j in table.jours %}{% for cr in table.creneaux %}<th class="cr">{{ cr }}</th>{% endfor %}{% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for lig in table.lignes %}
+            <tr>{% for v in lig %}<td{% if loop.first %} class="num"{% endif %}>{{ v }}</td>{% endfor %}{% for j in table.jours %}{% for cr in table.creneaux %}<td class="cr"></td>{% endfor %}{% endfor %}</tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% elif kind == 'table' %}
+        {% if table.contexte and table.contexte.legende %}<p class="contexte">{{ table.contexte.legende }}</p>{% endif %}
+        <table class="imp">
+          <thead><tr>{% for c in table.colonnes %}<th{% if loop.first %} class="num"{% endif %}>{{ c }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            {% for lig in table.lignes %}<tr>{% for v in lig %}<td{% if loop.first %} class="num"{% endif %}>{{ v }}</td>{% endfor %}</tr>{% endfor %}
+            {% if not table.lignes %}<tr><td colspan="{{ table.colonnes|length }}">Aucune donnee.</td></tr>{% endif %}
+            {% if table.total %}<tr class="total">{% for v in table.total %}<td>{{ v }}</td>{% endfor %}</tr>{% endif %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+
+    {% if doc.mentions %}<div class="doc-mentions">{{ doc.mentions }}</div>{% endif %}
+
+    {% if kind == 'situation' and '|' in doc.signataire %}
+    {% set sigs = doc.signataire.split('|') %}
+    <div class="doc-signature" style="display:flex;justify-content:space-between;text-align:center;gap:40px">
+      <div style="flex:1"><div class="lib">{{ sigs[0]|trim }}</div><div class="ligne" style="display:block;width:auto;margin-top:8px"></div></div>
+      <div style="flex:1"><div class="lib">{{ sigs[1]|trim }}</div><div class="ligne" style="display:block;width:auto;margin-top:8px"></div></div>
+    </div>
+    {% else %}
+    <div class="doc-signature">
+      <div class="lib">{{ doc.signataire }}</div>
+      <div class="ligne"></div>
+    </div>
+    {% endif %}
+  </div>
+{% endfor %}
+</div>
+</body>
+</html>

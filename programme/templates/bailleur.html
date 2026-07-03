@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Fiche bailleur</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-search i"></i><h3>Rechercher un bailleur</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">Saisissez l'<b>identifiant</b> (ou le nom) puis affichez la fiche. Les bailleurs et sources de financement sont le référentiel commun à la trésorerie et au budget.</p>
+    <form method="get" action="{{ url_for('bailleur') }}" id="form-rech-bail" autocomplete="off">
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px;color:var(--texte)">Identifiant ou nom</label>
+          <input type="text" id="rech-bail" name="id" list="dl-bail" value="{{ id_sel }}"
+                 placeholder="ex. AFD" autofocus
+                 style="width:calc(28ch + 26px);padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+          <datalist id="dl-bail">
+            {% for b in bailleurs %}<option value="{{ b.id }}">{{ b.label }}</option>{% endfor %}
+          </datalist>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-building-bank"></i> Afficher la fiche</button>
+      </div>
+    </form>
+    {% if introuvable %}
+    <p style="margin-top:12px;color:var(--rouge)"><i class="ti ti-alert-triangle"></i> Aucun bailleur avec l'identifiant « {{ id_sel }} ».</p>
+    {% endif %}
+    {% if not id_sel %}
+    <div style="margin-top:14px">
+      <table class="grille" style="width:auto;min-width:60%">
+        <thead><tr><th>Identifiant</th><th>Nom / raison sociale</th><th>Type</th><th>Statut</th></tr></thead>
+        <tbody>
+          {% for b in bailleurs %}
+          <tr>
+            <td><a href="{{ url_for('bailleur', id=b.id) }}" style="color:var(--bleu);font-weight:600;text-decoration:none">{{ b.id }}</a></td>
+            <td>{{ b.nom }}</td><td>{{ b.type }}</td>
+            <td>{% if b.statut %}<span class="badge">{{ b.statut }}</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+          {% if not bailleurs %}<tr><td colspan="4" style="color:var(--gris)">Aucun bailleur enregistré pour l'instant.</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if fiche %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-building-bank i"></i><h3>{{ fiche.nom or fiche.id }}</h3>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      {% if peut_modifier %}
+      <a class="btn-action" style="margin-top:0" href="{{ url_for('module', onglet='F4_Bailleurs', modifier=fiche.id) }}#form-saisie">
+        <i class="ti ti-edit"></i> Modifier dans le module</a>
+      {% endif %}
+      <a class="btn-action" style="margin-top:0" target="_blank"
+         href="{{ url_for('bailleur_imprimer', id_bailleur=fiche.id) }}">
+        <i class="ti ti-printer"></i> Imprimer</a>
+    </div>
+  </div>
+  <div class="pb">
+    <div class="bail-grille">
+      <section>
+        <h4><i class="ti ti-id"></i> Identité</h4>
+        <dl>
+          <dt>Identifiant</dt><dd>{{ fiche.id }}</dd>
+          <dt>Nom / raison sociale</dt><dd>{{ fiche.nom or '—' }}</dd>
+          <dt>Type</dt><dd>{{ fiche.Type or '—' }}</dd>
+          <dt>Statut</dt><dd>{% if fiche.Statut %}<span class="badge">{{ fiche.Statut }}</span>{% else %}—{% endif %}</dd>
+        </dl>
+      </section>
+      <section>
+        <h4><i class="ti ti-file-text"></i> Contrat / convention</h4>
+        <dl>
+          <dt>Référence</dt><dd>{{ fiche['Reference contrat / convention'] or '—' }}</dd>
+          <dt>Date de début</dt><dd>{{ fiche['Date debut'] or '—' }}</dd>
+          <dt>Date de fin</dt><dd>{{ fiche['Date fin'] or '—' }}</dd>
+        </dl>
+      </section>
+      <section>
+        <h4><i class="ti ti-cash"></i> Budget & périmètre</h4>
+        <dl>
+          <dt>Budget alloué (KMF)</dt><dd>{{ fiche['Budget alloue (KMF)'] or '—' }}</dd>
+          <dt>Périmètre du financement</dt><dd>{{ fiche['Perimetre du financement'] or '—' }}</dd>
+        </dl>
+      </section>
+      {% if fiche.Observations %}
+      <section style="grid-column:1 / -1">
+        <h4><i class="ti ti-notes"></i> Observations</h4>
+        <p style="margin:0;white-space:pre-wrap">{{ fiche.Observations }}</p>
+      </section>
+      {% endif %}
+    </div>
+
+    {% if tracabilite %}
+    <div class="bail-trac">
+      <div class="ph" style="margin-top:18px">
+        <i class="ti ti-route i"></i><h3>Traçabilité du financement</h3>
+      </div>
+      <div class="trac-kpis">
+        <div class="trac-kpi">
+          <span class="trac-lib">Budget alloué (KMF)</span>
+          <span class="trac-val">{{ tracabilite.budget_aff or '—' }}</span>
+        </div>
+        <div class="trac-kpi">
+          <span class="trac-lib">Dépensé (KMF)</span>
+          <span class="trac-val">{{ tracabilite.depense_aff }}</span>
+        </div>
+        <div class="trac-kpi">
+          <span class="trac-lib">Reste à dépenser (KMF)</span>
+          <span class="trac-val">{{ tracabilite.reste_aff or '—' }}</span>
+          {% if tracabilite.a_budget %}<span class="trac-sub">{{ tracabilite.taux_conso }} % consommé</span>{% endif %}
+        </div>
+        <div class="trac-kpi">
+          <span class="trac-lib">Équipements rattachés</span>
+          <span class="trac-val">{{ tracabilite.nb_equip }}</span>
+          {% if tracabilite.nb_equip %}<span class="trac-sub">{{ tracabilite.nb_localises }} localisés ({{ tracabilite.pct_localises }} %)</span>{% endif %}
+        </div>
+      </div>
+      {% if tracabilite.nb_equip %}
+      <p style="margin:6px 0 0">
+        <a href="{{ url_for('requetes_vue', vid='equip_bailleur', bailleur=fiche.id) }}">
+          <i class="ti ti-list-search"></i> Voir les équipements de ce bailleur</a>
+      </p>
+      {% endif %}
+
+      {% if tracabilite.a_detail %}
+      <h4 style="margin:16px 0 6px;color:var(--bleu);font-size:14px"><i class="ti ti-table"></i> Détail par poste</h4>
+      <table class="grille" style="width:auto;min-width:60%">
+        <thead><tr><th>Poste budgétaire</th><th style="text-align:right">Budgété (KMF)</th><th style="text-align:right">Dépensé (KMF)</th></tr></thead>
+        <tbody>
+          {% for p in tracabilite.detail_postes %}
+          <tr><td>{{ p.poste }}</td>
+              <td style="text-align:right">{{ p.budgete_aff or '—' }}</td>
+              <td style="text-align:right">{{ p.depense_aff or '—' }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="trac-hint">Détail par poste : renseignez le budget par poste (F3) et tag­uez vos écritures (F1) à ce bailleur pour un suivi détaillé (conseillé).</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="bail-docs">
+      <div class="ph" style="margin-top:18px">
+        <i class="ti ti-folder i"></i><h3>Documents liés</h3>
+      </div>
+      <table class="grille bail-doc-tbl">
+        <thead>
+          <tr>
+            <th>Document</th><th>Type</th><th>Date d'ajout</th><th>Taille</th>
+            <th>Ajouté par</th><th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in documents %}
+          <tr class="{{ 'doc-obsolete' if d.obsolete else '' }}">
+            <td>
+              <a href="{{ url_for('bailleur_document_telecharger', id_bailleur=fiche.id, nom_stocke=d.nom_stocke) }}">
+                <i class="ti ti-download"></i> {{ d.nom_original }}</a>
+            </td>
+            <td>{{ d.type or '—' }}</td>
+            <td>{{ d.date_ajout or '—' }}</td>
+            <td>{{ d.taille_aff or '—' }}</td>
+            <td>{{ d.ajoute_par or '—' }}</td>
+            <td>
+              {% if peut_modifier %}
+              <form method="post" class="doc-statut"
+                    action="{{ url_for('bailleur_document_statut', id_bailleur=fiche.id) }}">
+                <input type="hidden" name="nom_stocke" value="{{ d.nom_stocke }}">
+                <input type="text" name="statut" value="{{ d.statut }}"
+                       maxlength="120" placeholder="Actif — saisir un motif d'obsolescence">
+                <button type="submit" class="doc-btn" title="Enregistrer le statut">
+                  <i class="ti ti-device-floppy"></i></button>
+              </form>
+              {% else %}
+                {% if d.obsolete %}<span class="badge badge-obs">{{ d.statut }}</span>
+                {% else %}<span style="color:var(--gris)">Actif</span>{% endif %}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+          {% if not documents %}
+          <tr><td colspan="6" style="color:var(--gris)">Aucun document lié pour l'instant.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+      {% if peut_modifier %}
+      <form method="post" enctype="multipart/form-data" class="doc-ajout"
+            action="{{ url_for('bailleur_document_ajouter', id_bailleur=fiche.id) }}">
+        <div class="doc-ajout-l">
+          <label>Type
+            <select name="type" required>
+              {% for t in types_document %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+            </select>
+          </label>
+          <label>Fichier
+            <input type="file" name="document" accept=".pdf,.jpg,.jpeg,.png,.docx" required>
+          </label>
+          <button type="submit" class="btn-action" style="margin-top:0">
+            <i class="ti ti-upload"></i> Ajouter</button>
+        </div>
+        <p class="doc-hint">Formats acceptés : PDF, JPG, PNG, DOCX — 10 Mo maximum.
+          Un document n'est jamais supprimé ; il peut être marqué obsolète via la colonne Statut.</p>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+  .bail-grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; }
+  .bail-grille section h4 { color:var(--bleu); font-size:14px; margin:0 0 8px; display:flex; align-items:center; gap:6px; }
+  .bail-grille dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:5px 12px; }
+  .bail-grille dt { color:var(--gris); font-size:13px; }
+  .bail-grille dd { margin:0; font-size:14px; font-weight:600; color:var(--texte); }
+  .badge { background:var(--bleu-pale); color:var(--bleu); border-radius:10px; padding:1px 8px; font-size:12px; font-weight:600; }
+  .badge-obs { background:#fbeaea; color:var(--rouge); }
+  .bail-doc-tbl { width:100%; margin-top:4px; }
+  .bail-doc-tbl td, .bail-doc-tbl th { font-size:13px; vertical-align:middle; }
+  .doc-obsolete td { color:var(--gris); }
+  .doc-obsolete a { color:var(--gris); }
+  .doc-statut { display:flex; gap:6px; align-items:center; margin:0; }
+  .doc-statut input { flex:1; min-width:180px; font-size:12px; padding:3px 6px;
+    border:1px solid #cfdcea; border-radius:6px; }
+  .doc-btn { border:1px solid #cfdcea; background:#fff; color:var(--bleu); border-radius:6px;
+    padding:3px 8px; cursor:pointer; }
+  .doc-btn:hover { background:var(--bleu-pale); }
+  .doc-ajout { margin-top:14px; background:#eef3f8; border:1px solid #cfdcea; border-radius:8px; padding:12px 14px; }
+  .doc-ajout-l { display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; }
+  .doc-ajout label { display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--gris); }
+  .doc-ajout select, .doc-ajout input[type=file] { font-size:13px; padding:5px 7px;
+    border:1px solid #cfdcea; border-radius:6px; background:#fff; }
+  .doc-hint { margin:10px 0 0; font-size:12px; color:var(--gris); }
+  .trac-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-top:6px; }
+  .trac-kpi { background:#f4f8fc; border:1px solid #dbe6f1; border-radius:8px; padding:10px 12px; display:flex; flex-direction:column; gap:2px; }
+  .trac-lib { font-size:12px; color:var(--gris); }
+  .trac-val { font-size:18px; font-weight:700; color:var(--bleu); }
+  .trac-sub { font-size:11px; color:var(--gris); }
+  .trac-hint { margin:12px 0 0; font-size:12px; color:var(--gris); }
+</style>
+{% endblock %}

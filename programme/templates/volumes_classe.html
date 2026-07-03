@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; {{ info.libelle }}</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti {{ info.icone }} i"></i><h3>Volumes horaires d'une classe</h3></div>
+  <div class="pb">
+    <p style="margin:0 0 12px;color:var(--gris);font-size:13px">Heures dues par UE et par matière (source : référentiel des maquettes <b>R1</b>). Ces volumes servent de référence à la planification : ils donnent, pour chaque classe, le total d'heures à répartir dans l'agenda. Pour corriger ou compléter une valeur manquante, modifiez la ligne correspondante dans « Référentiel des formations (maquettes) ».</p>
+    <form method="get" action="{{ url_for('planification_volumes') }}">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:190px">
+            <option value="">— choisir —</option>
+            {% for o in options.filieres %}<option value="{{ o }}" {{ 'selected' if o==filtres.filiere else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— choisir —</option>
+            {% for o in options.niveaux %}<option value="{{ o }}" {{ 'selected' if o==filtres.niveau else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Semestre</label>
+          <select name="semestre" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">tous</option>
+            {% for o in options.semestres %}<option value="{{ o }}" {{ 'selected' if o==filtres.semestre else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-eye"></i> Afficher</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if data %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-clock-hour-4 i"></i><h3>{{ filtres.filiere }} {{ filtres.niveau }}{% if filtres.semestre %} — semestre {{ filtres.semestre }}{% endif %} : {{ data.ues|length }} UE, {{ '%g'|format(data.total_classe) }} h au total</h3></div>
+  <div class="pb">
+    {% if data.ues %}
+    {% for u in data.ues %}
+    <div style="margin-bottom:16px">
+      <div style="font-weight:700;color:var(--bleu);margin-bottom:4px"><i class="ti ti-folder"></i> UE {{ u.n_ue }} — {{ u.intitule }} <span style="color:var(--gris);font-weight:400">({{ '%g'|format(u.total) }} h)</span></div>
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr><th>Matière / contenu</th><th>Enseignant</th><th style="text-align:right">CM</th><th style="text-align:right">TD</th><th style="text-align:right">TP</th><th style="text-align:right">Total h</th></tr></thead>
+          <tbody>
+          {% for m in u.matieres %}
+            <tr><td>{{ m.matiere or '—' }}</td><td style="color:var(--gris)">{{ m.enseignant or '—' }}</td>
+                <td style="text-align:right">{{ '%g'|format(m.cm) if m.cm else '—' }}</td>
+                <td style="text-align:right">{{ '%g'|format(m.td) if m.td else '—' }}</td>
+                <td style="text-align:right">{{ '%g'|format(m.tp) if m.tp else '—' }}</td>
+                <td style="text-align:right;font-weight:600">{{ '%g'|format(m.total) if m.total else '—' }}</td></tr>
+          {% endfor %}
+            <tr style="background:var(--bleu-pale)"><td colspan="5" style="text-align:right;font-weight:600">Total UE</td><td style="text-align:right;font-weight:700;color:var(--bleu)">{{ '%g'|format(u.total) }} h</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+    <div style="border-top:2px solid var(--bleu);padding-top:8px;text-align:right;font-weight:700;color:var(--bleu)">Total classe : {{ '%g'|format(data.total_classe) }} heures</div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucun volume trouvé pour cette classe dans R1_Maquettes (vérifiez filière / niveau / semestre).</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

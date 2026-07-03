@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Comptes &amp; acces</div>
+<div class="page-head">
+  <i class="ti ti-shield-lock ic"></i>
+  <div>
+    <h1>Comptes &amp; acces</h1>
+    <div class="sub">{% if est_admin %}Console du responsable informatique : creation des comptes, rubrique, couleur, mot de passe et validite. La <b>matrice des droits par module</b> s'edite directement ci-dessous.{% else %}Consultation seule. La gestion des comptes est reservee au responsable informatique.{% endif %}</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Comptes &amp; acces <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p><b>Ici = comptes ; droits par module = grille des roles.</b> Cet ecran (Informatique) <b>cree et gere les comptes</b> (identite, mot de passe, validite). Les <b>droits par module</b> se reglent dans la <b>grille des roles</b> (Direction). Deux responsabilites distinctes, deux endroits.</p>
+    <ul>
+      <li>Le responsable informatique <b>cree les comptes</b>, leur affecte une <b>rubrique</b> et une <b>couleur d'identite</b>, genere le <b>mot de passe</b> et gere la <b>validite</b>.</li>
+      <li>Le mot de passe initial est <b>genere aleatoirement</b> ({{ cfg.MDP_LONGUEUR }} caracteres) et affiche <b>une seule fois</b> : remettez-le a l'utilisateur, qui le changera a sa premiere connexion.</li>
+      <li>La <b>validite</b> couvre l'annee scolaire (jusqu'au 31/07). A l'echeance le compte reste utilisable (alerte « a renouveler ») ; le bouton <b>Renouveler</b> le prolonge sans changer le mot de passe.</li>
+      <li>Les <b>droits par module</b> (lecture / ecriture / acces financier / administrateur) s'editent dans la <b>matrice ci-dessous</b> (un clic par case, puis « Enregistrer la matrice »). L'ancienne grille brute <code>P1_Roles</code> est retiree du menu.</li>
+      <li><b>Superutilisateur</b> (badge <span class="mat-badge mat-badge-sup">Super</span>) : acces total garanti par le systeme, ni supprimable ni modifiable — securite anti-blocage.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<style>
+  .mat-pill{display:inline-block;padding:2px 9px;border-radius:11px;font-size:12.5px;font-weight:600;white-space:nowrap}
+  .mat-rw{background:#1F4E79;color:#fff}
+  .mat-w{background:#3A7CB8;color:#fff}
+  .mat-r{background:var(--bleu-tres-pale,#EAF1FA);color:#1F4E79}
+  .mat-no{color:#9AA7B4}
+  .mat-fin-o{color:#1F4E79;font-weight:700}
+  .mat-fin-n{color:#9AA7B4}
+  .mat-badge{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:700;margin-left:5px;vertical-align:middle}
+  .mat-badge-sup{background:#7A3B12;color:#fff}
+  .mat-badge-adm{background:#1F4E79;color:#fff}
+  table.data td.role-cell{font-weight:600}
+  table.data td .role-login{font-weight:400;color:#5B6B7B;font-size:12.5px}
+  .mat-note{margin:14px 2px 0;color:#5B6B7B;font-size:13px}
+  .mat-sec{margin-top:30px}
+  .mat-sec h2{color:#1F4E79;font-size:17px;margin:0 0 10px}
+  .adm-card{border:1px solid var(--bord,#D8E2EC);border-radius:12px;padding:16px 18px;background:#fff;margin-top:14px}
+  .adm-card h3{margin:0 0 12px;font-size:15px;color:#1F4E79}
+  .adm-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-end}
+  .adm-field{display:flex;flex-direction:column;gap:4px}
+  .adm-field label{font-size:12.5px;color:#1F4E79;font-weight:600}
+  .adm-field input[type=text],.adm-field select{padding:7px 10px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit;min-width:190px}
+  .adm-actions{margin-top:6px;display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:none;font:inherit;font-weight:600;cursor:pointer}
+  .btn-primary{background:#1F4E79;color:#fff}
+  .btn-ghost{background:#EEF3F8;color:#1F4E79}
+  .btn-link{background:none;border:none;color:#1F4E79;font-weight:600;cursor:pointer;padding:4px 6px}
+  .adm-warn{background:#FFF7ED;border:1px solid #F2D9B6;color:#7A4A12;border-radius:9px;padding:9px 12px;font-size:13px;margin-top:8px}
+  .swatch{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle;border:1px solid rgba(0,0,0,.15);margin-right:5px}
+  .val-ok{color:#1e7d34}
+  .val-exp{color:#9B2C2C;font-weight:700}
+  .mdp-box{margin-top:14px;border:1px solid #BBD3A8;background:#F3F9EE;border-radius:11px;padding:14px 16px}
+  .mdp-box h3{margin:0 0 6px;color:#2C5C1E;font-size:15px}
+  .mdp-val{font-family:Consolas,'Courier New',monospace;font-size:20px;font-weight:700;letter-spacing:1px;color:#1F4E79;background:#fff;border:1px dashed #9DBE86;border-radius:8px;padding:8px 14px;display:inline-block;user-select:all}
+  .colorgrid{display:flex;flex-wrap:wrap;gap:7px}
+  .colorgrid label{cursor:pointer}
+  .colorgrid input{position:absolute;opacity:0;width:0;height:0}
+  .colorgrid .dot{display:inline-block;width:26px;height:26px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px rgba(0,0,0,.12) inset}
+  .colorgrid input:checked + .dot{border-color:#1F2937;box-shadow:0 0 0 2px #fff inset,0 0 0 1px rgba(0,0,0,.2)}
+</style>
+
+{% if est_admin and mdp_genere %}
+<div class="mdp-box">
+  <h3><i class="ti ti-key i"></i> Mot de passe {{ 'genere' if mdp_genere.motif=='creation' else 'reinitialise' }} pour <b>{{ mdp_genere.login }}</b></h3>
+  <div class="mdp-val">{{ mdp_genere.mdp }}</div>
+  <p class="mat-note" style="margin-top:8px"><i class="ti ti-alert-circle i"></i> Affiche <b>une seule fois</b>. Notez-le et remettez-le a l'utilisateur : il devra le changer a sa premiere connexion. Il ne sera plus consultable ensuite.</p>
+</div>
+{% endif %}
+
+{% if est_admin %}
+<form method="post" action="{{ url_for('autorisations_matrice') }}">
+<div class="tbl-wrap">
+  <table class="data matrice-edit">
+    <thead>
+      <tr>
+        <th>Utilisateur / Role</th>
+        {% for col in matrice.colonnes %}<th>{{ col }}</th>{% endfor %}
+        <th>Acces financier</th>
+        <th>Admin</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lig in matrice.lignes %}
+      <tr>
+        <td class="role-cell">{{ lig.role or '(role non nomme)' }}{% if lig.superuser %}<span class="mat-badge mat-badge-sup">Super</span>{% elif lig.admin == 'O' %}<span class="mat-badge mat-badge-adm">Admin</span>{% endif %}<br><span class="role-login">{{ lig.login }}</span></td>
+        {% if lig.superuser %}
+          {% for c in lig.cells %}<td class="mx-cell"><span class="mat-no">protege</span></td>{% endfor %}
+          <td class="mx-cell"><span class="mat-no">protege</span></td>
+          <td class="mx-cell"><span class="mat-no">protege</span></td>
+        {% else %}
+          <input type="hidden" name="logins" value="{{ lig.login }}">
+          <input type="hidden" name="role_{{ lig.login }}" value="{{ lig.role }}">
+          {% for col in matrice.colonnes %}
+          {% set c = lig.cells[loop.index0] %}
+          <td class="mx-cell">
+            {% if col == 'Direction (parametrage)' %}
+              <label class="mx-l"><input type="checkbox" name="lectous_{{ lig.login }}"{% if c.lecture %} checked{% endif %}> L</label>
+              <label class="mx-e"><input type="checkbox" name="ecrtous_{{ lig.login }}"{% if c.ecriture %} checked{% endif %}> E</label>
+            {% else %}
+              <label class="mx-l"><input type="checkbox" name="lec_{{ lig.login }}" value="{{ col }}"{% if c.lecture %} checked{% endif %}> L</label>
+              <label class="mx-e"><input type="checkbox" name="ecr_{{ lig.login }}" value="{{ col }}"{% if c.ecriture %} checked{% endif %}> E</label>
+            {% endif %}
+          </td>
+          {% endfor %}
+          <td class="mx-cell"><label class="mx-t"><input type="checkbox" name="fin_{{ lig.login }}"{% if lig.financier == 'O' %} checked{% endif %}></label></td>
+          <td class="mx-cell"><label class="mx-t"><input type="checkbox" name="adm_{{ lig.login }}"{% if lig.admin == 'O' %} checked{% endif %}></label></td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="adm-actions">
+  <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i> Enregistrer la matrice</button>
+  <span class="mat-note" style="margin:0">L = lecture, E = ecriture. Le superutilisateur garde tous les droits. Le dernier administrateur ne peut pas etre retire.</span>
+</div>
+</form>
+<p class="mat-note"><i class="ti ti-info-circle i"></i> Edition directe ici (remplace l'ancienne grille brute <code>P1_Roles</code>, retiree du menu). Les onglets Finances exigent en plus « Acces financier » coche. La gestion des comptes (mot de passe, validite) est plus bas.</p>
+{% else %}
+<div class="tbl-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Utilisateur / Role</th>
+        {% for col in matrice.colonnes %}<th>{{ col }}</th>{% endfor %}
+        <th>Acces financier</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lig in matrice.lignes %}
+      <tr>
+        <td class="role-cell">{{ lig.role or '(role non nomme)' }}{% if lig.superuser %}<span class="mat-badge mat-badge-sup">Super</span>{% elif lig.admin == 'O' %}<span class="mat-badge mat-badge-adm">Admin</span>{% endif %}<br><span class="role-login">{{ lig.login }}</span></td>
+        {% for c in lig.cells %}
+        <td>
+          {% if c.etat == 'Lecture + Ecriture' %}<span class="mat-pill mat-rw"><i class="ti ti-pencil"></i> Lecture + Ecriture</span>
+          {% elif c.etat == 'Ecriture' %}<span class="mat-pill mat-w"><i class="ti ti-pencil"></i> Ecriture</span>
+          {% elif c.etat == 'Lecture' %}<span class="mat-pill mat-r"><i class="ti ti-eye"></i> Lecture</span>
+          {% else %}<span class="mat-no">—</span>{% endif %}
+        </td>
+        {% endfor %}
+        <td>{% if lig.financier == 'O' %}<span class="mat-fin-o"><i class="ti ti-check"></i> Oui</span>{% else %}<span class="mat-fin-n">Non</span>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="mat-note"><i class="ti ti-info-circle i"></i> Droits par module en <b>lecture seule</b> (consultation). La modification est reservee aux administrateurs.</p>
+{% endif %}
+
+<div class="mat-sec">
+  <h2><i class="ti ti-layout-list i"></i> Definition des modules (decoupage)</h2>
+  <div class="tbl-wrap">
+    <table class="data">
+      <thead><tr><th>Module</th><th>Onglets couverts</th></tr></thead>
+      <tbody>
+        {% for m in matrice.modules_def %}
+        <tr><td class="role-cell">{{ m.module }}</td>
+          <td>{% for o in m.onglets %}<code>{{ o }}</code>{% if not loop.last %} · {% endif %}{% endfor %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="mat-note">Les onglets Finances (<code>{{ matrice.financiers | join('</code>, <code>') | safe }}</code>) exigent en plus « Acces financier = O » dans <code>P1_Roles</code>.</p>
+</div>
+
+{% if est_admin %}
+<div class="mat-sec">
+  <h2><i class="ti ti-users-group i"></i> Gestion des comptes</h2>
+  <p class="mat-note" style="margin-top:0">
+    <a class="btn-link" href="{{ url_for('journal_audit') }}"><i class="ti ti-history"></i> Consulter le journal d'audit</a>
+    &nbsp;&middot;&nbsp; L'empreinte du mot de passe et les attributs (rubrique, couleur, validite) sont stockes localement, hors du depot.
+  </p>
+
+  <div class="tbl-wrap">
+    <table class="data">
+      <thead><tr><th>Role</th><th>Login</th><th>Rubrique</th><th>Couleur</th><th>Valide jusqu'au</th><th>Compte</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for u in utilisateurs %}
+        <tr>
+          <td class="role-cell">{{ u.role }}{% if u.superuser %}<span class="mat-badge mat-badge-sup">Super</span>{% elif u.admin %}<span class="mat-badge mat-badge-adm">Admin</span>{% endif %}</td>
+          <td><span class="role-login">{{ u.login }}</span></td>
+          <td>{{ u.rubrique or '—' }}</td>
+          <td><span class="swatch" style="background:{{ u.couleur }}"></span>{{ u.couleur }}</td>
+          <td>{% if u.valide_jusqu %}{% if u.expire %}<span class="val-exp"><i class="ti ti-clock-exclamation"></i> {{ u.valide_jusqu }}</span>{% else %}<span class="val-ok">{{ u.valide_jusqu }}</span>{% endif %}{% else %}—{% endif %}</td>
+          <td>{% if u.compte_actif %}<span class="val-ok">Actif{% if u.doit_changer %} (mdp a changer){% endif %}</span>{% else %}<span class="val-exp">Sans mot de passe</span>{% endif %}</td>
+          <td>
+            {% if u.superuser %}
+              <span class="mat-note" style="margin:0">Protege (superutilisateur)</span>
+            {% else %}
+              <button type="button" class="btn-link" onclick='remplirForm({{ u | tojson }})'><i class="ti ti-edit"></i> Modifier</button>
+              <form method="post" action="{{ url_for('autorisations_reinitialiser') }}" style="display:inline" onsubmit="return confirm('Generer un nouveau mot de passe pour {{ u.login }} ? L\'ancien sera invalide.');">
+                <input type="hidden" name="login" value="{{ u.login }}">
+                <button type="submit" class="btn-link"><i class="ti ti-key"></i> Reinitialiser</button>
+              </form>
+              <form method="post" action="{{ url_for('autorisations_renouveler') }}" style="display:inline">
+                <input type="hidden" name="login" value="{{ u.login }}">
+                <button type="submit" class="btn-link"><i class="ti ti-calendar-plus"></i> Renouveler</button>
+              </form>
+              <form method="post" action="{{ url_for('autorisations_supprimer') }}" style="display:inline" onsubmit="return confirm('Supprimer le compte {{ u.login }} ? Cette action retire son acces.');">
+                <input type="hidden" name="login" value="{{ u.login }}">
+                <button type="submit" class="btn-link" style="color:#9B2C2C"><i class="ti ti-trash"></i> Supprimer</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="adm-card">
+    <h3 id="form-titre"><i class="ti ti-user-plus i"></i> Creer ou modifier un compte</h3>
+    <form method="post" action="{{ url_for('autorisations_utilisateur') }}">
+      <div class="adm-row">
+        <div class="adm-field">
+          <label for="f-login">Login</label>
+          <input type="text" name="login" id="f-login" placeholder="ex. j.directeur" required>
+        </div>
+        <div class="adm-field">
+          <label for="f-role">Role affiche</label>
+          <input type="text" name="role" id="f-role" placeholder="ex. Directeur">
+        </div>
+        <div class="adm-field">
+          <label for="f-rubrique">Rubrique</label>
+          <select name="rubrique" id="f-rubrique">
+            <option value="">— a choisir —</option>
+            {% for r in rubriques %}<option value="{{ r }}">{{ r }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="adm-row">
+        <div class="adm-field">
+          <label>Couleur d'identite</label>
+          <div class="colorgrid">
+            {% for c in couleurs %}
+            <label title="{{ c }}"><input type="radio" name="couleur" value="{{ c }}" {{ 'checked' if loop.first }}><span class="dot" style="background:{{ c }}"></span></label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <style>
+        .droits-grid{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 6px}
+        .droits-bloc{flex:1 1 280px;border:1px solid var(--bord,#D8E2EC);border-radius:10px;padding:10px 14px}
+        .droits-bloc legend{font-weight:700;color:#1F4E79;padding:0 6px}
+        .droit-tous{display:block;margin:2px 0 8px;padding-bottom:8px;border-bottom:1px dashed var(--bord,#D8E2EC)}
+        .droit-cases{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+        .droit-cases label,.droit-tous,.bascule{font-size:14px;display:flex;align-items:center;gap:6px}
+        .bascule{margin-right:20px}
+        .droit-cases.tous-actif{opacity:.45;pointer-events:none}
+      </style>
+      <div class="adm-row">
+        <div class="adm-field" style="min-width:300px">
+          <label for="f-modele">Role (modele) — pre-remplit les droits</label>
+          <select id="f-modele" onchange="appliquerModele(this.value)">
+            <option value="">— choisir un modele —</option>
+            {% for m in cfg.ROLES_MODELES %}<option value="{{ m.id }}">{{ m.libelle }}</option>{% endfor %}
+            <option value="__perso">(personnalise)</option>
+          </select>
+          <div class="mat-note" style="margin:4px 0 0">Le modele <b>pre-coche</b> les cases ; ajustez ensuite pour donner <b>moins</b> (ex. assistant comptable) ou <b>plus</b> (ex. gestionnaire) a CET utilisateur.</div>
+        </div>
+      </div>
+      <div class="droits-grid">
+        <fieldset class="droits-bloc">
+          <legend><i class="ti ti-eye"></i> Lecture</legend>
+          <label class="droit-tous"><input type="checkbox" name="lecture_tous" id="lt-tous" onchange="majTous('lecture')"> <b>Tous (Direction)</b> — y compris parametrage</label>
+          <div class="droit-cases" id="lecture-cases">
+            {% for g in cfg.GROUPES_DROITS %}
+            <label><input type="checkbox" name="lecture" value="{{ g }}"> {{ cfg.GROUPES_DROITS_LIBELLES.get(g, g) }}</label>
+            {% endfor %}
+          </div>
+        </fieldset>
+        <fieldset class="droits-bloc">
+          <legend><i class="ti ti-pencil"></i> Ecriture</legend>
+          <label class="droit-tous"><input type="checkbox" name="ecriture_tous" id="et-tous" onchange="majTous('ecriture')"> <b>Tous (Direction)</b></label>
+          <div class="droit-cases" id="ecriture-cases">
+            {% for g in cfg.GROUPES_DROITS %}
+            <label><input type="checkbox" name="ecriture" value="{{ g }}"> {{ cfg.GROUPES_DROITS_LIBELLES.get(g, g) }}</label>
+            {% endfor %}
+          </div>
+          <div class="mat-note" style="margin:6px 0 0">« Finances » exige aussi « Acces financier » ci-dessous.</div>
+        </fieldset>
+      </div>
+      <div class="adm-row">
+        <label class="bascule"><input type="checkbox" name="financier" id="f-financier"> <i class="ti ti-cash"></i> Acces financier (ecriture F1/F2/F3, encaissements)</label>
+        <label class="bascule"><input type="checkbox" name="admin" id="f-admin"> <i class="ti ti-shield-lock"></i> Admin droits (gere comptes &amp; droits)</label>
+      </div>
+      <div class="adm-warn"><i class="ti ti-info-circle"></i> A la <b>creation</b>, un mot de passe aleatoire est genere et affiche une seule fois ; la validite est fixee a la fin de l'annee scolaire. Les <b>droits</b> ci-dessus sont enregistres <b>par utilisateur</b> (deux comptes d'un meme role peuvent differer). Saisir un login existant met a jour ses droits / role / rubrique / couleur (sans changer le mot de passe).</div>
+      <div class="adm-actions">
+        <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i> Enregistrer</button>
+        <button type="button" class="btn btn-ghost" onclick="resetForm()"><i class="ti ti-rotate"></i> Vider le formulaire</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% else %}
+<p class="mat-note"><i class="ti ti-lock i"></i> La gestion des comptes est reservee au <b>responsable informatique</b> (droit administrateur).</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if est_admin %}
+<script>
+var MODELES = {{ cfg.ROLES_MODELES | tojson }};
+
+function cocheCases(type, groupes){
+  document.querySelectorAll('#'+type+'-cases input[type=checkbox]').forEach(function(c){
+    c.checked = (groupes || []).indexOf(c.value) >= 0;
+  });
+}
+function majTous(type){
+  var tous = document.getElementById((type=='lecture'?'lt':'et')+'-tous').checked;
+  var cases = document.getElementById(type+'-cases');
+  if(tous){ cases.classList.add('tous-actif'); }
+  else { cases.classList.remove('tous-actif'); }
+}
+function viderDroits(){
+  document.querySelectorAll('#lecture-cases input,#ecriture-cases input').forEach(function(c){c.checked=false;});
+  ['lt-tous','et-tous','f-financier','f-admin'].forEach(function(id){var e=document.getElementById(id);if(e)e.checked=false;});
+  majTous('lecture'); majTous('ecriture');
+  var m=document.getElementById('f-modele'); if(m) m.value='';
+}
+function appliquerModele(id){
+  if(!id || id==='__perso'){ return; }
+  var m = MODELES.filter(function(x){return x.id===id;})[0];
+  if(!m) return;
+  document.getElementById('lt-tous').checked = !!m.lecture_tous;
+  document.getElementById('et-tous').checked = !!m.ecriture_tous;
+  cocheCases('lecture', m.lecture);
+  cocheCases('ecriture', m.ecriture);
+  document.getElementById('f-financier').checked = !!m.financier;
+  document.getElementById('f-admin').checked = !!m.admin;
+  // Pre-remplit aussi le libelle de role s'il est vide.
+  var fr=document.getElementById('f-role'); if(fr && !fr.value.trim()){ fr.value=m.libelle; }
+  majTous('lecture'); majTous('ecriture');
+}
+function resetForm(){
+  document.getElementById('f-login').value='';
+  document.getElementById('f-role').value='';
+  document.getElementById('f-rubrique').value='';
+  var first=document.querySelector('.colorgrid input'); if(first){first.checked=true;}
+  viderDroits();
+  document.getElementById('form-titre').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function remplirForm(u){
+  resetForm();
+  document.getElementById('f-login').value=u.login||'';
+  document.getElementById('f-role').value=u.role||'';
+  document.getElementById('f-rubrique').value=u.rubrique||'';
+  if(u.couleur){
+    document.querySelectorAll('.colorgrid input').forEach(function(c){ if(c.value.toLowerCase()===String(u.couleur).toLowerCase()) c.checked=true; });
+  }
+  // Droits reels de CET utilisateur (peut differer d'un autre du meme role).
+  document.getElementById('lt-tous').checked = !!u.lecture_tous;
+  document.getElementById('et-tous').checked = !!u.ecriture_tous;
+  cocheCases('lecture', u.lecture);
+  cocheCases('ecriture', u.ecriture);
+  document.getElementById('f-financier').checked = !!u.financier;
+  document.getElementById('f-admin').checked = !!u.admin;
+  document.getElementById('f-modele').value='__perso';
+  majTous('lecture'); majTous('ecriture');
+  document.getElementById('form-titre').scrollIntoView({behavior:'smooth',block:'center'});
+}
+</script>
+{% endif %}
+{% endblock %}

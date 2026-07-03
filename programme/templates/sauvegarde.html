@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Sauvegarde des données</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-database-export i"></i><h3>Créer une sauvegarde</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">
+      Une sauvegarde copie les classeurs de données (inscriptions, notes) dans un dossier
+      <b>horodaté</b>, sans toucher aux fichiers en service. À faire avant toute manipulation
+      importante (import, clôture) et régulièrement — l'application fonctionne hors-ligne, la
+      sauvegarde est votre filet de sécurité.
+    </p>
+    <form method="post" action="{{ url_for('sauvegarde_creer') }}">
+      <button type="submit" class="btn-action" style="margin-top:0">
+        <i class="ti ti-database-plus"></i> Créer une sauvegarde maintenant</button>
+    </form>
+    <p style="margin:10px 0 0;color:var(--gris);font-size:12px">
+      Dossier des sauvegardes : <code>{{ dossier }}</code>
+    </p>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-history i"></i><h3>Sauvegardes existantes</h3></div>
+  <div class="pb">
+    {% if sauvegardes %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Date et heure</th><th style="text-align:center">Classeurs</th><th style="text-align:right">Taille</th><th>Dossier</th></tr></thead>
+        <tbody>
+        {% for s in sauvegardes %}
+          <tr>
+            <td>{{ s.affiche }}</td>
+            <td style="text-align:center">{{ s.n }}</td>
+            <td style="text-align:right">{{ s.ko }} Ko</td>
+            <td><code>{{ s.nom }}</code></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p style="margin:10px 0 0;color:var(--gris);font-size:12px">
+      Pour restaurer, copier les fichiers du dossier choisi par-dessus
+      <code>donnees/data/</code> (application fermée).
+    </p>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucune sauvegarde pour l'instant. Créez-en une avec le bouton ci-dessus.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

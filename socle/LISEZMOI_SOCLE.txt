@@ -1,0 +1,25 @@
+SOCLE TECHNIQUE EMSP  (Python + dependances)  --  s'installe UNE fois
+=====================================================================
+
+Le socle contient l'interpreteur Python et les bibliotheques (Flask, openpyxl)
+necessaires pour faire tourner l'application. Il est SEPARE du programme :
+on l'installe une seule fois et il reste en place d'une version a l'autre.
+
+Contenu du dossier socle\ :
+  - wheels\        : les bibliotheques + pip, au format hors-ligne (.whl)
+  - embeddable\    : a vous d'y deposer le zip Python officiel (voir le fichier dedans)
+  - 1_Installer_le_socle.bat : installe le socle, 100% hors-ligne
+  - runtime\       : cree par l'installeur (Python pret a l'emploi)
+
+INSTALLATION (hors-ligne, sur le poste de l'ecole) :
+  1. Deposez  python-3.12.10-embed-amd64.zip  dans  embeddable\
+     (a recuperer une fois sur une machine connectee ; lien dans le fichier
+      _DEPOSER_LE_ZIP_ICI.txt du dossier embeddable\).
+  2. Double-cliquez sur  1_Installer_le_socle.bat
+  3. Attendez le message "Socle installe".
+
+Aucune connexion Internet n'est requise pour cette installation : toutes les
+bibliotheques sont fournies dans wheels\.
+
+Mises a jour du PROGRAMME : elles ne touchent pas au socle. Vous n'aurez pas
+a refaire cette installation. Voir le LISEZMOI a la racine.

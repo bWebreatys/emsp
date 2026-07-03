@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  .doc-page.paysage { width: 297mm; }
+  .ctx { font-size: 13px; margin: 6px 0 2px; }
+  .ctx b { color: var(--bleu); }
+  table.kpi-imp { width: 70%; border-collapse: collapse; margin-top: 14px; font-size: 13.5px; }
+  table.kpi-imp td { border: 1px solid var(--bord); padding: 8px 12px; }
+  table.kpi-imp td.lib { background: #f1f5f9; font-weight: 600; width: 60%; }
+  table.kpi-imp td.grise { color: var(--gris); font-style: italic; }
+</style>
+</head>
+<body>
+{% macro kmf(x) %}{{ '{:,.0f}'.format(x|float).replace(',', ' ') }}{% endmacro %}
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page paysage">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">{{ titre_page }}
+      <span class="meta">Edite le {{ bandeau.date_jour }}</span>
+    </div>
+
+    {% if bandeau and bandeau.actif %}
+    <p class="ctx">Selection :
+      {% if bandeau.supporte.filiere %}filiere <b>{{ bandeau.filiere }}</b>{% endif %}
+      {% if bandeau.supporte.niveau %} &middot; niveau <b>{{ bandeau.niveau }}</b>{% endif %}
+      {% if bandeau.supporte.annee %} &middot; annee <b>{{ bandeau.annee }}</b>{% endif %}
+      {% if bandeau.supporte.periode and (bandeau.du or bandeau.au) %} &middot; periode <b>{{ bandeau.du or '...' }} &rarr; {{ bandeau.au or '...' }}</b>{% endif %}
+    </p>
+    {% else %}
+    <p class="ctx">Selection : <b>aucune (vue complete)</b></p>
+    {% endif %}
+
+    {% if mode == 'module' %}
+    <p class="ctx">{{ data.titre }} &mdash; <b>{{ data.nb }}</b> ligne(s)</p>
+    {% if data.lignes %}
+    <table class="imp">
+      <thead><tr>{% for h in data.entetes %}<th>{{ h.libelle }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for lig in data.lignes %}
+        <tr>{% for v in lig %}<td>{{ v if v is not none else '' }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="ctx">Aucune donnee pour cette selection.</p>
+    {% endif %}
+
+    {% elif mode == 'dashboard' %}
+    {# R4 (V1.99.40) : impression PILOTEE PAR LA SELECTION (boucle sur `lignes`), #}
+    {# au lieu d'un tableau fige. Inclut le reste du si le KPI est coche. #}
+    <table class="kpi-imp">
+      {% for lig in lignes %}
+      <tr><td class="lib">{{ lig.libelle }}</td><td class="{{ 'grise' if lig.grise else '' }}">{{ lig.valeur }}</td></tr>
+      {% endfor %}
+      {% if not lignes %}<tr><td colspan="2" style="font-style:italic;color:var(--gris)">Aucun indicateur selectionne.</td></tr>{% endif %}
+    </table>
+    {% if kpis.finances_non_filtrable or kpis.heures_non_filtrable %}
+    <p class="ctx" style="font-style:italic;color:var(--gris)">Les indicateurs financiers et horaires ne se filtrent pas par filiere/niveau (affichage global).</p>
+    {% endif %}
+    {% if reste_du_filiere and reste_du_filiere.labels %}
+    <h3 style="margin:18px 0 6px;color:#1F4E79;font-size:15px">Reste du d'inscription par filiere (KMF)</h3>
+    <table class="imp" style="width:80%">
+      <thead><tr><th>Filiere</th><th style="text-align:right">Attendu</th><th style="text-align:right">Paye</th><th style="text-align:right">Reste du</th></tr></thead>
+      <tbody>
+        {% for i in range(reste_du_filiere.labels|length) %}
+        <tr>
+          <td>{{ reste_du_filiere.labels[i] }}</td>
+          <td style="text-align:right">{{ kmf(reste_du_filiere.attendu[i]) }}</td>
+          <td style="text-align:right">{{ kmf(reste_du_filiere.paye[i]) }}</td>
+          <td style="text-align:right">{{ kmf(reste_du_filiere.valeurs[i]) }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="total" style="font-weight:700;background:#f1f5f9">
+          <td>Total</td>
+          <td style="text-align:right">{{ kmf(reste_du_filiere.attendu|sum) }}</td>
+          <td style="text-align:right">{{ kmf(reste_du_filiere.paye|sum) }}</td>
+          <td style="text-align:right">{{ kmf(reste_du_filiere.total_reste) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>

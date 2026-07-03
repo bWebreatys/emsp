@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Présences — saisie en liste (séance libre)</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-users-group i"></i><h3>Choisir la classe</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">
+      Aucun emploi du temps n'est requis : on définit la séance à la volée. Choisissez la classe,
+      puis <b>Afficher la feuille</b> pour obtenir la liste des étudiants à pointer.</p>
+    <form method="get" action="{{ url_for('presences_libre') }}" id="form-classe" autocomplete="off">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" id="sel-fil" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:22ch"></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" id="sel-niv" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:10ch"></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px" id="wrap-sec">
+          <label style="font-weight:600;font-size:13px">Section</label>
+          <select name="section" id="sel-sec" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:12ch"></select>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-list-check"></i> Afficher la feuille</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if roster %}
+<form method="post" action="{{ url_for('presences_libre_enregistrer') }}" id="form-presence" autocomplete="off">
+  <input type="hidden" name="filiere" value="{{ filiere }}">
+  <input type="hidden" name="niveau" value="{{ niveau }}">
+  <input type="hidden" name="section" value="{{ section }}">
+
+  <div class="panel">
+    <div class="ph"><i class="ti ti-calendar-event i"></i><h3>Définir la séance — {{ filiere }} {{ niveau }}{% if section %} · {{ section }}{% endif %}</h3></div>
+    <div class="pb">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Date</label>
+          <input type="text" name="date" id="f-date" value="{{ date_fr }}" placeholder="JJ/MM/AAAA"
+                 style="width:13ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Heure début</label>
+          <input type="time" name="debut" id="f-debut" value="{{ debut }}"
+                 style="width:11ch;padding:6px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Durée (h:mm)</label>
+          <input type="time" id="f-duree" value=""
+                 style="width:11ch;padding:6px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Heure fin</label>
+          <input type="time" name="fin" id="f-fin" value="{{ fin }}"
+                 style="width:11ch;padding:6px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1 1 240px">
+          <label style="font-weight:600;font-size:13px">Matière (barème)</label>
+          <input list="dl-mat" name="matiere" value="{{ matiere }}" placeholder="commencer à saisir…"
+                 style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+          <datalist id="dl-mat">{% for m in matieres %}<option value="{{ m }}"></option>{% endfor %}</datalist>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1 1 240px">
+          <label style="font-weight:600;font-size:13px">Enseignant</label>
+          {% if ens_options %}
+          <select name="enseignant" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">—</option>
+            {% for o in ens_options %}<option value="{{ o.value }}" {{ 'selected' if o.value==enseignant else '' }}>{{ o.label }}</option>{% endfor %}
+          </select>
+          {% else %}
+          <input name="enseignant" value="{{ enseignant }}" placeholder="(liste E1 vide)"
+                 style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+          {% endif %}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Salle <span style="color:var(--gris);font-weight:400">(optionnel)</span></label>
+          <input name="salle" value="{{ salle }}" placeholder="ex. Salle 3"
+                 style="width:16ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ph">
+      <i class="ti ti-checklist i"></i><h3>Feuille de présence</h3>
+      <span style="margin-left:auto;font-size:13px;color:var(--gris)">Présents : <b id="cnt" style="color:var(--bleu)">0</b> / {{ roster|length }} · non coché = absent</span>
+    </div>
+    <div class="pb">
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <button type="button" class="btn" id="btn-all"><i class="ti ti-checks"></i> Tout cocher</button>
+        <button type="button" class="btn" id="btn-none"><i class="ti ti-square-off"></i> Tout décocher</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr><th style="width:80px;text-align:center">Présent</th><th>Matricule</th><th>Nom</th><th>Prénom</th></tr></thead>
+          <tbody>
+          {% for e in roster %}
+            <tr>
+              <td style="text-align:center">
+                <input type="checkbox" class="chk" name="present" value="{{ e.matricule }}"
+                       {{ 'checked' if deja.get(e.matricule)=='O' else '' }}
+                       style="width:18px;height:18px;accent-color:var(--bleu)">
+              </td>
+              <td>{{ e.matricule }}</td><td>{{ e.nom }}</td><td>{{ e.prenom }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;border-top:1px dashed var(--bord);padding-top:12px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer">
+          <input type="checkbox" name="recurrente" value="1" {{ 'disabled' if not peut_creer_a3 else '' }}
+                 style="width:17px;height:17px;accent-color:var(--bleu)">
+          Enregistrer aussi cette séance comme récurrente (crée l'entrée dans A3_Sessions ; le jour est déduit de la date)
+        </label>
+        {% if not peut_creer_a3 %}
+        <div style="font-size:12.5px;color:var(--gris);margin-top:4px;padding-left:25px">Création de séance désactivée : nécessite le droit d'écriture sur A3_Sessions.</div>
+        {% endif %}
+      </div>
+      <div style="margin-top:14px;display:flex;justify-content:flex-end;gap:8px">
+        <a class="btn-action" target="_blank" style="margin-top:0"
+           href="{{ url_for('presences_feuille', filiere=filiere, niveau=niveau, section=section, date=date_fr, debut=debut, fin=fin, matiere=matiere, enseignant=enseignant) }}">
+          <i class="ti ti-printer"></i> {% if deja %}Imprimer la feuille (présents / absents){% else %}Imprimer la feuille (vierge, à signer){% endif %}</a>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-device-floppy"></i> Enregistrer les présences</button>
+      </div>
+    </div>
+  </div>
+</form>
+{% elif filiere and niveau %}
+<div class="panel"><div class="pb"><p style="margin:0;color:var(--rouge)"><i class="ti ti-alert-triangle"></i>
+  Aucun étudiant pour {{ filiere }} {{ niveau }}{% if section %} · {{ section }}{% endif %} dans A1_Etudiants.</p></div></div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  var CLASSES = {{ classes|tojson }};
+  var selF=document.getElementById('sel-fil'), selN=document.getElementById('sel-niv'),
+      selS=document.getElementById('sel-sec'), wrapS=document.getElementById('wrap-sec');
+  var curF={{ filiere|tojson }}, curN={{ niveau|tojson }}, curS={{ section|tojson }};
+  function opt(v,t,sel){var o=document.createElement('option');o.value=v;o.textContent=t;if(sel)o.selected=true;return o;}
+  function remplirFil(){
+    selF.appendChild(opt('','— choisir —',!curF));
+    CLASSES.forEach(function(c){ selF.appendChild(opt(c.filiere,c.filiere,c.filiere===curF)); });
+  }
+  function niveauxDe(f){ var c=CLASSES.find(function(x){return x.filiere===f;}); return c?c.niveaux:[]; }
+  function remplirNiv(){
+    selN.innerHTML=''; var nivs=niveauxDe(selF.value);
+    if(!nivs.length){ selN.appendChild(opt('','—',true)); }
+    nivs.forEach(function(n){ selN.appendChild(opt(n.niveau, n.niveau||'(sans niveau)', n.niveau===curN)); });
+    remplirSec();
+  }
+  function sectionsDe(f,n){ var nivs=niveauxDe(f); var x=nivs.find(function(y){return y.niveau===n;}); return x?x.sections:[]; }
+  function remplirSec(){
+    selS.innerHTML=''; var secs=sectionsDe(selF.value, selN.value);
+    if(!secs.length){ wrapS.style.display='none'; selS.appendChild(opt('','',true)); return; }
+    wrapS.style.display='';
+    selS.appendChild(opt('','(toutes)', !curS));
+    secs.forEach(function(s){ selS.appendChild(opt(s,s,s===curS)); });
+  }
+  remplirFil(); remplirNiv();
+  selF.addEventListener('change', function(){ curF=selF.value; curN=''; curS=''; remplirNiv(); });
+  selN.addEventListener('change', function(){ curN=selN.value; curS=''; remplirSec(); });
+
+  // Date du jour par defaut si vide.
+  var fd=document.getElementById('f-date');
+  if(fd && !fd.value){ var d=new Date(),p=function(x){return(x<10?'0':'')+x;};
+    fd.value=p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear(); }
+
+  // Compteur de presents + tout cocher/decocher.
+  var chks=[].slice.call(document.querySelectorAll('.chk')), cnt=document.getElementById('cnt');
+  function maj(){ if(cnt) cnt.textContent=chks.filter(function(c){return c.checked;}).length; }
+  chks.forEach(function(c){ c.addEventListener('change', maj); });
+  var ba=document.getElementById('btn-all'), bn=document.getElementById('btn-none');
+  if(ba) ba.addEventListener('click', function(){ chks.forEach(function(c){c.checked=true;}); maj(); });
+  if(bn) bn.addEventListener('click', function(){ chks.forEach(function(c){c.checked=false;}); maj(); });
+  maj();
+
+  // Heure de fin pilotee par debut + duree (h:mm). Saisie de la duree -> calcule
+  // la fin ; saisie directe de la fin -> recalcule la duree (coherence).
+  var fdeb=document.getElementById('f-debut'), fdur=document.getElementById('f-duree'),
+      ffin=document.getElementById('f-fin'), gardefou=false;
+  function min(v){ if(!v) return null; var p=v.split(':'); return (+p[0])*60+(+p[1]); }
+  function hhmm(m){ m=((m%1440)+1440)%1440; var h=Math.floor(m/60), n=m%60,
+      z=function(x){return(x<10?'0':'')+x;}; return z(h)+':'+z(n); }
+  function calcFin(){ var d=min(fdeb&&fdeb.value), u=min(fdur&&fdur.value);
+    if(d===null||u===null||!ffin) return; gardefou=true; ffin.value=hhmm(d+u); gardefou=false; }
+  function calcDuree(){ if(gardefou) return; var d=min(fdeb&&fdeb.value), f=min(ffin&&ffin.value);
+    if(d===null||f===null||!fdur) return; var diff=f-d; if(diff<0) diff+=1440; fdur.value=hhmm(diff); }
+  if(fdur) fdur.addEventListener('input', calcFin);
+  if(fdeb) fdeb.addEventListener('input', function(){ if(fdur&&fdur.value) calcFin(); else calcDuree(); });
+  if(ffin) ffin.addEventListener('input', calcDuree);
+  calcDuree();   // pre-remplit la duree si debut+fin deja connus (retour de saisie)
+})();
+</script>
+{% endblock %}

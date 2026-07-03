@@ -1,0 +1,5 @@
+
+# Secrets et journal LOCAUX — jamais pousses sur le depot public (V1.24)
+instance/
+comptes.json
+journal.csv

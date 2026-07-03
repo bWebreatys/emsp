@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block contenu %}
+{# Partie centrale — identite drapeau des Comores. Deux niveaux d'accordeon :
+   1) le volume (carte) s'ouvre au clic ; 2) dans un volume ouvert, seuls les
+   groupes (Eleves, Presences...) sont listes ; leurs ecrans n'apparaissent qu'au
+   clic sur le groupe. Coherent avec l'arborescence du menu de gauche. #}
+<style>
+  .acc-wrap{--vert:#3A7728;--jaune:#FCD116;--rouge:#CE1126;--bleu:#2C6BB0;
+            --marine:#1F4E79;--encre:#22303c;--trait:#e3e9f0;}
+  .acc-hero{position:relative;overflow:hidden;border-radius:14px;
+            background:linear-gradient(105deg,var(--vert) 0%,#2f6322 60%,#245018 100%);
+            color:#fff;padding:16px 24px;display:flex;align-items:center;gap:12px;}
+  .acc-hero h1{margin:0;font-size:20px;letter-spacing:.2px;font-weight:700}
+  .acc-stripes{display:flex;height:8px;border-radius:0 0 4px 4px;overflow:hidden;margin:0 2px 20px}
+  .acc-stripes i{flex:1}
+  .acc-stripes i:nth-child(1){background:var(--jaune)}
+  .acc-stripes i:nth-child(2){background:#fff;box-shadow:inset 0 0 0 1px #eee}
+  .acc-stripes i:nth-child(3){background:var(--rouge)}
+  .acc-stripes i:nth-child(4){background:var(--bleu)}
+  .acc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
+  .acc-card{border:1px solid var(--trait);border-radius:12px;background:#fff;
+            overflow:hidden;box-shadow:0 1px 2px rgba(20,40,70,.04);transition:box-shadow .15s}
+  .acc-card[open]{box-shadow:0 6px 20px rgba(20,40,70,.10)}
+  .acc-card>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
+            padding:15px 16px;position:relative}
+  .acc-card>summary::-webkit-details-marker{display:none}
+  .acc-card>summary::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;
+            background:var(--c)}
+  .acc-num{flex:0 0 auto;width:38px;height:38px;border-radius:9px;display:grid;place-items:center;
+            font-weight:800;font-size:16px;color:#fff;background:var(--c)}
+  .acc-tt{flex:1 1 auto;min-width:0}
+  .acc-tt b{display:block;color:var(--marine);font-size:15.5px;line-height:1.2}
+  .acc-tt span{display:block;color:#5b6b7a;font-size:12px;margin-top:2px}
+  .acc-chev{flex:0 0 auto;color:#9fb0c0;transition:transform .18s}
+  .acc-card[open]>summary .acc-chev{transform:rotate(90deg)}
+  .acc-count{flex:0 0 auto;font-size:11.5px;color:#5b6b7a;background:#f2f6fb;
+            border:1px solid var(--trait);border-radius:999px;padding:2px 9px}
+  .acc-items{padding:6px 12px 12px;border-top:1px solid var(--trait);
+            display:flex;flex-direction:column;gap:1px}
+  /* niveau 2 : groupe repliable */
+  .acc-sub{border-radius:8px}
+  .acc-sub>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+            padding:9px 8px;border-radius:8px;color:var(--marine);font-weight:600;font-size:13.5px}
+  .acc-sub>summary::-webkit-details-marker{display:none}
+  .acc-sub>summary:hover{background:#f4f8fd}
+  .acc-sub>summary>.acc-sub-ico{color:var(--c);width:18px;text-align:center;flex:0 0 auto}
+  .acc-sub-tt{flex:1 1 auto;min-width:0}
+  .acc-sub-count{flex:0 0 auto;font-size:11px;color:#5b6b7a;background:#f2f6fb;
+            border:1px solid var(--trait);border-radius:999px;padding:1px 8px}
+  .acc-sub-chev{flex:0 0 auto;color:#9fb0c0;transition:transform .18s}
+  .acc-sub[open]>summary .acc-sub-chev{transform:rotate(90deg)}
+  .acc-sub-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+            gap:1px 12px;padding:2px 0 8px 26px}
+  .acc-lien{display:flex;align-items:center;gap:9px;padding:8px 8px;border-radius:8px;
+            color:var(--encre);text-decoration:none;font-size:13.5px;line-height:1.2}
+  .acc-lien:hover{background:#f4f8fd;color:var(--marine)}
+  .acc-lien i{color:var(--c);width:18px;text-align:center;flex:0 0 auto}
+  @media (prefers-reduced-motion:reduce){.acc-chev,.acc-sub-chev,.acc-card{transition:none}}
+</style>
+
+<div class="acc-wrap">
+  <div class="acc-hero">
+    <h1>{{ role_courant.login }}</h1>
+  </div>
+  <div class="acc-stripes" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  {% set couleurs = ['#3A7728','#2C6BB0','#CE1126','#E0A800','#1F4E79','#1B7F6B'] %}
+  <div class="acc-grid">
+    {% for sec in GUIDE %}
+      {% set ns = namespace(visibles=0) %}
+      {% for grp in sec.groupes %}{% for cle, lib, ico in grp.modules %}{% if cle not in MODULES_CACHES %}{% set ns.visibles = ns.visibles + 1 %}{% endif %}{% endfor %}{% endfor %}
+      {% if ns.visibles > 0 %}
+      <details class="acc-card" style="--c:{{ couleurs[loop.index0 % couleurs|length] }}">
+        <summary>
+          <span class="acc-num">{{ sec.num }}</span>
+          <span class="acc-tt"><b>{{ sec.titre }}</b><span>{{ sec.intro }}</span></span>
+          <span class="acc-count">{{ ns.visibles }} écran{{ 's' if ns.visibles > 1 else '' }}</span>
+          <i class="ti ti-chevron-right acc-chev"></i>
+        </summary>
+        <div class="acc-items">
+          {% for grp in sec.groupes %}
+            {% set gv = namespace(n=0) %}
+            {% for cle, lib, ico in grp.modules %}{% if cle not in MODULES_CACHES %}{% set gv.n = gv.n + 1 %}{% endif %}{% endfor %}
+            {% if gv.n > 0 %}
+              {% if grp.titre %}
+                <details class="acc-sub">
+                  <summary>
+                    <i class="ti {{ grp.icone }} acc-sub-ico"></i>
+                    <span class="acc-sub-tt">{{ grp.titre }}</span>
+                    <span class="acc-sub-count">{{ gv.n }}</span>
+                    <i class="ti ti-chevron-right acc-sub-chev"></i>
+                  </summary>
+                  <div class="acc-sub-items">
+                    {% for cle, lib, ico in grp.modules %}
+                      {% if cle not in MODULES_CACHES %}
+                        {% if cle in cfg.SPECIAL_ROUTES %}{% set href = url_for(cfg.SPECIAL_ROUTES[cle]) %}{% else %}{% set href = url_for('module', onglet=cle) %}{% endif %}
+                        <a class="acc-lien" href="{{ href }}"><i class="ti {{ ico }}"></i>{{ lib }}</a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </details>
+              {% else %}
+                {% for cle, lib, ico in grp.modules %}
+                  {% if cle not in MODULES_CACHES %}
+                    {% if cle in cfg.SPECIAL_ROUTES %}{% set href = url_for(cfg.SPECIAL_ROUTES[cle]) %}{% else %}{% set href = url_for('module', onglet=cle) %}{% endif %}
+                    <a class="acc-lien" href="{{ href }}"><i class="ti {{ ico }}"></i>{{ lib }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </details>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

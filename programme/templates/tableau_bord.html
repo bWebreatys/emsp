@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Tableau de bord</div>
+<div class="page-head">
+  <i class="ti ti-dashboard ic"></i>
+  <div>
+    <h1>Tableau de bord</h1>
+    <div class="sub">Direction — lecture seule. Se met a jour automatiquement depuis le classeur.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Tableau de bord <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li>Chaque graphique propose plusieurs formes : <b>histogramme</b>, <b>camembert</b> ou <b>radar</b>. Cliquez sur les boutons en haut de chaque encart pour changer.</li>
+      <li>Sous chaque graphique, cochez ou decochez les valeurs a afficher (filieres, statuts, categories…). Utilisez <b>Tout</b> / <b>Aucun</b> pour selectionner rapidement.</li>
+      <li>Les chiffres proviennent directement des pages de saisie. Rien ne se saisit ici.</li>
+      <li>Le bouton <b>Donnees de demonstration</b> affiche des valeurs fictives pour visualiser les graphiques tant que le classeur est vide ; desactivez-le pour revenir aux donnees reelles.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+{% set fnf = kpis and kpis.finances_non_filtrable %}
+{% set hnf = kpis and kpis.heures_non_filtrable %}
+{% if bandeau %}
+  {% set bandeau_action = url_for('tableau_bord') %}
+  {% set bandeau_action_imp = url_for('tableau_bord_imprimer') %}
+  {% include "_bandeau_filtres.html" %}
+{% endif %}
+<div style="margin:0 0 14px"><a class="btn-action" href="{{ url_for('tableau_bord_plan_action') }}"><i class="ti ti-list-check"></i> Plan d'action (synthese + saisie)</a></div>
+<div class="kpis" id="kpis">
+  <div class="kpi"><div class="v" data-k="etudiants">—</div><div class="l">Effectif total</div></div>
+  <div class="kpi"><div class="v" data-k="actifs">—</div><div class="l">Actifs</div></div>
+  <div class="kpi"><div class="v" data-k="diplomes">—</div><div class="l">Diplomes</div></div>
+  <div class="kpi"><div class="v" data-k="taux_presence">—</div><div class="l">Taux de presence (%)</div></div>
+  <div class="kpi green" {% if fnf %}style="opacity:.45" title="Non filtrable par filiere/niveau (affichage global)"{% endif %}><div class="v" data-k="recettes">—</div><div class="l">Recettes (KMF)</div></div>
+  <div class="kpi red" {% if fnf %}style="opacity:.45" title="Non filtrable par filiere/niveau (affichage global)"{% endif %}><div class="v" data-k="depenses">—</div><div class="l">Depenses (KMF)</div></div>
+  <div class="kpi" {% if fnf %}style="opacity:.45" title="Non filtrable par filiere/niveau (affichage global)"{% endif %}><div class="v" data-k="solde">—</div><div class="l">Solde (KMF)</div></div>
+  <div class="kpi" {% if hnf %}style="opacity:.45" title="Non filtrable par filiere/niveau (affichage global)"{% endif %}><div class="v" data-k="heures">—</div><div class="l">Heures constatees</div></div>
+</div>
+{% if fnf or hnf %}<p style="margin:8px 0 0;font-size:13px;font-style:italic;color:var(--gris)">Les indicateurs financiers et horaires ne se filtrent pas par filiere/niveau (affichage global).</p>{% endif %}
+
+{% if ecart_heures %}
+<div class="panel"><div class="ph"><i class="ti ti-clock-hour-4 i"></i><h3>Synthese des heures (prevu / enregistre)</h3></div>
+  <div class="pb">
+    <div class="kpis">
+      <div class="kpi"><div class="v">{{ ecart_heures.prevu_aff }}</div><div class="l">Heures prevues</div></div>
+      <div class="kpi"><div class="v">{{ ecart_heures.enregistre_aff }}</div><div class="l">Heures enregistrees</div></div>
+      <div class="kpi {{ 'red' if ecart_heures.ecart_nonzero else '' }}"><div class="v">{{ ecart_heures.ecart_aff }}</div><div class="l">Ecart (prevu &minus; enregistre)</div></div>
+    </div>
+    {% if ecart_heures.nb_ens_ecart %}
+    <p style="margin:8px 0 0;font-size:13px;color:var(--rouge)"><i class="ti ti-alert-triangle"></i>
+      {{ ecart_heures.nb_ens_ecart }} enseignant(s) avec un ecart entre heures prevues et enregistrees
+      (feuilles non remplies ou retard de saisie). Detail par mois : ecran &laquo; Heures constatees du mois &raquo;.</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="panel"><div class="pb" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+  <label class="demo-switch"><input type="checkbox" id="demo"> Donnees de demonstration (valeurs fictives)</label>
+  <span style="color:var(--gris);font-size:13px"><i class="ti ti-refresh"></i> Actualisez la page apres une saisie dans le classeur.</span>
+</div></div>
+
+<div class="grid-charts">
+  {% for c in charts %}
+  <div class="chart-card" data-chart="{{ c.id }}">
+    <div class="ch">
+      <i class="ti ti-chart-dots i"></i>
+      <h3>{{ c.titre }}</h3>
+      <span class="types">
+        {% for t in c.types %}
+        <button data-type="{{ t }}" class="{{ 'on' if t==c.defaut else '' }}">{{ {'bar':'Histogramme','pie':'Camembert','radar':'Radar'}[t] }}</button>
+        {% endfor %}
+      </span>
+    </div>
+    <div class="chart-body">
+      <div class="canvas-box"><canvas id="cv_{{ c.id }}"></canvas></div>
+      <div class="selecteur">
+        <div class="stitle">Valeurs affichees <a data-all="1">Tout</a> · <a data-all="0">Aucun</a></div>
+        <div class="chips" id="chips_{{ c.id }}"></div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{# R4 (V1.99.40) : montants exacts du reste du par filiere, en complement du graphe. #}
+{% if reste_du_filiere and reste_du_filiere.labels %}
+<div class="chart-card" style="margin-top:14px">
+  <div class="ch"><i class="ti ti-cash-banknote i"></i><h3>Reste dû d'inscription par filière (KMF)</h3></div>
+  <div style="padding:6px 14px 14px">
+    <table class="data" style="width:100%">
+      <thead><tr><th>Filière</th><th style="text-align:right">Attendu</th><th style="text-align:right">Payé</th><th style="text-align:right">Reste dû</th></tr></thead>
+      <tbody>
+        {% for i in range(reste_du_filiere.labels|length) %}
+        <tr>
+          <td>{{ reste_du_filiere.labels[i] }}</td>
+          <td style="text-align:right">{{ '{:,}'.format(reste_du_filiere.attendu[i]).replace(',', ' ') }}</td>
+          <td style="text-align:right">{{ '{:,}'.format(reste_du_filiere.paye[i]).replace(',', ' ') }}</td>
+          <td style="text-align:right;{% if reste_du_filiere.valeurs[i] > 0 %}color:#9B2C2C;font-weight:600{% endif %}">{{ '{:,}'.format(reste_du_filiere.valeurs[i]).replace(',', ' ') }}</td>
+        </tr>
+        {% endfor %}
+        <tr style="font-weight:700;background:#EAF1F8">
+          <td>Total</td>
+          <td style="text-align:right">{{ '{:,}'.format(reste_du_filiere.attendu|sum).replace(',', ' ') }}</td>
+          <td style="text-align:right">{{ '{:,}'.format(reste_du_filiere.paye|sum).replace(',', ' ') }}</td>
+          <td style="text-align:right;color:#9B2C2C">{{ '{:,}'.format(reste_du_filiere.total_reste).replace(',', ' ') }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script>
+window.CHART_DEFS = {{ charts|tojson }};
+window.API_URL = "{{ url_for('api_dashboard') }}{% if request.query_string %}?{{ request.query_string.decode() }}{% endif %}";
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

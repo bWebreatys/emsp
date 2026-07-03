@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; {{ info.libelle }}</div>
+<div class="page-head">
+  <i class="ti ti-printer ic"></i>
+  <div>
+    <h1>Impressions &amp; editions</h1>
+    <div class="sub">Choisissez un document, ajustez les criteres, puis lancez l'apercu (retouche possible avant impression).</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Impressions <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p><b>Point central d'impression.</b> Cet ecran est le <b>hub</b> de toutes les editions. Les boutons d'impression presents sur les autres ecrans (liste, attestation, recu, tableau de bord&hellip;) sont des <b>raccourcis</b> vers les memes editions &mdash; pas de double emploi.</p>
+    <p>Chaque bouton ouvre un <b>apercu imprimable</b> dans un nouvel onglet. Sur l'apercu : le contenu est <b>retouchable a la main</b> (modifications ponctuelles, non enregistrees), puis bouton <b>Imprimer / PDF</b> (impression papier ou PDF du navigateur).</p>
+    <p>Les <b>parties fixes</b> (en-tete, titre, corps type, mentions, signataire, nombre de copies) se reglent durablement dans <a href="{{ url_for('modeles_docs') }}">Parametrages &rarr; Modeles de documents</a>.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div class="cards">
+
+  {# 1. Liste d'etudiants #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-list-numbers"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Liste d'etudiants</h2></div></div>
+    <div class="intro">Liste filtree (filiere, niveau, section, annee). Laisser un critere vide = toutes les valeurs.</div>
+    <form method="get" action="{{ url_for('impr_liste') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Filiere</label>
+        <select name="filiere"><option value="">Toutes</option>{% for v in filtres.filiere %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Niveau</label>
+        <select name="niveau"><option value="">Tous</option>{% for v in filtres.niveau %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Section</label>
+        <select name="section"><option value="">Toutes</option>{% for v in filtres.section %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Annee acad.</label>
+        <select name="annee"><option value="">Toutes</option>{% for v in filtres.annee %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# 2. Feuille de presence vierge #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-clipboard-list"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Feuille de presence vierge</h2></div></div>
+    <div class="intro">Feuille contextualisee : <b>classe (filiere + niveau) obligatoire</b>, pre-remplie avec les etudiants de la classe ; date et horaires mentionnes ; colonne emargement vide. Repli en grille vierge si la classe n'a aucun etudiant.</div>
+    <form method="get" action="{{ url_for('impr_presence') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Filiere <span style="color:var(--rouge,#9B2C2C)">*</span></label>
+        <select name="filiere" required><option value="">— choisir —</option>{% for v in filtres.filiere %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Niveau <span style="color:var(--rouge,#9B2C2C)">*</span></label>
+        <select name="niveau" required><option value="">— choisir —</option>{% for v in filtres.niveau %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Section</label>
+        <select name="section"><option value="">Toutes</option>{% for v in filtres.section %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Date</label>
+        <input type="text" name="date" placeholder="JJ/MM/AAAA"></div>
+      <div class="saisie-champ"><label>Debut</label>
+        <input type="text" name="debut" placeholder="HH:MM"></div>
+      <div class="saisie-champ"><label>Fin</label>
+        <input type="text" name="fin" placeholder="HH:MM"></div>
+      <div class="saisie-champ"><label>Matiere</label>
+        <input type="text" name="matiere" placeholder="(facultatif)"></div>
+      <div class="saisie-champ"><label>Enseignant</label>
+        <input type="text" name="enseignant" placeholder="(facultatif)"></div>
+      <div class="saisie-champ"><label>Lignes si classe vide</label>
+        <input type="number" name="lignes" value="{{ presence_lignes }}" min="1" max="200"></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# 3. Releve d'heures individuel (paie) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-clock-hour-4"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Releve d'heures individuel</h2></div></div>
+    <div class="intro">Pour la paie : un enseignant, une periode. Choisir d'abord le mois.</div>
+    <form method="get" action="{{ url_for('impr_releve_ind') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Mois / Annee <span class="oblig">*</span></label>
+        <select name="mois" id="ri-mois" required><option value="">— choisir —</option>{% for v in mois %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Enseignant <span class="oblig">*</span></label>
+        <select name="matricule" id="ri-ens" required><option value="">— choisir un mois d'abord —</option></select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# 4. Recapitulatif mensuel des heures #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-table"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Recapitulatif mensuel des heures</h2></div></div>
+    <div class="intro">Tous les enseignants pour un mois (vol. programme, constate, total a payer + total general).</div>
+    <form method="get" action="{{ url_for('impr_releve_recap') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Mois / Annee <span class="oblig">*</span></label>
+        <select name="mois" required><option value="">— choisir —</option>{% for v in mois %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# 5. Recu de paiement #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-receipt"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Recu de paiement</h2></div></div>
+    {% if peut_financier %}
+    <div class="intro">Etabli depuis une recette de la tresorerie. Le numero (REC-AAAA-NNNN) est pre-rempli et reste modifiable a l'impression.</div>
+    <form method="get" action="{{ url_for('impr_recu') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ" style="grid-column:1/-1"><label>Recette</label>
+        <select name="i" required>
+          <option value="">— choisir une recette —</option>
+          {% for r in recettes %}<option value="{{ r.idx }}">{{ r.date }} · {{ r.tiers }} · {{ r.montant }} KMF{% if r.reference %} · {{ r.reference }}{% endif %} — {{ r.libelle }}</option>{% endfor %}
+        </select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+    {% if not recettes %}<div class="saisie-note" style="margin-top:8px"><i class="ti ti-info-circle"></i> Aucune recette en tresorerie pour le moment.</div>{% endif %}
+    {% else %}
+    <div class="intro"><i class="ti ti-lock"></i> Reserve a la Comptabilite et a la Direction (Acces financier = Oui).</div>
+    {% endif %}
+  </div>
+
+  {# 6. Attestation de passage #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-certificate"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Attestation de passage</h2></div></div>
+    <div class="intro">Version imprimable simple (l'automatisation du cycle de validation est une piste possible ensuite, sans engagement).</div>
+    <form method="get" action="{{ url_for('impr_attestation') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ" style="grid-column:1/-1"><label>Etudiant <span class="oblig">*</span></label>
+        <select name="matricule" required><option value="">— choisir —</option>{% for e in etudiants %}<option value="{{ e.matricule }}">{{ e.libelle }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# Situation de compte (registre mensuel) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-report-money"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Situation de compte</h2></div></div>
+    {% if peut_financier %}
+    <div class="intro">Registre mensuel signe (Gestionnaire + Directeur) : report a nouveau, mouvements de la periode, solde courant ligne a ligne, solde de cloture.</div>
+    <form method="get" action="{{ url_for('impr_situation_compte') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Compte / caisse <span class="oblig">*</span></label>
+        <select name="compte" required><option value="">— choisir —</option>{% for c in comptes_treso %}<option>{{ c.nom }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Periode (MM/AAAA) <span class="oblig">*</span></label>
+        <select name="mois" required><option value="">— choisir —</option>{% for v in mois_treso %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+    {% if not mois_treso %}<div class="saisie-note" style="margin-top:8px"><i class="ti ti-info-circle"></i> Aucun mouvement date en tresorerie pour le moment.</div>{% endif %}
+    {% else %}
+    <div class="intro"><i class="ti ti-lock"></i> Reserve a la Comptabilite et a la Direction (Acces financier = Oui).</div>
+    {% endif %}
+  </div>
+
+  {# Export Excel du tableau de bord #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-file-spreadsheet"></i></div>
+      <div><div class="num">EXPORT</div><h2>Tableau de bord (Excel)</h2></div></div>
+    <div class="intro">Telecharge un classeur .xlsx des 5 jeux du tableau de bord (effectif par filiere, statuts, recettes/depenses, presence par creneau, heures par enseignant) + une synthese.</div>
+    <a class="btn-action" style="margin-top:8px;display:inline-flex;align-items:center;gap:6px" href="{{ url_for('impr_export_tdb') }}"><i class="ti ti-download"></i> Telecharger le .xlsx</a>
+  </div>
+
+  {# Feuille de presence de la semaine (document A, paysage) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-calendar-week"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Feuille de presence de la semaine</h2></div></div>
+    <div class="intro">Feuille hebdomadaire (modele EMSP), paysage : chaque journee est decomposee en 4 creneaux (10h / 12h / 15h / 17h), avec date et lieu de naissance. Pre-remplie avec les etudiants filtres.</div>
+    <form method="get" action="{{ url_for('impr_presence_semaine') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Filiere</label>
+        <select name="filiere"><option value="">Toutes</option>{% for v in filtres.filiere %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Niveau</label>
+        <select name="niveau"><option value="">Tous</option>{% for v in filtres.niveau %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Section</label>
+        <select name="section"><option value="">Toutes</option>{% for v in filtres.section %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Annee acad.</label>
+        <select name="annee"><option value="">Toutes</option>{% for v in filtres.annee %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# Fiche d'appreciation de stage (document D, vierge) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-clipboard-check"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Fiche d'appreciation de stage</h2></div></div>
+    <div class="intro">Aptitudes generales a la fonction (document D) : grille vierge a imprimer puis a remplir a la main par le responsable d'encadrement sur le lieu de stage.</div>
+    <a class="btn-action" style="margin-top:8px;display:inline-flex;align-items:center;gap:6px" target="_blank" href="{{ url_for('impr_appreciation_stage') }}"><i class="ti ti-eye"></i> Apercu &amp; impression</a>
+  </div>
+
+  {# Bulletin / releve de notes #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-award"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Releve de notes (bulletin)</h2></div></div>
+    <div class="intro">Releve d'un semestre OU releve annuel (decret 05-106) : UE, matieres, moyennes, mention. Laisser le semestre vide pour le releve annuel (format officiel, 2 semestres).</div>
+    <form method="get" action="{{ url_for('impr_bulletin') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Etudiant</label>
+        <select name="matricule" required><option value="">— choisir —</option>{% for e in etudiants %}<option value="{{ e.matricule }}">{{ e.libelle }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Annee acad.</label>
+        <select name="annee" required><option value="">— choisir —</option>{% for v in filtres.annee %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Semestre</label>
+        <select name="semestre"><option value="">Annee (releve annuel)</option>{% for s in [1,2,3,4,5,6] %}<option>{{ s }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Session</label>
+        <select name="session">
+          <option value="">Automatique (session 2 si rattrapage saisi)</option>
+          <option value="1">Premiere session (sans colonnes rattrapage)</option>
+          <option value="2">Deuxieme session (avec colonnes rattrapage)</option>
+        </select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# Plan d'action #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-list-check"></i></div>
+      <div><div class="num">DOCUMENT</div><h2>Plan d'action</h2></div></div>
+    <div class="intro">Suivi des ecarts et axes de progres (tableau) : domaine, ecart constate, action corrective, responsable, echeance, statut.</div>
+    <a class="btn-action" style="margin-top:8px;display:inline-flex;align-items:center;gap:6px" target="_blank" href="{{ url_for('impr_plan_action') }}"><i class="ti ti-eye"></i> Apercu &amp; impression</a>
+  </div>
+
+  {# Inventaire des equipements (V1.75) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-clipboard-list"></i></div>
+      <div><div class="num">ETAT LOGISTIQUE</div><h2>Inventaire des equipements</h2></div></div>
+    <div class="intro">Equipements (module M1) regroupes au choix par salle, par source de financement (bailleur) ou par etat, avec sous-totaux quantite et montant.</div>
+    <form method="get" action="{{ url_for('impr_inventaire') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Regrouper par</label>
+        <select name="axe">
+          <option value="salle">Salle / localisation</option>
+          <option value="bailleur">Bailleur</option>
+          <option value="etat">Etat</option>
+        </select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# Expression de besoin (V1.75) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-file-text"></i></div>
+      <div><div class="num">ETAT LOGISTIQUE</div><h2>Expression de besoin</h2></div></div>
+    <div class="intro">Etat des besoins exprimes (module L3), filtrable par statut, priorite et salle, avec total des couts estimes.</div>
+    <form method="get" action="{{ url_for('impr_bon_besoin') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Statut</label>
+        <select name="statut"><option value="">Tous</option>{% for v in besoin_statuts %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Priorite</label>
+        <select name="priorite"><option value="">Toutes</option>{% for v in besoin_priorites %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Salle</label>
+        <select name="salle"><option value="">Toutes</option>{% for v in salles_equip %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {% if peut_financier %}
+  {# Journal de tresorerie #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-book"></i></div>
+      <div><div class="num">ETAT COMPTABLE</div><h2>Journal de tresorerie</h2></div></div>
+    <div class="intro">Toutes les operations (recettes et depenses) d'une periode, pour un compte ou tous les comptes, avec totaux.</div>
+    <form method="get" action="{{ url_for('impr_journal_treso') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Compte / caisse</label>
+        <select name="compte"><option value="">Tous</option>{% for c in comptes_treso %}<option>{{ c.nom }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Mois (MM/AAAA)</label>
+        <select name="mois"><option value="">Toutes periodes</option>{% for v in mois_treso %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+
+  {# Situation globale (balance) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-scale"></i></div>
+      <div><div class="num">ETAT COMPTABLE</div><h2>Situation globale (balance)</h2></div></div>
+    <div class="intro">Un compte / caisse par ligne : solde initial, total recettes, total depenses, solde courant, et total general.</div>
+    <a class="btn-action" style="margin-top:8px;display:inline-flex;align-items:center;gap:6px" target="_blank" href="{{ url_for('impr_balance') }}"><i class="ti ti-eye"></i> Apercu &amp; impression</a>
+  </div>
+  {# Etat par poste budgetaire #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-chart-bar"></i></div>
+      <div><div class="num">ETAT COMPTABLE</div><h2>Recettes / depenses par poste budgetaire</h2></div></div>
+    <div class="intro">Regroupement par poste budgetaire : recettes, depenses et solde, pour une periode et un compte (ou tous).</div>
+    <form method="get" action="{{ url_for('impr_etat_poste') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Compte / caisse</label>
+        <select name="compte"><option value="">Tous</option>{% for c in comptes_treso %}<option>{{ c.nom }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Mois (MM/AAAA)</label>
+        <select name="mois"><option value="">Toutes periodes</option>{% for v in mois_treso %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+  {# Budget par poste : prevu / realise / ecart (V1.70) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-report-money"></i></div>
+      <div><div class="num">ETAT COMPTABLE</div><h2>Budget : prevu / realise / ecart</h2></div></div>
+    <div class="intro">Comparatif par poste budgetaire pour un exercice (annee civile) : montant prevu (budget F3), realise (mouvements F1 de l'annee), ecart et taux de realisation.</div>
+    <form method="get" action="{{ url_for('impr_etat_poste') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Exercice (annee civile)</label>
+        <input type="number" name="exercice" min="2020" max="2100" step="1" value="{{ annee_civile }}" style="width:9ch"></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+  {# Recettes/depenses par source de financement — reporting AFD (V1.75) #}
+  <div class="card">
+    <div class="top"><div class="badge"><i class="ti ti-building-bank"></i></div>
+      <div><div class="num">ETAT COMPTABLE</div><h2>Recettes / depenses par source de financement</h2></div></div>
+    <div class="intro">Regroupement par bailleur (AFD, OMS, EMSP...) : total recettes, total depenses et solde. Filtre par annee civile optionnel.</div>
+    <form method="get" action="{{ url_for('impr_etat_bailleur') }}" target="_blank" class="saisie-grid" style="margin-top:8px">
+      <div class="saisie-champ"><label>Annee civile</label>
+        <select name="annee"><option value="">Toutes</option>{% for v in annees_f1 %}<option>{{ v }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-eye"></i> Apercu &amp; impression</button></div>
+    </form>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+// Selecteur dependant : enseignants ayant un releve pour le mois choisi (hors-ligne, meme serveur).
+(function () {
+  var mois = document.getElementById('ri-mois');
+  var ens = document.getElementById('ri-ens');
+  if (!mois || !ens) return;
+  mois.addEventListener('change', function () {
+    ens.innerHTML = '<option value="">— chargement… —</option>';
+    if (!mois.value) { ens.innerHTML = '<option value="">— choisir un mois d\'abord —</option>'; return; }
+    fetch('{{ url_for("api_releve_individuels") }}?mois=' + encodeURIComponent(mois.value))
+      .then(function (r) { return r.json(); })
+      .then(function (lst) {
+        if (!lst.length) { ens.innerHTML = '<option value="">— aucun releve ce mois —</option>'; return; }
+        ens.innerHTML = '<option value="">— choisir —</option>';
+        lst.forEach(function (o) {
+          var opt = document.createElement('option');
+          opt.value = o.matricule; opt.textContent = o.libelle; ens.appendChild(opt);
+        });
+      })
+      .catch(function () { ens.innerHTML = '<option value="">— erreur de chargement —</option>'; });
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{# Bandeau de filtres (V1.71). Attendu dans le contexte :
+   bandeau : {filiere,niveau,annee,du,au,actif,supporte:{filiere,niveau,annee,periode},date_jour}
+   valeurs : {filiere:[...], niveau:[...], annee:[...]}
+   bandeau_action : URL GET d'application ; bandeau_action_imp : URL d'impression #}
+<style>
+  .bandeau-filtres { background:#eef3f8; border:1px solid #cfdcea; border-radius:8px;
+    padding:10px 14px; margin:0 0 16px; }
+  .bandeau-filtres .bf-titre { color:var(--bleu); font-weight:700; font-size:14px; margin-bottom:8px; }
+  .bandeau-filtres .bf-controles { display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; }
+  .bandeau-filtres label { font-size:13px; color:#333; display:flex; flex-direction:column; gap:3px; }
+  .bandeau-filtres select, .bandeau-filtres input[type=text] {
+    font:inherit; font-size:14px; padding:6px 8px; border:1px solid #b9c7d6; border-radius:6px; background:#fff; }
+  .bandeau-filtres .bf-resume { margin-top:8px; font-size:13px; color:#333; }
+  .bandeau-filtres .bf-resume b { color:var(--bleu); }
+  .bandeau-filtres .bf-imp { margin-left:auto; }
+</style>
+<form class="bandeau-filtres" method="get" action="{{ bandeau_action }}">
+  <div class="bf-titre"><i class="ti ti-filter i"></i> Filtrer la selection</div>
+  <div class="bf-controles">
+    {% if bandeau.supporte.filiere %}
+    <label>Filiere
+      <select name="filiere">
+        <option value="">Toutes</option>
+        {% for v in valeurs.filiere %}<option value="{{ v }}" {{ 'selected' if bandeau.filiere == v else '' }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    {% endif %}
+    {% if bandeau.supporte.niveau %}
+    <label>Niveau
+      <select name="niveau">
+        <option value="">Tous</option>
+        {% for v in valeurs.niveau %}<option value="{{ v }}" {{ 'selected' if bandeau.niveau == v else '' }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    {% endif %}
+    {% if bandeau.supporte.annee %}
+    <label>Annee academique
+      <select name="annee">
+        <option value="">Toutes</option>
+        {% for v in valeurs.annee %}<option value="{{ v }}" {{ 'selected' if bandeau.annee == v else '' }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    {% endif %}
+    {% if bandeau.supporte.periode %}
+    <label>Du <input type="text" name="du" value="{{ bandeau.du }}" placeholder="JJ/MM/AAAA" pattern="\d{2}/\d{2}/\d{4}" size="10"></label>
+    <label>Au <input type="text" name="au" value="{{ bandeau.au }}" placeholder="JJ/MM/AAAA" pattern="\d{2}/\d{2}/\d{4}" size="10"></label>
+    {% endif %}
+    <button type="submit" class="btn-mini"><i class="ti ti-filter"></i> Appliquer</button>
+    {% if bandeau.actif %}<a class="btn-mini" href="{{ bandeau_action }}"><i class="ti ti-filter-off"></i> Reinitialiser</a>{% endif %}
+    <button type="submit" class="btn-mini bf-imp" formaction="{{ bandeau_action_imp }}" formtarget="_blank"><i class="ti ti-printer"></i> Imprimer cette selection</button>
+  </div>
+  {% if bandeau.actif %}
+  <div class="bf-resume">Selection :
+    {% if bandeau.supporte.filiere %}filiere <b>{{ bandeau.filiere }}</b>{% endif %}
+    {% if bandeau.supporte.niveau %} &middot; niveau <b>{{ bandeau.niveau }}</b>{% endif %}
+    {% if bandeau.supporte.annee %} &middot; annee <b>{{ bandeau.annee }}</b>{% endif %}
+    {% if bandeau.supporte.periode and (bandeau.du or bandeau.au) %} &middot; periode <b>{{ bandeau.du or '...' }} &rarr; {{ bandeau.au or '...' }}</b>{% endif %}
+  </div>
+  {% endif %}
+</form>

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Fiche étudiant</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-search i"></i><h3>Rechercher un étudiant</h3></div>
+  <div class="pb">
+    <p style="margin-top:0;color:var(--gris);font-size:14px">Saisissez le <b>matricule</b> (ou le nom) puis affichez la fiche. Aucune longue liste : la saisie filtre directement.</p>
+    <form method="get" action="{{ url_for('etudiant') }}" id="form-rech" autocomplete="off">
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px;color:var(--texte)">Matricule ou nom</label>
+          <input type="text" id="rech" name="matricule" list="dl-etu" value="{{ matricule }}"
+                 placeholder="ex. 74180" autofocus
+                 style="width:calc(26ch + 26px);padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+          <datalist id="dl-etu">
+            {% for e in etudiants %}<option value="{{ e.label }}"></option>{% endfor %}
+          </datalist>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-user-search"></i> Afficher la fiche</button>
+      </div>
+    </form>
+    {% if introuvable %}
+    <p style="margin-top:12px;color:var(--rouge)"><i class="ti ti-alert-triangle"></i> Aucun étudiant avec le matricule « {{ matricule }} ».</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if fiche %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-id i"></i><h3>Fiche de {{ fiche.nom_complet or '(sans nom)' }}</h3>
+    {% if peut_modifier and not poste_secondaire %}
+    <a class="btn-action" style="margin-left:auto;margin-top:0"
+       href="{{ url_for('module', onglet='A1_Etudiants', modifier=fiche.matricule) }}#form-saisie">
+      <i class="ti ti-edit"></i> Modifier dans le module</a>
+    <a class="btn-action" style="margin-left:8px;margin-top:0" target="_blank"
+       href="{{ url_for('etudiant_imprimer', matricule=fiche.matricule) }}">
+      <i class="ti ti-printer"></i> Imprimer la fiche</a>
+    {% else %}
+    <a class="btn-action" style="margin-left:auto;margin-top:0" target="_blank"
+       href="{{ url_for('etudiant_imprimer', matricule=fiche.matricule) }}">
+      <i class="ti ti-printer"></i> Imprimer la fiche</a>
+    {% endif %}
+  </div>
+  <div class="pb">
+    <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:0 0 auto;text-align:center;width:150px">
+        <img src="{{ url_for('etudiant_photo', matricule=fiche.matricule) }}" alt="Photo"
+             style="width:128px;height:128px;border-radius:10px;border:1px solid var(--bord);object-fit:cover;background:var(--bleu-pale)">
+        {% if peut_modifier and not poste_secondaire %}
+        <div style="margin-top:10px;border-top:1px dashed var(--bord);padding-top:10px">
+          <form method="post" id="form-photo" enctype="multipart/form-data"
+                action="{{ url_for('etudiant_photo_televerser', matricule=fiche.matricule) }}">
+            <input type="file" name="photo" id="photo-file" accept="image/jpeg,image/png" style="display:none"
+                   onchange="if(this.files.length){this.form.submit();}">
+            <button type="button" class="btn-action" style="margin-top:0;width:100%"
+                    onclick="document.getElementById('photo-file').click()">
+              <i class="ti ti-upload"></i> {{ 'Changer la photo' if fiche.a_photo else 'Choisir une photo…' }}
+            </button>
+          </form>
+          <div style="font-size:12px;color:var(--gris);margin-top:5px">JPEG ou PNG &middot; 1 Mo max</div>
+          {% if fiche.a_photo %}
+          <form method="post" style="margin-top:6px"
+                action="{{ url_for('etudiant_photo_retirer', matricule=fiche.matricule) }}"
+                onsubmit="return confirm('Retirer la photo de cet étudiant ?');">
+            <button type="submit" class="btn-action danger" style="margin-top:0;width:100%">
+              <i class="ti ti-trash"></i> Retirer la photo
+            </button>
+          </form>
+          {% endif %}
+        </div>
+        {% elif not fiche.a_photo %}
+        <div style="margin-top:6px;font-size:12px;color:var(--gris)"><i class="ti ti-camera-off"></i> Aucune photo</div>
+        {% endif %}
+      </div>
+      <div style="flex:1 1 320px;min-width:280px">
+        <table class="fiche-tbl">
+          {% set lignes = [
+            ('Matricule', fiche.Matricule), ('Genre', fiche.Genre),
+            ('Nom', fiche.Nom), ('Prénom', fiche.Prenom),
+            ('Date de naissance', fiche['Date naissance']), ('Lieu de naissance', fiche['Lieu naissance']),
+            ('Origine / lieu actuel', fiche['Origine / lieu actuel']),
+            ('Filière', fiche.Filiere), ('Niveau', fiche.Niveau), ('Section', fiche.Section),
+            ('Année académique', fiche['Annee acad.']), ('Statut', fiche.Statut),
+            ('Date inscription', fiche['Date inscription']) ] %}
+          {% for lib, val in lignes %}
+          <tr><td class="fiche-lib">{{ lib }}</td><td class="fiche-val">{{ val or '—' }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn-action" href="{{ url_for('releve', matricule=fiche.matricule, annee=annee) }}"><i class="ti ti-file-certificate"></i> Relevé / bulletin</a>
+      <a class="btn-action" href="{{ url_for('presences_saisie') }}"><i class="ti ti-checklist"></i> Présences</a>
+      <a class="btn-action" href="{{ url_for('module', onglet='S1_Stages') }}"><i class="ti ti-map-pin"></i> Stages</a>
+    </div>
+  </div>
+</div>
+
+{% if droits %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-cash i"></i><h3>Droits d'inscription</h3>
+    {% if peut_encaisser and not poste_secondaire and droits.tarif_defini %}
+    <a class="btn-action" style="margin-left:auto;margin-top:0"
+       href="{{ url_for('etudiant_encaisser', matricule=fiche.matricule) }}">
+      <i class="ti ti-receipt"></i> Encaisser un droit</a>
+    {% endif %}
+  </div>
+  <div class="pb">
+    {% if not droits.tarif_defini %}
+    <p style="margin:0;color:var(--gris);font-size:14px"><i class="ti ti-info-circle"></i>
+      <b>Tarif non défini</b> pour le niveau « {{ droits.niveau or '—' }} ». Renseignez-le dans
+      <a href="{{ url_for('module', onglet='P0_Parametres') }}">Paramètres</a>
+      (colonnes <code>Tarif_inscription_niveau</code> / <code>Tarif_inscription_KMF</code>).</p>
+    {% else %}
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px">
+      <div style="flex:1 1 140px;border:1px solid var(--bord);border-radius:8px;padding:10px 12px">
+        <div style="font-size:12px;color:var(--gris)">Dû ({{ droits.niveau }}, {{ droits.annee or 'année en cours' }})</div>
+        <div style="font-size:18px;font-weight:700;color:var(--texte)">{{ droits.tarif_fmt }} KMF</div>
+      </div>
+      <div style="flex:1 1 140px;border:1px solid var(--bord);border-radius:8px;padding:10px 12px">
+        <div style="font-size:12px;color:var(--gris)">Payé</div>
+        <div style="font-size:18px;font-weight:700;color:var(--texte)">{{ droits.paye_fmt }} KMF</div>
+      </div>
+      <div style="flex:1 1 140px;border:1px solid var(--bord);border-radius:8px;padding:10px 12px;background:{{ '#EAF5EE' if droits.solde else '#FBECEC' }}">
+        <div style="font-size:12px;color:var(--gris)">Reste dû</div>
+        <div style="font-size:18px;font-weight:700;color:{{ 'var(--vert,#1B7F5C)' if droits.solde else 'var(--rouge)' }}">
+          {{ droits.reste_fmt }} KMF{% if droits.solde %} <i class="ti ti-check"></i>{% endif %}</div>
+      </div>
+    </div>
+    {% if droits.versements %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Date</th><th>Année acad.</th><th>Référence</th><th style="text-align:right">Montant (KMF)</th></tr></thead>
+        <tbody>
+        {% for v in droits.versements %}
+          <tr><td>{{ v.date or '—' }}</td><td>{{ v.annee or '—' }}</td><td>{{ v.reference or '—' }}</td>
+              <td style="text-align:right">{{ v.montant_fmt }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucun versement enregistré pour ce niveau et cette année académique.</p>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-map-pin i"></i><h3>Stages de l'étudiant</h3></div>
+  <div class="pb">
+    {% if stages %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Année</th><th>N° séance</th><th>Lieu</th><th>Début</th><th>Fin</th><th>Note /20</th><th>Fiche retour</th></tr></thead>
+        <tbody>
+        {% for s in stages %}
+          <tr><td>{{ s.annee }}</td><td>{{ s.seance }}</td><td>{{ s.lieu }}</td><td>{{ s.debut }}</td><td>{{ s.fin }}</td><td>{{ s.note or '—' }}</td><td>{{ s.retour or '—' }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucun stage enregistré pour cet étudiant.</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<style>
+.fiche-tbl{border-collapse:collapse;width:100%}
+.fiche-tbl td{padding:6px 8px;border-bottom:1px solid var(--bord);font-size:14px;vertical-align:top}
+.fiche-lib{color:var(--gris);width:190px;font-weight:600}
+.fiche-val{color:var(--texte)}
+</style>
+<script>
+(function(){
+  var f=document.getElementById('form-rech'), inp=document.getElementById('rech');
+  if(!f||!inp) return;
+  // Extrait le matricule d'un libelle complet 'matricule — Nom Prenom (...)'
+  // choisi dans la liste deroulante (sinon renvoie la saisie nettoyee).
+  function matriculeDe(v){
+    v=(v||'').trim();
+    var i=v.indexOf('—');
+    if(i>=0) v=v.slice(0,i);
+    return v.trim();
+  }
+  // Clic sur le bouton : le submit natif passe ici -> on nettoie avant l'envoi.
+  f.addEventListener('submit',function(){ inp.value=matriculeDe(inp.value); });
+  // Selection dans la liste : nettoyer PUIS envoyer (form.submit() natif ne
+  // declenche pas le handler 'submit', d'ou le nettoyage explicite ici).
+  inp.addEventListener('change',function(){
+    if((inp.value||'').indexOf('—')<0) return;   // seulement si un libelle a ete choisi
+    inp.value=matriculeDe(inp.value);
+    if(!inp.value) return;
+    if(f.requestSubmit){ f.requestSubmit(); } else { f.submit(); }
+  });
+})();
+</script>
+{% endblock %}

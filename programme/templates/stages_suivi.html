@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Stages — suivi & tableau de bord</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-filter i"></i><h3>Filtres</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('stages_suivi') }}">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Lieu de stage</label>
+          <select name="lieu" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;min-width:200px">
+            <option value="">— tous —</option>
+            {% for o in options.lieux %}<option value="{{ o }}" {{ 'selected' if o==filtres.lieu else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Période / séance</label>
+          <select name="seance" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— toutes —</option>
+            {% for o in options.seances %}<option value="{{ o }}" {{ 'selected' if o==filtres.seance else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Niveau</label>
+          <select name="niveau" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— tous —</option>
+            {% for o in options.niveaux %}<option value="{{ o }}" {{ 'selected' if o==filtres.niveau else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Filière</label>
+          <select name="filiere" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+            <option value="">— toutes —</option>
+            {% for o in options.filieres %}<option value="{{ o }}" {{ 'selected' if o==filtres.filiere else '' }}>{{ o }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1 1 200px">
+          <label style="font-weight:600;font-size:13px">Nom / matricule</label>
+          <input type="text" name="nom" value="{{ filtres.nom }}" placeholder="commencer à saisir…"
+                 style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-search"></i> Filtrer</button>
+        <a class="btn-action" style="margin-top:0;background:var(--bleu-pale);color:var(--bleu)" href="{{ url_for('stages_suivi') }}"><i class="ti ti-x"></i> Réinitialiser</a>
+        <a class="btn-action" style="margin-top:0" target="_blank"
+           href="{{ url_for('stages_imprimer', lieu=filtres.lieu, seance=filtres.seance, niveau=filtres.niveau, filiere=filtres.filiere, nom=filtres.nom, annee=filtres.annee) }}">
+          <i class="ti ti-printer"></i> Imprimer</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-dashboard i"></i><h3>Tableau de bord</h3></div>
+  <div class="pb">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      {% set cartes = [
+        ('Étudiants affectés', tdb.etudiants, 'ti-users'),
+        ('Lieux de stage', tdb.lieux, 'ti-building-hospital'),
+        ('Places disponibles', tdb.places_dispo, 'ti-door-enter'),
+        ('Taux d\'occupation global', (tdb.taux_global ~ ' %'), 'ti-gauge') ] %}
+      {% for lib, val, ico in cartes %}
+      <div style="flex:1 1 170px;border:1px solid var(--bord);border-radius:10px;padding:12px 14px;background:var(--bleu-pale)">
+        <div style="color:var(--gris);font-size:12px"><i class="ti {{ ico }}"></i> {{ lib }}</div>
+        <div style="font-size:24px;font-weight:700;color:var(--bleu)">{{ val }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if tdb.repartition %}
+    <div style="margin-top:14px">
+      <div style="color:var(--gris);font-size:13px;margin-bottom:6px">Répartition par promotion</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        {% for p in tdb.repartition %}
+        <span style="border:1px solid var(--bord);border-radius:20px;padding:4px 12px;font-size:13px">
+          <b>{{ p.niveau }}</b> · {{ p.n }} étudiant{{ 's' if p.n>1 else '' }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-building-hospital i"></i><h3>Occupation par lieu</h3></div>
+  <div class="pb">
+    {% if tdb.lieux_detail %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Lieu</th><th>Niveau</th><th>Période</th><th style="text-align:right">Quota</th><th style="text-align:right">Occupé</th><th style="text-align:right">Disponible</th><th style="text-align:right">Taux</th></tr></thead>
+        <tbody>
+        {% for l in tdb.lieux_detail %}
+          <tr>
+            <td>{{ l.lib }}</td><td>{{ l.niveau or '—' }}</td><td>{{ l.periode or '—' }}</td>
+            <td style="text-align:right">{{ l.quota }}</td><td style="text-align:right">{{ l.occupe }}</td>
+            <td style="text-align:right">{{ l.dispo }}</td>
+            <td style="text-align:right;{{ 'color:var(--rouge);font-weight:700' if l.taux>100 else '' }}">{{ l.taux }} %</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot><tr style="font-weight:700;background:#EAF1F8">
+          <td colspan="3">Total</td>
+          <td style="text-align:right">{{ tdb.quota_total }}</td>
+          <td style="text-align:right">{{ tdb.occupe_total }}</td>
+          <td style="text-align:right">{{ tdb.places_dispo }}</td>
+          <td style="text-align:right">{{ tdb.taux_global }} %</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <p style="margin:8px 0 0;color:var(--gris);font-size:12px">Un taux supérieur à 100 % signale un dépassement de quota à corriger.</p>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucun lieu de stage dans le référentiel (S2_Lieux_stage).</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-list-details i"></i><h3>Affectations ({{ affectations|length }})</h3></div>
+  <div class="pb">
+    {% if affectations %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Séance</th><th>Matricule</th><th>Nom</th><th>Prénom</th><th>Filière</th><th>Niveau</th><th>Lieu</th><th>Début</th><th>Fin</th><th>Retour</th><th style="text-align:right">Note</th><th style="text-align:right">Heures abs.</th></tr></thead>
+        <tbody>
+        {% for a in affectations %}
+          <tr>
+            <td>{{ a.seance or '—' }}</td><td>{{ a.matricule }}</td><td>{{ a.nom or '—' }}</td>
+            <td>{{ a.prenom or '—' }}</td><td>{{ a.filiere or '—' }}</td><td>{{ a.niveau or '—' }}</td>
+            <td>{{ a.lieu }}</td><td>{{ a.debut or '—' }}</td><td>{{ a.fin or '—' }}</td>
+            <td style="text-align:center">{{ a.retour or '—' }}</td><td style="text-align:right">{{ a.note or '—' }}</td>
+            <td style="text-align:right{{ ';color:var(--rouge);font-weight:600' if a.heures_abs and a.heures_abs not in ['0','0.0'] else '' }}">{{ a.heures_abs or '—' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--gris);font-size:14px;margin:0">Aucune affectation pour ces critères.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

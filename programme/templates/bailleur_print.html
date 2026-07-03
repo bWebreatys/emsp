@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 portrait; margin: 14mm; }
+  table.fiche { border-collapse: collapse; width: 100%; font-size: 13px; margin-top: 6px; }
+  table.fiche td { border: 1px solid var(--bord); padding: 7px 10px; vertical-align: top; }
+  table.fiche td.lib { background: #f1f5f9; font-weight: 600; width: 230px; color: var(--bleu); }
+  h2.sect { font-size: 14px; color: var(--bleu); margin: 18px 0 4px; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Fiche bailleur &mdash; {{ fiche.nom or fiche.id }}
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+
+    <h2 class="sect">Identite</h2>
+    <table class="fiche">
+      <tr><td class="lib">Identifiant</td><td>{{ fiche.id }}</td></tr>
+      <tr><td class="lib">Nom / raison sociale</td><td>{{ fiche.nom }}</td></tr>
+      <tr><td class="lib">Type</td><td>{{ fiche.Type }}</td></tr>
+      <tr><td class="lib">Statut</td><td>{{ fiche.Statut }}</td></tr>
+    </table>
+
+    <h2 class="sect">Contrat / convention</h2>
+    <table class="fiche">
+      <tr><td class="lib">Reference</td><td>{{ fiche['Reference contrat / convention'] }}</td></tr>
+      <tr><td class="lib">Date de debut</td><td>{{ fiche['Date debut'] }}</td></tr>
+      <tr><td class="lib">Date de fin</td><td>{{ fiche['Date fin'] }}</td></tr>
+    </table>
+
+    <h2 class="sect">Budget &amp; perimetre</h2>
+    <table class="fiche">
+      <tr><td class="lib">Budget alloue (KMF)</td><td>{{ fiche['Budget alloue (KMF)'] }}</td></tr>
+      <tr><td class="lib">Perimetre du financement</td><td>{{ fiche['Perimetre du financement'] }}</td></tr>
+    </table>
+
+    {% if fiche.Observations %}
+    <h2 class="sect">Observations</h2>
+    <table class="fiche"><tr><td style="white-space:pre-wrap">{{ fiche.Observations }}</td></tr></table>
+    {% endif %}
+
+    {% if tracabilite %}
+    <h2 class="sect">Tracabilite du financement</h2>
+    <table class="fiche">
+      <tr><td class="lib">Budget alloue (KMF)</td><td>{{ tracabilite.budget_aff or '-' }}</td></tr>
+      <tr><td class="lib">Depense (KMF)</td><td>{{ tracabilite.depense_aff }}</td></tr>
+      <tr><td class="lib">Reste a depenser (KMF)</td><td>{{ tracabilite.reste_aff or '-' }}{% if tracabilite.a_budget %} ({{ tracabilite.taux_conso }} % consomme){% endif %}</td></tr>
+      <tr><td class="lib">Equipements rattaches</td><td>{{ tracabilite.nb_equip }}{% if tracabilite.nb_equip %} (dont {{ tracabilite.nb_localises }} localises, {{ tracabilite.pct_localises }} %){% endif %}</td></tr>
+    </table>
+    {% if tracabilite.a_detail %}
+    <h2 class="sect">Detail par poste</h2>
+    <table class="fiche">
+      <tr><th>Poste budgetaire</th><th>Budgete (KMF)</th><th>Depense (KMF)</th></tr>
+      {% for p in tracabilite.detail_postes %}
+      <tr><td>{{ p.poste }}</td><td>{{ p.budgete_aff or '-' }}</td><td>{{ p.depense_aff or '-' }}</td></tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+    {% endif %}
+
+    {% if documents %}
+    <h2 class="sect">Documents lies</h2>
+    <table class="fiche">
+      <tr><th>Document</th><th>Type</th><th>Date</th><th>Statut</th></tr>
+      {% for d in documents %}
+      <tr>
+        <td>{{ d.nom_original }}</td>
+        <td>{{ d.type or '-' }}</td>
+        <td>{{ d.date_ajout or '-' }}</td>
+        <td>{{ d.statut if d.obsolete else 'Actif' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>

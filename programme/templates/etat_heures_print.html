@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 portrait; margin: 16mm; }
+  table.fiche { border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  table.fiche td { border: 1px solid var(--bord); padding: 6px 9px; vertical-align: top; }
+  table.fiche td.lib { background: #f1f5f9; font-weight: 600; width: 190px; color: var(--bleu); }
+  table.imp { width: 100%; }
+  table.imp td.r, table.imp th.r { text-align: right; }
+  h2.sect { font-size: 14px; color: var(--bleu); margin: 18px 0 4px; }
+  .visa { margin-top: 34px; display: flex; gap: 40px; font-size: 13px; }
+  .visa .case { flex: 1 1 0; }
+  .visa .case .lib { color: var(--bleu); font-weight: 600; margin-bottom: 30px; }
+  .visa .case .trait { border-top: 1px solid var(--bord); }
+  .note { font-size: 12px; color: var(--gris); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Etat des heures a payer &mdash; {{ fiche.nom_complet or '(sans nom)' }}
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+
+    <table class="fiche">
+      {% set lignes = [
+        ('Matricule ens.', fiche['Matricule ens.']),
+        ('Nom et prenom', fiche.nom_complet),
+        ('Statut', fiche['Statut (titulaire/vacataire)']),
+        ('Departement', fiche.Departement) ] %}
+      {% for lib, val in lignes %}
+      <tr><td class="lib">{{ lib }}</td><td>{{ val or '—' }}</td></tr>
+      {% endfor %}
+    </table>
+
+    <h2 class="sect">Releve des heures (E2)</h2>
+    {% if heures and heures.lignes %}
+    <table class="imp">
+      <thead><tr><th>Mois / Annee</th><th class="r">Vol. programme</th><th class="r">Vol. constate</th><th class="r">Total a payer</th></tr></thead>
+      <tbody>
+      {% for h in heures.lignes %}
+        <tr><td>{{ h.mois or '' }}</td><td class="r">{{ h.prog }}</td><td class="r">{{ h.constate }}</td><td class="r">{{ h.a_payer }}</td></tr>
+      {% endfor %}
+      </tbody>
+      <tfoot><tr class="total"><td>Total</td><td class="r">{{ heures.tot_prog }}</td><td class="r">{{ heures.tot_constate }}</td><td class="r">{{ heures.tot_a_payer }}</td></tr></tfoot>
+    </table>
+    <p class="note">Etat des heures uniquement. La valorisation (montant en KMF) releve de la
+      comptabilite, sur la base des contrats signes et de ce releve.</p>
+    {% else %}
+    <p style="font-size:13px;color:var(--gris)">Aucune heure relevee pour cet enseignant.</p>
+    {% endif %}
+
+    <div class="visa">
+      <div class="case"><div class="lib">L'enseignant</div><div class="trait"></div></div>
+      <div class="case"><div class="lib">Le Chef de departement</div><div class="trait"></div></div>
+      <div class="case"><div class="lib">La comptabilite</div><div class="trait"></div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

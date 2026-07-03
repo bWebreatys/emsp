@@ -1,0 +1,96 @@
+INTERFACE DE GESTION EMSP  --  Installation hors-ligne (Windows)
+================================================================
+Projet ODS 21SANOC277 - Webcreatys SAS - ref. 2026/EAALDDDGPLDGDLS/15420
+Interface V1.99.52
+
+Ce kit est organise en TROIS parties INDEPENDANTES :
+
+  socle\        Le moteur technique (Python + bibliotheques), PRET et hors-ligne.
+                Installe une fois, il reste en place quand le programme evolue.
+  programme\    L'application (ecrans, logique, modeles). C'est cette partie qui
+                change d'une version a l'autre. NE CONTIENT AUCUNE DONNEE.
+  donnees\      VOS donnees, jamais ecrasees par une mise a jour.
+       \data\        vos classeurs : EMSP_V1.xlsx et EMSP_Notes.xlsx
+       \instance\    comptes et journal (crees au premier lancement)
+
+  Demarrer_EMSP.bat   Lance l'application (utilise socle\runtime, hors-ligne).
+  _lancer_emsp.py     Lanceur interne (fixe l'emplacement de donnees\).
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+NOUVEAUTES V1.99.52 (amorcage comptabilite)
+--------------------------------------------------------------------
+  - Poste budgetaire par defaut du passage en compta des vacations :
+    642 - Cours complementaires (heures supplementaires). Le gestionnaire
+    peut toujours choisir un autre poste au moment du passage.
+  - Nouveau document de recette : programme\doc\circuit_test_compta.md -
+    le circuit complet a derouler par l'EMSP (presences -> heures ->
+    releve -> etat de paiement -> arrete -> passage en compta -> controles
+    F1/F2/journal), avec les garde-fous a verifier a chaque etape.
+  - Rappel : les comptes reels (Compte bancaire UDC-EMSP-ODS (BIC-Comores)
+    et Caisse EMSP) sont deja dans l'ecran Comptes & caisses ; il reste a
+    l'EMSP a saisir les SOLDES INITIAUX puis les ecritures reelles.
+  - Aucune migration de donnees pour cette version : copier programme\ suffit.
+
+----
+NOUVEAUTES V1.99.51 (planning des cours)
+--------------------------------------------------------------------
+  - Le PLANNING REEL du semestre 1 2025-2026 (document EMSP, 16 semaines,
+    L1/L2/L3) est charge dans les seances de cours : 646 seances, 2960 h
+    programmees, enseignant renseigne automatiquement quand la matiere ne
+    correspond qu'a un seul enseignant (171 seances). Salles a completer
+    par l'EMSP a l'ecran Seances (absentes du document source).
+  - Debloque : feuille de presence par seance planifiee, vue Presences
+    PAR PROFESSEUR, grille de planification hebdomadaire, report d'heures.
+  - Mise a jour d'un poste deja installe : copier programme\ puis executer
+    UNE FOIS  scripts\import_planning_A3_v1_99_51.py  sur
+    donnees\data\EMSP_V1.xlsx (idempotent : un second passage est sans effet).
+
+----
+NOUVEAUTES V1.99.50 (notes & bulletins)
+--------------------------------------------------------------------
+  - Bareme des UE : nouvelle colonne 'Coef matiere' (1 par defaut) ;
+    la moyenne d'une UE est la moyenne de ses matieres ponderee par ce
+    coefficient (a 1 partout : moyenne arithmetique, comme le releve
+    officiel). A regler uniquement si l'ecole applique des coefficients
+    differencies par matiere.
+  - Session 2 (rattrapage) : la moyenne d'une matiere repassee repose sur
+    les seules notes de la session 2 (la note de 1ere session est annulee),
+    conformement au releve officiel et au decret 05-106.
+  - Impressions > Releve de notes : nouveau choix de SESSION - Premiere
+    session (page sans colonnes rattrapage) ou Deuxieme session (avec les
+    colonnes Exam. sess. 2 / Moy. sess. 2), comme sur les releves officiels.
+  - Bareme Aides-soignants ajoute (11 modules, coefficients 1, a confirmer).
+  - Tous les baremes sont marques 'Coef confirme = Non' (provisoires) :
+    la scolarite les confirme filiere par filiere a l'ecran Bareme des UE ;
+    la mention 'Bareme provisoire' reste affichee d'ici la.
+  - Mise a jour d'un poste deja installe : copier programme\ puis executer
+    une fois  scripts\migr_bareme_v1_99_50.py  sur donnees\data\EMSP_Notes.xlsx
+    (script idempotent : un second passage est sans effet).
+
+--------------------------------------------------------------------
+UTILISATION AU QUOTIDIEN
+--------------------------------------------------------------------
+  - Double-cliquez sur  Demarrer_EMSP.bat
+  - Le navigateur s'ouvre sur  http://127.0.0.1:5000
+  - Premier compte : superadmin / admin (mot de passe a changer aussitot).
+  - Pour arreter : fermez la fenetre noire.
+
+  Ce kit fonctionne SANS connexion Internet : le socle\runtime contient deja
+  Python et toutes les bibliotheques.
+
+--------------------------------------------------------------------
+METTRE A JOUR LE PROGRAMME (nouvelle version, sans toucher au socle ni aux donnees)
+--------------------------------------------------------------------
+  1. Ne touchez PAS a  socle\  ni a  donnees\.
+  2. Remplacez le CONTENU de  programme\  par celui de la mise a jour
+     (MAJ_EMSP_V1_xx.zip).
+  3. Si la note de version signale un changement de STRUCTURE des classeurs,
+     suivez le script indique (ex. scripts\ajout_*.py, scripts\import_*.py)
+     AVANT de relancer.
+  4. Relancez  Demarrer_EMSP.bat.
+
+--------------------------------------------------------------------
+SAUVEGARDE
+--------------------------------------------------------------------
+  Copiez regulierement le dossier  donnees\  (data + instance) sur une cle USB
+  dediee. C'est la seule partie irremplacable.

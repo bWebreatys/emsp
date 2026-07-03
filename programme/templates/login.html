@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/tabler-icons.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="login-wrap">
+  <form class="login-card" method="post" action="{{ url_for('login') }}">
+    <h1>{{ cfg.APP_NOM }}</h1>
+    <div class="sub">Interface de gestion EMSP — connexion</div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, m in messages %}
+      <div class="flash flash-{{ cat }}"><i class="ti {{ 'ti-circle-check' if cat=='ok' else 'ti-alert-circle' }}"></i> {{ m }}</div>
+      {% endfor %}
+    {% endwith %}
+    <input type="hidden" name="suite" value="{{ suite }}">
+    <label for="login"><i class="ti ti-user i"></i> Identifiant</label>
+    <input id="login" name="login" autocomplete="username" autofocus required>
+    <label for="mdp"><i class="ti ti-lock i"></i> Mot de passe</label>
+    <input id="mdp" name="mdp" type="password" autocomplete="current-password" required>
+    <button type="submit"><i class="ti ti-login"></i> Se connecter</button>
+    <div class="login-foot">Acces reserve. Toute connexion est journalisee.</div>
+  </form>
+</div>
+</body>
+</html>

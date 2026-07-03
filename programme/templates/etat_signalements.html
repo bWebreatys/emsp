@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> État des signalements</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel no-print">
+  <div class="ph"><i class="ti ti-report i"></i><h3>État des signalements / indiscipline</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('etat_signalements') }}" class="releve-form">
+      <label>Annee acad. <input type="text" name="annee" value="{{ f.annee }}" placeholder="2025-2026"></label>
+      <label>Du <input type="text" name="du" value="{{ f.du }}" placeholder="JJ/MM/AAAA"></label>
+      <label>Au <input type="text" name="au" value="{{ f.au }}" placeholder="JJ/MM/AAAA"></label>
+      <label>Semestre
+        <select name="semestre"><option value="">(tous)</option>
+          {% for s in ['1','2','3','4','5','6'] %}<option value="{{ s }}" {{ 'selected' if f.semestre==s else '' }}>{{ s }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Contexte
+        <select name="contexte"><option value="">(tous)</option>
+          {% for ct in ['Examen','Cours','Stage','Autre'] %}<option value="{{ ct }}" {{ 'selected' if f.contexte==ct else '' }}>{{ ct }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Filiere <input type="text" name="filiere" value="{{ f.filiere }}"></label>
+      <label>Niveau <input type="text" name="niveau" value="{{ f.niveau }}" placeholder="L1/L2/L3"></label>
+      <button type="submit" class="btn-action"><i class="ti ti-filter"></i> Filtrer</button>
+    </form>
+    <p class="saisie-note">Compte rendu disciplinaire pour la scolarité — sans les notes. Les signalements n'affectent ni les moyennes ni les propositions.</p>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="ph no-print"><i class="ti ti-report i"></i><h3>{{ etat|length }} étudiant(s), {{ total }} signalement(s)</h3>
+    <span class="releve-actions">
+      <a class="btn-action" target="_blank" href="{{ url_for('etat_signalements_imprimer', **f) }}"><i class="ti ti-printer"></i> Imprimer</a>
+      <a class="btn-action" href="{{ url_for('etat_signalements_export', **f) }}"><i class="ti ti-file-spreadsheet"></i> Exporter (Excel)</a>
+    </span>
+  </div>
+  <div class="pb">
+    <div class="releve-titre-print">EMSP &mdash; Etat des signalements / indiscipline (par etudiant)</div>
+    {% if not etat %}
+      <p>Aucun signalement pour ces critères.</p>
+    {% else %}
+      {% for e in etat %}
+      <div class="sig-etu">
+        <div class="sig-etu-tete"><b>{{ e.nom or '(etudiant inconnu)' }}</b> &middot; {{ e.matricule }}
+          &middot; {{ e.filiere }} {{ e.niveau }} &middot; <span class="signal-flag">{{ e.nb }} signalement(s)</span></div>
+        <table class="data signal-table">
+          <thead><tr><th>Date</th><th>Semestre</th><th>Contexte</th><th>Fonction</th><th>Émetteur</th><th>Motif</th></tr></thead>
+          <tbody>
+            {% for s in e.signalements %}
+            <tr><td>{{ s.date }}</td><td>{{ s.semestre }}</td><td>{{ s.contexte }}</td><td>{{ s.fonction }}</td><td>{{ s.nom }}</td><td>{{ s.motif }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

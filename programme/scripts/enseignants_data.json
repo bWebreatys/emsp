@@ -1,0 +1,314 @@
+[
+ {
+  "n": 1,
+  "nom": "Adamou Hamada Jean Alain",
+  "statut": "titulaire",
+  "matieres": "Obstétrique normale; Soins obstétricaux d’urgence de base (SONUB); Anatomie de l'Appareil urinaire; Anatomie système génitale; Pathologies de la grossesse et du travail; Pathologie de l’accouchement et Des suites de couches; Pathologies gynécologiques; Aspiration Manuelle IntraUtérine (AMIU); Ventouse et Forceps"
+ },
+ {
+  "n": 2,
+  "nom": "Daniel Ali Soumaïla (Chef de département S.I)",
+  "statut": "titulaire",
+  "matieres": "Premiers secours et soins d’urgence; Théories, modèles et interaction; Personne agonisant et decedé; PCIME dr Zoubeir; PCIME; Gestion des catastrophes/Fléaux sociaux"
+ },
+ {
+  "n": 3,
+  "nom": "Dr EL HABIB",
+  "statut": "titulaire",
+  "matieres": "Microbiologie, micro-organismes et parasitologie; introduction à la biochimie (prévoir des TD de biochimie); Communication interpersonnel (a chercher DSPP)); ethique et déontologie; cancerologie dr widad"
+ },
+ {
+  "n": 4,
+  "nom": "Dr Kamal Ahamada (Directeur)",
+  "statut": "titulaire",
+  "matieres": "Chirurgie pédiatrique; Methodologie de recherche; introduction à la recherche; Introduction au corps humain (Dr Mbae); Affections urologiques; Urgences traumatologiques; Soutenance un travail de fin d’études; Pathologies et grossesses; Anatomie du bassin et du périnée"
+ },
+ {
+  "n": 5,
+  "nom": "HALIMA ABDALLAH",
+  "statut": "titulaire",
+  "matieres": "Santé sexuelle et reproductive et droits connexes; Vaccination; TD/:TP des programme; Stratégies conventionnelles et novatrices de communication; Gestion des services de santé; Démographie en SRMNIA; S.I Stomatologies; Soins gynéco-obstétricaux de base; Soins obstétricaux; Planification familiale et technologie contraceptive,"
+ },
+ {
+  "n": 6,
+  "nom": "Irina Ismaïla Abdou",
+  "statut": "titulaire",
+  "matieres": "Sémiologie Médical; Pathologies dermatologiques; Anatomie du système digestif; Anatomie du système cardiovasculaire et sang; Hématopoïèse; Anatomie des organes de sens; Pathologies digestifs; Gynécologie; Sémiologie gynécologique; sémiologie chirurgicale; Gériatrie; Troubless psychiatriques; Troisième âge, Andropause et Ménopause; Consultations des enfants sains"
+ },
+ {
+  "n": 7,
+  "nom": "Mme Houzaimata Ahamada",
+  "statut": "titulaire",
+  "matieres": "Introduction à la psychologie; Psychologie de l’enfant; prise en charge Psychologie des enfants victimes ou tentatives d'agression; Prise en charge Psychologie des agressions physique et psychologiques couple; Psychologie; Psychologie de la femme enceinte; S.I Affections neurologiques"
+ },
+ {
+  "n": 8,
+  "nom": "Mohamed Ibrahim Kaïva",
+  "statut": "titulaire",
+  "matieres": "Sociologie; Antropologie de la santé; Anthropologie"
+ },
+ {
+  "n": 9,
+  "nom": "Moussa Hasane (a contacter)",
+  "statut": "titulaire",
+  "matieres": "Communication virtuelle"
+ },
+ {
+  "n": 10,
+  "nom": "Moussa Mohamed Ahmed (Chef de département formation continue et santé publique)",
+  "statut": "titulaire",
+  "matieres": "Pathologies endocriniennes; Anatomie du Système Endocrinien; Anatomie systèmes respiratoire; Systèmes d’intégration, de protection et de contrôle nerveux, endocrine; L’infection, la résistance de l’hôte et le contrôle des infections; Maladies infectieuses, parasitaires et VIH; Affections respiratoires; Affections neurologiques"
+ },
+ {
+  "n": 11,
+  "nom": "Mr Daniel Ali (Chef de Département S.I)",
+  "statut": "titulaire",
+  "matieres": "Base théorique des soins infirmiers en milieu communautaire; Maladies transmissibles : prévention et intervention; Santé familiale; Soins à domicile, en milieu communautaire et soins palliatifs; Soins infirmiers en médecine de Catastrophe; Soins infirmiers en médecine de travail; Santé scolaire"
+ },
+ {
+  "n": 12,
+  "nom": "Mréha Abdou (Chef de département S.O)",
+  "statut": "titulaire",
+  "matieres": "Infirmier dans l'environnement sanitaire; Perceptions en matière de santé; Disposition d'un environnement sûr; Prévention et contrôle des infections; Calcul des doses médicamenteuses; S.I en urgences et réanimation"
+ },
+ {
+  "n": 13,
+  "nom": "Soudjay Mohamed",
+  "statut": "titulaire",
+  "matieres": "Art et science des soins infirmiers en milieu communautaire; Introduction à l’épidémiologie; Rédaction administrative; Gestion/administration; Documents normatifs en santé; Méthodes statistiques; Santé et environnement; Formation/Supervision; strategie national en santé maternel et néonatal et audits"
+ },
+ {
+  "n": 14,
+  "nom": "???",
+  "statut": "vacataire",
+  "matieres": "Métabolisme; Besoins nutritionnels des différentes tranches d’âge; Sécurité et disponibilité alimentaire; Aspects comportementaux et culturels de la nutrition; Prise en charge diététique des carences et de la surnutrition"
+ },
+ {
+  "n": 15,
+  "nom": "Ahmed Ali Itrisso",
+  "statut": "vacataire",
+  "matieres": "Examen de santé (Clinique, physique, ATCD, Spéciaux); S.I aux personnes âgées"
+ },
+ {
+  "n": 16,
+  "nom": "AMINA BIZIRA",
+  "statut": "vacataire",
+  "matieres": "Aspiration Manuelle IntraUtérine (AMIU) et soins; Soins Obstétricaux; Soins Urologies"
+ },
+ {
+  "n": 17,
+  "nom": "Anne Beugny",
+  "statut": "vacataire",
+  "matieres": "Généralité sur la SP/SC; Approche de SP/SC; Etude de l’environnement; Épidémiologie; Communication interpersonnel"
+ },
+ {
+  "n": 18,
+  "nom": "Dr Abdou Antik",
+  "statut": "vacataire",
+  "matieres": "Imagérie médicale"
+ },
+ {
+  "n": 19,
+  "nom": "Dr Ahamada Widade",
+  "statut": "vacataire",
+  "matieres": "Pathologies Stomatologiques; Ethique; deontologie; Cancerologie"
+ },
+ {
+  "n": 20,
+  "nom": "Dr Chamsouddine",
+  "statut": "vacataire",
+  "matieres": "Soins en pediatrie; Puériculture; Système de soins de santé"
+ },
+ {
+  "n": 21,
+  "nom": "Dr Daroueche",
+  "statut": "vacataire",
+  "matieres": "Pathologies ORL; Pathologies Stomatologiques"
+ },
+ {
+  "n": 22,
+  "nom": "Dr Fazul Ahamada",
+  "statut": "vacataire",
+  "matieres": "Biologie Clinique (Examens de laboratoire)"
+ },
+ {
+  "n": 23,
+  "nom": "Dr HAMID HASAL",
+  "statut": "vacataire",
+  "matieres": "Affections cardiologiques"
+ },
+ {
+  "n": 24,
+  "nom": "Dr Idjabou",
+  "statut": "vacataire",
+  "matieres": "Kinérespiratoire de l'enfant; Pharmacologie générale; Pharmacologie et thérapeutique inféctieuse et respiratoires"
+ },
+ {
+  "n": 25,
+  "nom": "Dr Mbaé Toyibou",
+  "statut": "vacataire",
+  "matieres": "Anatomie de l'œil (en semestre 1); Anatomie de l'Appareil urinaire; Anatomie système génitale; Anatomie Appareil locomoteur"
+ },
+ {
+  "n": 26,
+  "nom": "Dr Mohamed Abdallah",
+  "statut": "vacataire",
+  "matieres": "Pathologies orthopédiques et traumatologiqes"
+ },
+ {
+  "n": 27,
+  "nom": "Dr Mohamed Chanfi",
+  "statut": "vacataire",
+  "matieres": "Pathologies ophtalmologiques"
+ },
+ {
+  "n": 28,
+  "nom": "Dr Mohamed Moundhirou",
+  "statut": "vacataire",
+  "matieres": "Liquides et électrolytes; Pharmacologie et thérapeutiques en psychiatrie; Pharmacologie et thérapeutique en uronéphrologie; Affections nephrologiques et dialyse"
+ },
+ {
+  "n": 29,
+  "nom": "Dr MOHAMED RIDHOINE",
+  "statut": "vacataire",
+  "matieres": "Addictologie (Drogue, Alcoolisme et tabagisme); Approche Sundromique"
+ },
+ {
+  "n": 30,
+  "nom": "Dr Mohamed Soihiri",
+  "statut": "vacataire",
+  "matieres": "Pharmacologie et thérapeutiques spécifiques à la pathologie; Prise en charge diététique des carences et de la surnutrition; Aspects cliniques et pratiques de la nutrition et de la diététique; Pharmacologie et thérapeutiques des urgences et réanimation"
+ },
+ {
+  "n": 31,
+  "nom": "Dr Rahia Mmadi Ibrahim",
+  "statut": "vacataire",
+  "matieres": "Obstétrique normal"
+ },
+ {
+  "n": 32,
+  "nom": "Dr Said Hassane",
+  "statut": "vacataire",
+  "matieres": "Pathologies orthopédiques et traumatologiqes; Pédiatrie/ Pédopsychiatrie"
+ },
+ {
+  "n": 33,
+  "nom": "Dr Soumayat",
+  "statut": "vacataire",
+  "matieres": "SONUB"
+ },
+ {
+  "n": 34,
+  "nom": "Dr Soummayat",
+  "statut": "vacataire",
+  "matieres": "Pharmacologie et thérapeutique en cardiologie; Pharmacologie et thérapeutique en neurologie; Dépistage des cancers du col de l’utérus (IVL/IVA) ET DU SEIN"
+ },
+ {
+  "n": 35,
+  "nom": "Dr Yacine Mohamed",
+  "statut": "vacataire",
+  "matieres": "Réanimation néonatale"
+ },
+ {
+  "n": 36,
+  "nom": "Dr Youssouf Mahamoudou",
+  "statut": "vacataire",
+  "matieres": "Pharmacologie et thérapeutiques spécifiques à la pathologie; Pharmacologie et thérapeutiques des pathologies spéciales; Pathologies ORL"
+ },
+ {
+  "n": 37,
+  "nom": "Dr Zoubeir",
+  "statut": "vacataire",
+  "matieres": "Kinérespiratoire de l'enfant"
+ },
+ {
+  "n": 38,
+  "nom": "Dr Zoubert Boinaidi",
+  "statut": "vacataire",
+  "matieres": "Pédiatrie/ Pédopsychiatrie"
+ },
+ {
+  "n": 39,
+  "nom": "Elykarim",
+  "statut": "vacataire",
+  "matieres": "S.I en cardiologie; Maladies Non Transmissbles"
+ },
+ {
+  "n": 40,
+  "nom": "Fatima Ahamada",
+  "statut": "vacataire",
+  "matieres": "S.I Affections Digestives"
+ },
+ {
+  "n": 41,
+  "nom": "HACHIMIA AYOUBA? Myriam Abdallah",
+  "statut": "vacataire",
+  "matieres": "Ventouse et Soins obstétricaux"
+ },
+ {
+  "n": 42,
+  "nom": "INAAM???",
+  "statut": "vacataire",
+  "matieres": "Alimentation et nutrition"
+ },
+ {
+  "n": 43,
+  "nom": "Mme Hachimia Ayouba",
+  "statut": "vacataire",
+  "matieres": "Imagérie médicale; Principes d’accueil, d’orientation et de prise en charge respectueuse et bienveillante de la femme"
+ },
+ {
+  "n": 44,
+  "nom": "Mme MADANIA ALI RIDHOI",
+  "statut": "vacataire",
+  "matieres": "Urgences Médicales et réanimation; S.I Troubless psychiatriques"
+ },
+ {
+  "n": 45,
+  "nom": "Mme MYRIAM ABDALLAH",
+  "statut": "vacataire",
+  "matieres": "Accouchement eutocique; Consultation prénatale; Soins obstétricaux et néonataux d’urgence complet (SONUC); Soins infantiles; Soins néonataux; Allaitement maternel; Rééducation périnéale et abdominale (postnatal)"
+ },
+ {
+  "n": 46,
+  "nom": "Mme Zaharia Said Allaoui",
+  "statut": "vacataire",
+  "matieres": "Participation communautaire; Technique de soins de base en médecine; S.I ophtalomologie; S.I ophtalomologie (Vois surveillante CHN)"
+ },
+ {
+  "n": 47,
+  "nom": "Mme Zainaba Mohamed",
+  "statut": "vacataire",
+  "matieres": "Soins obstétricaux d’urgence de base (SONUB); Besoins fondamentaux du patient; Démarche de soin et projet de soins; Soins obstrétricaux de base; Soins Urologies; S.I en Nephrologie; Les métiers d’infirmier et de sage-femme"
+ },
+ {
+  "n": 48,
+  "nom": "MOHAMED SOILIHI DJAE",
+  "statut": "vacataire",
+  "matieres": "Législation et réglementation de la profession, et protection du public"
+ },
+ {
+  "n": 49,
+  "nom": "Mr ABDEREMANE MOHAMED",
+  "statut": "vacataire",
+  "matieres": "Addictologie (Drogue, Alcoolisme et tabagisme)"
+ },
+ {
+  "n": 50,
+  "nom": "Mr AMELDINE DACHIROUDINE",
+  "statut": "vacataire",
+  "matieres": "S.I Affections Digestives; Évaluation et prise en charge de certains signes et symptômes; soins infirmiers en orthopédie et truamatologie; Expression française (Voir SG); Anglais médical; Organisations et associations professionnelles; Accouchement à risque; Consultation prénatale recentrée (selon la pathologie); Approche basée sur le genre; violence gynéco-obstétrical; Suivi et accompagnement pédagogique; Soins chirurgicaux de bases"
+ },
+ {
+  "n": 51,
+  "nom": "SAID MOHAMED",
+  "statut": "vacataire",
+  "matieres": "Examen de santé (Clinique, physique, ATCD, Spéciaux); Soins en cancerologie; S. I en endocrinologie; Biologie de la reproduction humaine(PMA) Suite; S.I en cardiologie"
+ },
+ {
+  "n": 52,
+  "nom": "Soudjay Asnounat",
+  "statut": "vacataire",
+  "matieres": "Protocoles de prise en charge de la grossesse normale (calendrier et objectifs, prestations biologiques, cliniques et radiologiques); Préparation à l’accouchement normal; Protocoles de prise en charge en post Partum immédiat et précoce; Physiologie des trois stades de l’accouchement"
+ }
+]

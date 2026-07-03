@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Présences</div>
+<div class="page-head">
+  <i class="ti ti-clipboard-check ic"></i>
+  <div>
+    <h1>Présences</h1>
+    <div class="sub">Choisir la classe et la date, puis imprimer la feuille ou saisir les présences</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Présences <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p>1) Choisissez votre <b>classe</b> (filière, niveau) et la <b>date</b> (le jour même est proposé ; cliquez le calendrier pour une autre date).
+       2) <b>Imprimer</b> édite la feuille de présence à faire signer.
+       3) <b>Saisir</b> ouvre le pointage : partez d'une <b>séance prévue</b> ce jour-là (matière, horaire et enseignant repris automatiquement) ou d'une <b>séance hors planning</b> (créneau + durée).
+       Cocher = présent. Ré-enregistrer met à jour sans doublon.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div style="margin:0 0 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <span style="color:var(--gris);font-size:13px"><i class="ti ti-chart-bar"></i> Voir / imprimer les présences déjà saisies :</span>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_explorer', onglet='A2_Presences') }}"><i class="ti ti-table"></i> Explorer &amp; imprimer la liste</a>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_vue', vid='absences', origine='cours') }}"><i class="ti ti-arrow-right"></i> Absences &amp; observations</a>
+</div>
+
+<div class="onglets-vue" style="display:flex;gap:6px;margin:0 0 12px">
+  <a class="btn {{ 'demo-on' if vue != 'prof' else '' }}" href="{{ url_for('presences_saisie', vue='classe', date=date_fr) }}"><i class="ti ti-users"></i> Par classe</a>
+  <a class="btn {{ 'demo-on' if vue == 'prof' else '' }}" href="{{ url_for('presences_saisie', vue='prof', date=date_fr) }}"><i class="ti ti-user"></i> Par professeur</a>
+</div>
+
+{% if vue == 'prof' %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-user i"></i><h3>1. Professeur et date</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('presences_saisie') }}" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+      <input type="hidden" name="vue" value="prof">
+      <div class="saisie-champ" style="min-width:280px">
+        <label>Professeur <span class="oblig">*</span></label>
+        <select name="ens_prof">
+          <option value="">— choisir —</option>
+          {% for o in ens_options %}<option value="{{ o.value }}" {{ 'selected' if o.value==ens_prof else '' }}>{{ o.label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="saisie-champ">
+        <label>Date <span class="oblig">*</span></label>
+        <input type="date" name="date" value="{{ date_iso }}">
+      </div>
+      <div class="saisie-champ" style="justify-content:flex-end">
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-eye"></i> Afficher</button>
+      </div>
+    </form>
+
+    {% if ens_prof %}
+    <div class="pres-meta" style="margin-top:10px">
+      <span><i class="ti ti-user"></i> {{ prof_seances[0].enseignant if prof_seances else '—' }}</span>
+      <span><i class="ti ti-calendar"></i> {{ jour }} {{ date_fr }}</span>
+    </div>
+    {% if prof_seances %}
+    <a class="btn-action" target="_blank" style="margin-top:10px"
+       href="{{ url_for('presences_feuilles_prof', ens_prof=ens_prof, date=date_fr) }}">
+      <i class="ti ti-printer"></i> Imprimer toutes mes feuilles ({{ prof_seances|length }})</a>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+{% if ens_prof %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-clipboard-check i"></i><h3>2. Mes séances le {{ jour or '—' }} {{ date_fr }}</h3></div>
+  <div class="pb">
+    {% if prof_seances %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Créneau</th><th>Classe</th><th>Matière</th><th>Salle</th><th></th><th></th></tr></thead>
+        <tbody>
+          {% for s in prof_seances %}
+          <tr>
+            <td><b>{{ s.creneau }}</b>{% if s.debut %} <span style="color:var(--gris)">({{ s.debut }}{% if s.fin %}-{{ s.fin }}{% endif %})</span>{% endif %}</td>
+            <td>{{ s.filiere }} {{ s.niveau }}{% if s.section %} · {{ s.section }}{% endif %}</td>
+            <td>{{ s.matiere or '(matière ?)' }}</td>
+            <td>{{ s.salle or '—' }}</td>
+            <td><a class="btn-action" target="_blank" style="margin-top:0" href="{{ url_for('presences_feuille', seance=s.id, date=date_fr, creneau=s.creneau) }}"><i class="ti ti-printer"></i> Feuille</a></td>
+            <td><a class="btn-action" style="margin-top:0" href="{{ url_for('presences_saisie', vue='prof', ens_prof=ens_prof, date=date_fr, seance=s.id) }}"><i class="ti ti-pencil"></i> Saisir</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide" style="margin:0"><i class="ti ti-calendar-off i"></i> Aucune séance planifiée pour ce professeur ce jour-là. La saisie par professeur s'appuie sur le planning des séances (A3).</div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endif %}
+
+{% if vue != 'prof' %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-filter i"></i><h3>1. Classe et date</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('presences_saisie') }}" class="pres-select" id="fSel">
+      <div class="saisie-champ">
+        <label>Filière <span class="oblig">*</span></label>
+        <select name="filiere" id="selF">
+          <option value="">— choisir —</option>
+          {% for c in classes %}<option value="{{ c.filiere }}" {{ 'selected' if c.filiere==filiere else '' }}>{{ c.filiere }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="saisie-champ">
+        <label>Niveau <span class="oblig">*</span></label>
+        <select name="niveau" id="selN"><option value="">—</option></select>
+      </div>
+      <div class="saisie-champ" id="wrapSec">
+        <label>Section</label>
+        <select name="section" id="selS"><option value="">—</option></select>
+      </div>
+      <div class="saisie-champ">
+        <label>Date <span class="oblig">*</span></label>
+        <input type="date" name="date" id="selD" value="{{ date_iso }}">
+      </div>
+      <div class="saisie-champ" style="justify-content:flex-end">
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-eye"></i> Afficher</button>
+      </div>
+    </form>
+
+    {% if filiere and niveau %}
+    <div class="pres-meta" style="margin-top:10px">
+      <span><i class="ti ti-users"></i> {{ filiere }} {{ niveau }}{% if section %} · {{ section }}{% endif %}</span>
+      <span><i class="ti ti-calendar"></i> {{ jour }} {{ date_fr }}</span>
+    </div>
+    <a class="btn-action" target="_blank" style="margin-top:10px"
+       href="{{ url_for('impr_presence', filiere=filiere, niveau=niveau, section=section, date=date_fr) }}">
+      <i class="ti ti-printer"></i> Imprimer la feuille de présence</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if filiere and niveau %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-clipboard-check i"></i><h3>2. Saisir les présences</h3></div>
+  <div class="pb">
+    <div class="acc-grp" style="margin:0 0 6px">Séances prévues le {{ jour or '—' }} {{ date_fr }}</div>
+    {% if prevues %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Créneau</th><th>Matière</th><th>Enseignant</th><th>Durée</th><th>Salle</th><th></th></tr></thead>
+        <tbody>
+          {% for s in prevues %}
+          <tr>
+            <td><b>{{ s.creneau }}</b>{% if s.debut %} <span style="color:var(--gris)">({{ s.debut }}{% if s.fin %}-{{ s.fin }}{% endif %})</span>{% endif %}</td>
+            <td>{{ s.matiere or '(matière ?)' }}</td>
+            <td>{{ s.enseignant or '—' }}</td>
+            <td>{{ (s.duree ~ ' h') if s.duree else '—' }}</td>
+            <td>{{ s.salle or '—' }}</td>
+            <td><a class="btn-action" style="margin-top:0" href="{{ url_for('presences_saisie', filiere=filiere, niveau=niveau, section=section, date=date_fr, seance=s.id) }}"><i class="ti ti-pencil"></i> Saisir</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide" style="margin:0"><i class="ti ti-calendar-off i"></i> Aucune séance planifiée pour cette classe ce jour-là. Utilisez « séance hors planning » ci-dessous.</div>
+    {% endif %}
+
+    <details class="panel-exc" style="margin-top:12px" {{ 'open' if (ctx and ctx.type=='libre') else '' }}>
+      <summary><i class="ti ti-calendar-plus i"></i> Séance hors planning (créneau + durée)</summary>
+      <form method="get" action="{{ url_for('presences_saisie') }}" class="exc-grid">
+        <input type="hidden" name="filiere" value="{{ filiere }}">
+        <input type="hidden" name="niveau" value="{{ niveau }}">
+        <input type="hidden" name="section" value="{{ section }}">
+        <input type="hidden" name="date" value="{{ date_iso }}">
+        <input type="hidden" name="mode" value="libre">
+        <label>Créneau
+          <select name="creneau">
+            {% for c in creneaux %}<option value="{{ c }}" {{ 'selected' if ctx and ctx.creneau==c else '' }}>{{ c }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Durée
+          <select name="duree">
+            <option value="1" {{ 'selected' if ctx and ctx.duree=='1' else '' }}>1 h</option>
+            <option value="2" {{ 'selected' if (not ctx) or ctx.duree=='2' else '' }}>2 h</option>
+          </select>
+        </label>
+        <label>Matière
+          <input type="text" name="matiere" list="dl_mat" value="{{ ctx.matiere if ctx else '' }}" placeholder="commencer à saisir…">
+          <datalist id="dl_mat">{% for m in matieres_sug %}<option value="{{ m }}">{% endfor %}</datalist>
+        </label>
+        <label>Enseignant
+          <select name="enseignant">
+            <option value="">—</option>
+            {% for o in ens_options %}<option value="{{ o.value }}" {{ 'selected' if ctx and ctx.enseignant==o.value else '' }}>{{ o.label }}</option>{% endfor %}
+          </select>
+        </label>
+        <div class="exc-large" style="text-align:right">
+          <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-pencil"></i> Saisir cette séance</button>
+        </div>
+      </form>
+    </details>
+  </div>
+</div>
+{% endif %}
+{% endif %}{# fin vue != 'prof' #}
+
+{% if ctx %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-list-check i"></i><h3>3. Pointage — {{ ctx.matiere or 'séance' }} · {{ ctx.creneau }}</h3></div>
+  <div class="pb">
+    <div class="pres-meta">
+      <span><i class="ti ti-book"></i> {{ ctx.matiere or '(matière ?)' }}</span>
+      <span><i class="ti ti-clock"></i> Créneau {{ ctx.creneau }}{% if ctx.type=='libre' %} · {{ ctx.duree }} h{% endif %}</span>
+      {% if ctx.enseignant %}<span><i class="ti ti-user"></i> {{ ctx.enseignant }}</span>{% endif %}
+      <span><i class="ti ti-users"></i> {{ ctx.filiere }} {{ ctx.niveau }}{% if ctx.section %} · {{ ctx.section }}{% endif %}</span>
+    </div>
+    <p style="margin:6px 2px 8px;font-size:13px;color:var(--gris)"><i class="ti ti-info-circle"></i>
+      Ce pointage compte les heures de la séance{% if ctx.enseignant %} pour <b>{{ ctx.enseignant }}</b>{% endif %} et les présences des élèves.</p>
+
+    <div style="margin:0 0 10px">
+      {% if ctx.type=='prevue' %}
+      <a class="btn-action" target="_blank" style="margin-top:0"
+         href="{{ url_for('presences_feuille', seance=ctx.seance, date=date_fr, creneau=ctx.creneau) }}">
+      {% else %}
+      <a class="btn-action" target="_blank" style="margin-top:0"
+         href="{{ url_for('presences_feuille', filiere=ctx.filiere, niveau=ctx.niveau, section=ctx.section, date=date_fr, creneau=ctx.creneau, duree=ctx.duree, matiere=ctx.matiere, enseignant=ctx.enseignant) }}">
+      {% endif %}
+        <i class="ti ti-printer"></i> {% if deja %}Imprimer la feuille (présents / absents){% else %}Imprimer la feuille (vierge, à signer){% endif %}</a>
+      <span class="saisie-note">Vierge avant saisie (à signer) ; présents / absents une fois enregistrée.</span>
+    </div>
+
+    {% if roster %}
+    {% if ctx.type=='prevue' %}
+    <form method="post" action="{{ url_for('presences_enregistrer') }}">
+      <input type="hidden" name="seance" value="{{ ctx.seance }}">
+      <input type="hidden" name="date" value="{{ date_fr }}">
+      <input type="hidden" name="creneau" value="{{ ctx.creneau }}">
+    {% else %}
+    <form method="post" action="{{ url_for('presences_libre_enregistrer') }}">
+      <input type="hidden" name="filiere" value="{{ ctx.filiere }}">
+      <input type="hidden" name="niveau" value="{{ ctx.niveau }}">
+      <input type="hidden" name="section" value="{{ ctx.section }}">
+      <input type="hidden" name="date" value="{{ date_fr }}">
+      <input type="hidden" name="creneau" value="{{ ctx.creneau }}">
+      <input type="hidden" name="duree" value="{{ ctx.duree }}">
+      <input type="hidden" name="matiere" value="{{ ctx.matiere }}">
+      <input type="hidden" name="enseignant" value="{{ ctx.enseignant }}">
+      <input type="hidden" name="retour" value="presences">
+    {% endif %}
+      <div class="pres-actions-haut">
+        <button type="button" class="mini" onclick="tousPresents(true)"><i class="ti ti-checks"></i> Tout présent</button>
+        <button type="button" class="mini" onclick="tousPresents(false)"><i class="ti ti-square-off"></i> Tout absent</button>
+        <span class="saisie-note">Coche = présent ; décoché = absent.</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="data pres-table">
+          <thead><tr><th>Présent</th><th>Matricule</th><th>Nom</th><th>Prénom</th><th>Section</th><th>État actuel</th></tr></thead>
+          <tbody>
+            {% for e in roster %}
+            {% set etat = deja.get(e.matricule, '') %}
+            <tr>
+              <td class="c"><input type="checkbox" class="pres-chk" name="present" value="{{ e.matricule }}" {{ 'checked' if (etat != 'N') else '' }}></td>
+              <td>{{ e.matricule }}</td>
+              <td>{{ e.nom }}</td>
+              <td>{{ e.prenom }}</td>
+              <td>{{ e.section }}</td>
+              <td>{% if etat=='O' %}<span class="badge-ok">présent</span>{% elif etat=='N' %}<span class="badge-no">absent</span>{% else %}<span class="badge-na">—</span>{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="saisie-actions" style="margin-top:14px">
+        <button type="submit" class="btn-action" {{ 'disabled' if not date_fr else '' }}><i class="ti ti-device-floppy"></i> Enregistrer les présences</button>
+        <span class="saisie-note">{{ ctx.filiere }} {{ ctx.niveau }} · {{ date_fr }} · {{ ctx.creneau }}</span>
+      </div>
+    </form>
+    {% else %}
+    <div class="vide"><i class="ti ti-users-group i"></i> Aucun étudiant pour cette classe. Vérifiez filière / niveau / section dans la fiche étudiants.</div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var CLASSES = {{ classes|tojson }};
+  var CUR = {f: {{ filiere|tojson }}, n: {{ niveau|tojson }}, s: {{ section|tojson }}};
+  var selF=document.getElementById('selF'), selN=document.getElementById('selN'),
+      selS=document.getElementById('selS'), wrapSec=document.getElementById('wrapSec');
+  function niveauxDe(f){ var c=CLASSES.find(function(x){return x.filiere===f;}); return c?c.niveaux:[]; }
+  function sectionsDe(f,n){ var x=niveauxDe(f).find(function(y){return y.niveau===n;}); return x?x.sections:[]; }
+  function opt(v,t,sel){ var o=document.createElement('option'); o.value=v; o.textContent=t; if(sel)o.selected=true; return o; }
+  function majN(){
+    selN.innerHTML=''; selN.appendChild(opt('','—'));
+    niveauxDe(selF.value).forEach(function(nv){ selN.appendChild(opt(nv.niveau, nv.niveau, nv.niveau===CUR.n)); });
+    majS();
+  }
+  function majS(){
+    var secs=sectionsDe(selF.value, selN.value);
+    selS.innerHTML=''; selS.appendChild(opt('','(toutes)'));
+    secs.forEach(function(s){ selS.appendChild(opt(s, s, s===CUR.s)); });
+    // 3b : masquer la section quand la classe n'a pas plus d'une section
+    wrapSec.style.display = (secs.length > 1) ? '' : 'none';
+    if(secs.length <= 1) selS.value='';
+  }
+  if(selF){
+    selF.addEventListener('change', function(){ CUR.n=''; CUR.s=''; majN(); });
+    selN.addEventListener('change', function(){ CUR.s=''; majS(); });
+    majN();
+  }
+  function tousPresents(v){ document.querySelectorAll('.pres-chk').forEach(function(c){ c.checked=v; }); }
+</script>
+{% endblock %}

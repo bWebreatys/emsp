@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Budget prévisionnel</div>
+<div class="page-head">
+  <i class="ti ti-report-money ic"></i>
+  <div>
+    <h1>Budget prévisionnel par formation</h1>
+    <div class="sub">Saisie détaillée par niveau. Montant = Qté1 × Qté2 × Coût unitaire. Frais administratifs EMSP {{ data.frais_admin_pct }} % par niveau. Conversion EUR au taux {{ data.taux_eur|kmf }} KMF.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Budget prévisionnel <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li>Choisissez une <b>Formation</b> (et au besoin une <b>Session</b>) pour cadrer la saisie.</li>
+      <li>Chaque ligne : <b>Montant (KMF)</b> = Qté1 × Qté2 × Coût unitaire. Laisser une quantité vide équivaut à 1 (coût forfaitaire).</li>
+      <li><b>Niveau</b> structure les sous-blocs (M1, M2, L1, L2, L3). <b>Rubrique</b> regroupe des lignes (facultatif).</li>
+      <li><b>Poste budgétaire</b> : codes de <b>dépense actifs</b> de la nomenclature (P3). <b>Bailleur</b> : origine des fonds (AFD…).</li>
+      <li>Totaux, frais {{ data.frais_admin_pct }} % et sous-totaux sont calculés automatiquement.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<style>
+  .bp-filtres{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#fff;padding:14px 16px;margin-bottom:16px}
+  .bp-filtres .f{display:flex;flex-direction:column;gap:4px}
+  .bp-filtres label{font-size:12px;font-weight:600;color:#5B6B7B}
+  .bp-filtres select,.bp-filtres input{padding:8px 10px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+  .btn-primary{background:#1F4E79;color:#fff}
+  .btn-ghost{background:#EEF3F8;color:#1F4E79}
+  .btn-off{background:#fff;color:#1F4E79;border:1px solid #1F4E79}
+  .btn-mini{padding:5px 9px;font-size:12px;border-radius:7px}
+  .btn-danger{background:#fff;color:#B42318;border:1px solid #E6B0AA}
+  .bp-form{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#F6F9FC;padding:16px;margin:18px 0}
+  .bp-form .f{display:flex;flex-direction:column;gap:4px}
+  .bp-form .f.large{grid-column:span 2}
+  .bp-form label{font-size:12px;font-weight:600;color:#5B6B7B}
+  .bp-form select,.bp-form input{padding:8px 10px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit;width:100%;box-sizing:border-box}
+  .bp-form .actions{grid-column:1/-1;display:flex;gap:10px}
+  .bp-form h3{grid-column:1/-1;margin:0;color:#1F4E79;font-size:15px}
+  .bp-form-edit{background:#FFF8E6;border-color:#E6D8A8}
+  .formation-bloc{border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#fff;margin-bottom:22px;overflow:hidden}
+  .formation-head{display:flex;justify-content:space-between;align-items:center;background:#1F4E79;color:#fff;padding:10px 16px}
+  .formation-head h2{margin:0;font-size:16px}
+  .formation-head .tot{font-weight:700}
+  .niveau-bloc{padding:6px 14px 14px}
+  .niveau-bloc h3{margin:14px 0 6px;color:#1F4E79;font-size:14px;border-bottom:2px solid #D8E2EC;padding-bottom:3px}
+  table.bp{width:100%;border-collapse:collapse;font-size:13px}
+  table.bp th,table.bp td{border:1px solid var(--bord,#D8E2EC);padding:6px 8px;text-align:left;vertical-align:top}
+  table.bp th{background:#EEF3F8;color:#1F4E79;font-weight:600}
+  table.bp td.num,table.bp th.num{text-align:right;white-space:nowrap}
+  table.bp tr:nth-child(even) td{background:#F6F9FC}
+  .src{font-size:11px;color:#5B6B7B}
+  .niv-totaux{display:flex;gap:18px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px;font-size:13px}
+  .niv-totaux span b{color:#1F4E79}
+  .vide{padding:24px;text-align:center;color:#5B6B7B;border:1px dashed var(--bord,#D8E2EC);border-radius:12px}
+  .reglages{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin:0 0 16px;font-size:13px}
+  .reglages input{width:120px;padding:7px 9px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit}
+  details.edit{margin-top:4px}
+  details.edit summary{cursor:pointer;color:#1F4E79;font-size:12px;font-weight:600}
+  .edit-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+  .edit-grid .f{display:flex;flex-direction:column;gap:3px}
+  .edit-grid label{font-size:11px;color:#5B6B7B}
+  .edit-grid input,.edit-grid select{padding:6px 8px;border:1px solid var(--bord,#D8E2EC);border-radius:7px;font:inherit;width:100%;box-sizing:border-box}
+  .edit-grid .actions{grid-column:1/-1;display:flex;gap:8px}
+  @media print{.bp-filtres,.bp-form,.reglages,.actions,details.edit,.no-print{display:none!important}}
+</style>
+
+{# ----- Sélecteur Formation / Session ----- #}
+<form method="get" action="{{ url_for('budget_previsionnel') }}" class="bp-filtres">
+  <div class="f">
+    <label>Formation</label>
+    <select name="formation">
+      <option value="">— Toutes les formations —</option>
+      {% for f in formations_opt %}
+      <option value="{{ f }}" {% if f==formation %}selected{% endif %}>{{ f }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="f">
+    <label>Session</label>
+    <input type="text" name="session" value="{{ session_sel }}" placeholder="{{ session_defaut }}">
+  </div>
+  <button type="submit" class="btn btn-primary"><i class="ti ti-filter"></i> Afficher</button>
+  <a href="{{ url_for('budget_previsionnel') }}" class="btn btn-ghost"><i class="ti ti-filter-off"></i> Réinitialiser</a>
+  <a href="{{ url_for('budget_previsionnel_imprimer', formation=formation, session=session_sel) }}" target="_blank" class="btn btn-off no-print" style="margin-left:auto"><i class="ti ti-printer"></i> Imprimer</a>
+</form>
+
+{# ----- Réglages taux / frais (écriture) ----- #}
+{% if peut_ecrire %}
+<form method="post" action="{{ url_for('budget_previsionnel_reglages') }}" class="reglages">
+  <input type="hidden" name="formation_sel" value="{{ formation }}">
+  <input type="hidden" name="session_sel" value="{{ session_sel }}">
+  <div class="f"><label style="font-size:12px;font-weight:600;color:#5B6B7B">Taux EUR (KMF)</label>
+    <input type="text" name="taux_eur" placeholder="{{ data.taux_eur|kmf }}"></div>
+  <div class="f"><label style="font-size:12px;font-weight:600;color:#5B6B7B">Frais admin (%)</label>
+    <input type="text" name="frais_admin_pct" placeholder="{{ data.frais_admin_pct }}"></div>
+  <button type="submit" class="btn btn-off btn-mini"><i class="ti ti-settings"></i> Mettre à jour</button>
+</form>
+{% endif %}
+
+{# ----- Tableaux par formation / niveau ----- #}
+{% if data.formations %}
+  {% for f in data.formations %}
+  <div class="formation-bloc">
+    <div class="formation-head">
+      <h2><i class="ti ti-school"></i> {{ f.formation }}</h2>
+      <div class="tot">Total : {{ f.total_kmf|kmf }} KMF&nbsp;&nbsp;({{ "%.2f"|format(f.total_eur) }} €)</div>
+    </div>
+    {% for n in f.niveaux %}
+    <div class="niveau-bloc">
+      <h3>{{ n.niveau or "(sans niveau)" }}</h3>
+      <table class="bp">
+        <thead>
+          <tr>
+            <th>Désignation</th><th>U1</th><th class="num">Q1</th><th>U2</th><th class="num">Q2</th>
+            <th class="num">Coût (KMF)</th><th class="num">Montant (KMF)</th><th class="num">€</th>
+            <th>Poste</th><th>Bailleur</th>{% if peut_ecrire %}<th class="no-print">Actions</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in n.lignes %}
+          <tr>
+            <td>{{ l.designation }}{% if l.rubrique %}<div class="src">{{ l.rubrique }}</div>{% endif %}</td>
+            <td>{{ l.unite1 }}</td><td class="num">{{ l.qte1 }}</td>
+            <td>{{ l.unite2 }}</td><td class="num">{{ l.qte2 }}</td>
+            <td class="num">{{ l.cout|kmf }}</td>
+            <td class="num"><b>{{ l.montant_kmf|kmf }}</b></td>
+            <td class="num">{{ "%.2f"|format(l.montant_eur) }}</td>
+            <td>{{ l.poste }}</td><td>{{ l.bailleur }}</td>
+            {% if peut_ecrire %}
+            <td class="no-print">
+              <form method="post" action="{{ url_for('budget_previsionnel_supprimer') }}" style="display:inline"
+                    onsubmit="return confirm('Supprimer cette ligne ?');">
+                <input type="hidden" name="index" value="{{ l.index }}">
+                <input type="hidden" name="formation_sel" value="{{ formation }}">
+                <input type="hidden" name="session_sel" value="{{ session_sel }}">
+                <button type="submit" class="btn btn-danger btn-mini"><i class="ti ti-trash"></i></button>
+              </form>
+              <details class="edit">
+                <summary><i class="ti ti-edit"></i> Modifier</summary>
+                <form method="post" action="{{ url_for('budget_previsionnel_modifier') }}" class="edit-grid">
+                  <input type="hidden" name="index" value="{{ l.index }}">
+                  <input type="hidden" name="formation" value="{{ l.designation and f.formation or f.formation }}">
+                  <div class="f"><label>Formation</label>
+                    <select name="Formation">{% for o in formations_opt %}<option value="{{ o }}" {% if o==f.formation %}selected{% endif %}>{{ o }}</option>{% endfor %}</select></div>
+                  <div class="f"><label>Niveau</label>
+                    <select name="Niveau">{% for o in niveaux_opt %}<option value="{{ o }}" {% if o==l.niveau %}selected{% endif %}>{{ o }}</option>{% endfor %}</select></div>
+                  <div class="f"><label>Rubrique</label><input name="Rubrique" value="{{ l.rubrique }}"></div>
+                  <div class="f"><label>Désignation</label><input name="Designation" value="{{ l.designation }}" required></div>
+                  <div class="f"><label>Unité1</label><input name="Unite1" value="{{ l.unite1 }}"></div>
+                  <div class="f"><label>Qté1</label><input name="Qte1" value="{{ l.qte1 }}"></div>
+                  <div class="f"><label>Unité2</label><input name="Unite2" value="{{ l.unite2 }}"></div>
+                  <div class="f"><label>Qté2</label><input name="Qte2" value="{{ l.qte2 }}"></div>
+                  <div class="f"><label>Coût unitaire (KMF)</label><input name="Cout unitaire (KMF)" value="{{ l.cout|int }}"></div>
+                  <div class="f"><label>Poste budgétaire</label>
+                    <select name="Poste budgetaire"><option value="">—</option>{% for p in postes_opt %}<option value="{{ p.value }}" {% if p.value==l.poste %}selected{% endif %}>{{ p.label }}</option>{% endfor %}</select></div>
+                  <div class="f"><label>Bailleur</label>
+                    <select name="Source de financement / Bailleur"><option value="">—</option>{% for b in bailleurs_opt %}<option value="{{ b }}" {% if b==l.bailleur %}selected{% endif %}>{{ b }}</option>{% endfor %}</select></div>
+                  <div class="f"><label>Session</label><input name="Session" value="{{ l.session }}"></div>
+                  <div class="actions"><button type="submit" class="btn btn-primary btn-mini"><i class="ti ti-check"></i> Enregistrer</button></div>
+                </form>
+              </details>
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="niv-totaux">
+        <span>Total : <b>{{ n.total_kmf|kmf }}</b> KMF</span>
+        <span>Frais {{ data.frais_admin_pct }} % : <b>{{ n.frais_kmf|kmf }}</b> KMF</span>
+        <span>Sous-total : <b>{{ n.sous_total_kmf|kmf }}</b> KMF ({{ "%.2f"|format(n.sous_total_eur) }} €)</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+  {% if data.formations|length > 1 %}
+  <div class="formation-head" style="border-radius:12px">
+    <h2><i class="ti ti-sigma"></i> Total général (formations affichées)</h2>
+    <div class="tot">{{ data.total_general_kmf|kmf }} KMF&nbsp;&nbsp;({{ "%.2f"|format(data.total_general_eur) }} €)</div>
+  </div>
+  {% endif %}
+{% else %}
+<div class="vide">Aucune ligne de budget prévisionnel pour cette sélection. Ajoutez une première ligne ci-dessous.</div>
+{% endif %}
+
+{# ----- Ajout d'une ligne ----- #}
+{% if peut_ecrire %}
+<form method="post" action="{{ url_for('budget_previsionnel_ajouter') }}" class="bp-form">
+  <h3><i class="ti ti-plus"></i> Ajouter une ligne</h3>
+  <input type="hidden" name="formation" value="{{ formation }}">
+  <div class="f"><label>Formation</label>
+    <select name="Formation" required>
+      <option value="">— choisir —</option>
+      {% for o in formations_opt %}<option value="{{ o }}" {% if o==formation %}selected{% endif %}>{{ o }}</option>{% endfor %}
+    </select></div>
+  <div class="f"><label>Niveau</label>
+    <select name="Niveau">{% for o in niveaux_opt %}<option value="{{ o }}">{{ o }}</option>{% endfor %}</select></div>
+  <div class="f"><label>Rubrique</label><input name="Rubrique" placeholder="(facultatif)"></div>
+  <div class="f large"><label>Désignation</label><input name="Designation" required></div>
+  <div class="f"><label>Unité1</label><input name="Unite1" placeholder="personnes, heures…"></div>
+  <div class="f"><label>Qté1</label><input name="Qte1" placeholder="1"></div>
+  <div class="f"><label>Unité2</label><input name="Unite2" placeholder="mois, année…"></div>
+  <div class="f"><label>Qté2</label><input name="Qte2" placeholder="1"></div>
+  <div class="f"><label>Coût unitaire (KMF)</label><input name="Cout unitaire (KMF)"></div>
+  <div class="f large"><label>Poste budgétaire (dépense)</label>
+    <select name="Poste budgetaire"><option value="">—</option>{% for p in postes_opt %}<option value="{{ p.value }}">{{ p.label }}</option>{% endfor %}</select></div>
+  <div class="f"><label>Bailleur</label>
+    <select name="Source de financement / Bailleur"><option value="">—</option>{% for b in bailleurs_opt %}<option value="{{ b }}">{{ b }}</option>{% endfor %}</select></div>
+  <div class="f"><label>Session</label><input name="Session" value="{{ session_sel or session_defaut }}"></div>
+  <div class="actions"><button type="submit" class="btn btn-primary"><i class="ti ti-plus"></i> Ajouter la ligne</button></div>
+</form>
+{% endif %}
+{% endblock %}

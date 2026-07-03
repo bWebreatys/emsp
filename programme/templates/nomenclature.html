@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Nomenclature — curation</div>
+<div class="page-head">
+  <i class="ti ti-checkbox ic"></i>
+  <div>
+    <h1>Nomenclature budgétaire — curation</h1>
+    <div class="sub">Filtrer les codes et activer / désactiver en masse. Seuls les codes <b>Actif = Oui</b> apparaissent dans les menus de saisie (F1 mouvements, F3 budget).</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Curation de la nomenclature <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p><b>Trois ecrans pour la nomenclature :</b> <i>Nomenclature budgetaire (codes)</i> = <b>ajouter / corriger un code</b> ; <i>Nomenclature &mdash; curation</i> (cet ecran) = <b>activer / desactiver en masse</b> ; <i>Parametres &amp; listes</i> = les autres listes de reference. Ici on cure ; pour creer un code, passez par l'ecran des codes.</p>
+    <ul>
+      <li><b>Actif = Oui</b> : le code est proposé à la saisie d'un mouvement (F1) ou d'une ligne de budget (F3).</li>
+      <li><b>Actif = Non</b> : code en réserve (socle OHADA), masqué de la saisie jusqu'à activation.</li>
+      <li>Cochez plusieurs lignes puis <b>Activer</b> / <b>Désactiver la sélection</b> pour curer vite.</li>
+      <li>Pour <b>ajouter</b> un sous-article ou <b>corriger</b> un intitulé, utilisez l'écran <a href="{{ url_for('module', onglet='P3_Nomenclature') }}">Nomenclature budgétaire (codes)</a>.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<style>
+  .nom-counts{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+  .nom-counts .chip{border:1px solid var(--bord,#D8E2EC);border-radius:999px;padding:6px 13px;font-size:13px;color:#1F4E79;background:#fff}
+  .nom-counts .chip b{font-size:15px}
+  .nom-filtres{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#fff;padding:14px 16px;margin-bottom:16px}
+  .nom-filtres .f{display:flex;flex-direction:column;gap:4px}
+  .nom-filtres label{font-size:12px;font-weight:600;color:#5B6B7B}
+  .nom-filtres select,.nom-filtres input[type=text]{padding:8px 10px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+  .btn-primary{background:#1F4E79;color:#fff}
+  .btn-ghost{background:#EEF3F8;color:#1F4E79}
+  .btn-off{background:#fff;color:#1F4E79;border:1px solid #1F4E79}
+  .nom-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 12px}
+  table.nom{width:100%;border-collapse:collapse;font-size:14px}
+  table.nom th,table.nom td{border:1px solid var(--bord,#D8E2EC);padding:7px 9px;text-align:left}
+  table.nom th{background:#1F4E79;color:#fff;font-weight:600;position:sticky;top:0}
+  table.nom td.c,table.nom th.c{text-align:center;width:42px}
+  table.nom tr:nth-child(even) td{background:#F6F9FC}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600}
+  .pill-oui{background:#E3F1DA;color:#3C7A1E}
+  .pill-non{background:#ECECEC;color:#777}
+  .src{font-size:12px;color:#5B6B7B}
+  .vide{padding:24px;text-align:center;color:#5B6B7B}
+</style>
+
+<div class="nom-counts">
+  <span class="chip">Total <b>{{ data.total }}</b></span>
+  <span class="chip">Actifs <b>{{ data.nb_actifs }}</b></span>
+  <span class="chip">En réserve <b>{{ data.nb_reserve }}</b></span>
+  <span class="chip">Affichés <b>{{ data.nb_filtre }}</b></span>
+</div>
+
+<form method="get" action="{{ url_for('nomenclature') }}" class="nom-filtres">
+  <div class="f"><label>Sens</label>
+    <select name="sens">
+      <option value="">Tous</option>
+      {% for s in data.sens_opts %}<option value="{{ s }}" {{ 'selected' if filtres.sens==s else '' }}>{{ s }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="f"><label>Source</label>
+    <select name="source">
+      <option value="">Toutes</option>
+      {% for s in data.source_opts %}<option value="{{ s }}" {{ 'selected' if filtres.source==s else '' }}>{{ s }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="f"><label>Actif</label>
+    <select name="actif">
+      <option value="">Tous</option>
+      <option value="Oui" {{ 'selected' if filtres.actif|lower=='oui' else '' }}>Oui</option>
+      <option value="Non" {{ 'selected' if filtres.actif|lower=='non' else '' }}>Non</option>
+    </select>
+  </div>
+  <div class="f"><label>Recherche (code ou intitulé)</label>
+    <input type="text" name="q" value="{{ filtres.q }}" placeholder="ex. 706 ou inscription" style="min-width:24ch">
+  </div>
+  <button type="submit" class="btn btn-primary"><i class="ti ti-filter"></i> Filtrer</button>
+  <a href="{{ url_for('nomenclature') }}" class="btn btn-ghost"><i class="ti ti-filter-off"></i> Réinitialiser</a>
+  <a href="{{ url_for('module', onglet='P3_Nomenclature') }}" class="btn btn-off" style="margin-left:auto"><i class="ti ti-plus"></i> Ajouter / modifier un code</a>
+</form>
+
+{% if data.lignes %}
+<form method="post" action="{{ url_for('nomenclature_actif') }}">
+  <input type="hidden" name="f_sens" value="{{ filtres.sens }}">
+  <input type="hidden" name="f_source" value="{{ filtres.source }}">
+  <input type="hidden" name="f_actif" value="{{ filtres.actif }}">
+  <input type="hidden" name="f_q" value="{{ filtres.q }}">
+  <div class="nom-actions">
+    <button type="submit" name="actif" value="Oui" class="btn btn-primary"><i class="ti ti-check"></i> Activer la sélection</button>
+    <button type="submit" name="actif" value="Non" class="btn btn-off"><i class="ti ti-x"></i> Désactiver la sélection</button>
+    <span class="src" style="margin-left:6px">La sélection s'applique aux lignes cochées ci-dessous.</span>
+  </div>
+  <table class="nom">
+    <thead>
+      <tr>
+        <th class="c"><input type="checkbox" onclick="for(var b of document.querySelectorAll('input[name=codes]'))b.checked=this.checked"></th>
+        <th>Code</th><th>Intitulé</th><th>Sens</th><th>Niveau</th><th>Source</th><th class="c">Actif</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in data.lignes %}
+      <tr>
+        <td class="c"><input type="checkbox" name="codes" value="{{ r.code }}"></td>
+        <td><b>{{ r.code }}</b></td>
+        <td>{{ r.intitule }}</td>
+        <td>{{ r.sens }}</td>
+        <td class="src">{{ r.niveau }}</td>
+        <td class="src">{{ r.source }}</td>
+        <td class="c">{% if r.actif|lower=='oui' %}<span class="pill pill-oui">Oui</span>{% else %}<span class="pill pill-non">Non</span>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+{% else %}
+<div class="vide"><i class="ti ti-search-off"></i> Aucun code ne correspond à ces filtres.</div>
+{% endif %}
+{% endblock %}

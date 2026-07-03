@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/tabler-icons.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body{% if formation %} class="formation"{% endif %}{% if poste_secondaire %} data-lecture-seule="1"{% endif %}>
+{% if formation %}<div class="formation-banner">ENVIRONNEMENT DE FORMATION — espace d'entraînement, les saisies ici n'affectent pas la production</div>{% endif %}
+{% if poste_secondaire %}<div class="lecture-seule-banner"><i class="ti ti-eye"></i> LECTURE SEULE — poste secondaire (consultation). La saisie se fait sur le poste principal.</div>{% endif %}
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-top">
+        <img class="logo" src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+        <div class="nom">EMSP</div>
+      </div>
+      <div class="ss">{{ cfg.APP_SOUS_TITRE }}</div>
+    </div>
+    <nav class="nav">
+      <a class="accueil-lien" href="{{ url_for('accueil') }}"><i class="ti ti-home i"></i> Accueil</a>
+      {% set actif = request.path %}
+      {% for sec in GUIDE %}
+      {% set ns = namespace(ouvert=false, visibles=0) %}
+      {% for cle, lib, ico in sec.modules %}
+        {% if cle not in MODULES_CACHES %}{% set ns.visibles = ns.visibles + 1 %}{% endif %}
+        {% if cle in cfg.SPECIAL_ROUTES %}{% set h = url_for(cfg.SPECIAL_ROUTES[cle]) %}{% else %}{% set h = url_for('module', onglet=cle) %}{% endif %}
+        {% if actif==h or actif.startswith(h+'/') %}{% set ns.ouvert = true %}{% endif %}
+      {% endfor %}
+      {% if ns.visibles > 0 %}
+      <details class="sec" {% if ns.ouvert %}open{% endif %}>
+        <summary>
+          <a class="sec-jump" href="{{ url_for('accueil') }}#{{ sec.id }}">
+            <span class="num">{{ sec.num }}</span>
+            <i class="ti {{ sec.icone }} i"></i>
+            <span>{{ sec.titre }}</span>
+          </a>
+          <i class="ti ti-chevron-right chev"></i>
+        </summary>
+        <div class="items">
+          {% for grp in sec.groupes %}
+            {% set gv = namespace(n=0) %}
+            {% for cle, lib, ico in grp.modules %}{% if cle not in MODULES_CACHES %}{% set gv.n = gv.n + 1 %}{% endif %}{% endfor %}
+            {% if gv.n > 0 %}
+              {% if grp.titre %}<div class="grp"><i class="ti {{ grp.icone }} gi"></i>{{ grp.titre }}</div>{% endif %}
+              {% for cle, lib, ico in grp.modules %}
+                {% if cle not in MODULES_CACHES %}
+                  {% if cle in cfg.SPECIAL_ROUTES %}
+                    {% set href = url_for(cfg.SPECIAL_ROUTES[cle]) %}
+                  {% else %}
+                    {% set href = url_for('module', onglet=cle) %}
+                  {% endif %}
+                  <a href="{{ href }}" class="{{ 'actif' if (actif==href or actif.startswith(href+'/')) else '' }}">
+                    <i class="ti {{ ico }} i"></i> {{ lib }}
+                  </a>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </details>
+      {% endif %}
+      {% endfor %}
+      <details class="sec">
+        <summary><span class="num"></span><i class="ti ti-bookmark i"></i><span>Reference</span><i class="ti ti-chevron-right chev"></i></summary>
+        <div class="items">
+          {% for cle, lib, ico in PAGES_REF %}
+          <a href="{{ url_for('reference', onglet=cle) }}" class="{{ 'actif' if actif==url_for('reference', onglet=cle) else '' }}">
+            <i class="ti {{ ico }} i"></i> {{ lib }}
+          </a>
+          {% endfor %}
+        </div>
+      </details>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="user-strip" style="background:{{ couleur_user }}"></div>
+    <div class="topbar" style="border-top:3px solid {{ couleur_user }}">
+      <div class="tb-fil"><i class="ti ti-map-pin i"></i> {{ titre_page }}</div>
+      <div class="tb-role">
+        <span class="tb-user" style="--uc:{{ couleur_user }}"><i class="ti ti-user-shield i"></i> {{ role_courant.login }}
+          <b>({{ role_courant.role }})</b></span>
+        <span class="tb-fin">Acces financier : <b>{{ 'Oui' if role_courant.financier=='O' else 'Non' }}</b></span>
+        <a class="tb-lien" href="{{ url_for('logout') }}"><i class="ti ti-logout i"></i> Deconnexion</a>
+      </div>
+    </div>
+    <div class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat, m in messages %}
+          <div class="flash flash-{{ cat }}"><i class="ti {{ 'ti-circle-check' if cat=='ok' else 'ti-alert-circle' }}"></i> {{ m }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% if alertes_capacite %}
+        {% for a in alertes_capacite %}
+        <div class="flash flash-warn"><i class="ti ti-alert-triangle"></i> Capacite : l'onglet <b>{{ a.libelle }}</b> approche la limite ({{ a.nb }} / {{ a.max }} lignes). Pensez a archiver ou a augmenter <code>CAPACITE</code>.</div>
+        {% endfor %}
+      {% endif %}
+      {% if compte_expire %}
+        <div class="flash flash-warn"><i class="ti ti-clock-exclamation"></i> Votre compte est <b>a renouveler</b> (validite de l'annee scolaire depassee). L'acces reste ouvert ; demandez au responsable informatique de le renouveler.</div>
+      {% endif %}
+      {% block fil %}{% endblock %}
+      {% block aide %}{% endblock %}
+      {% block contenu %}{% endblock %}
+    </div>
+    <footer class="pied">
+      <img class="pied-logo" src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="pied-txt">
+        <b>{{ cfg.APP_NOM }} — Version {{ cfg.VERSION }}</b> &nbsp;·&nbsp; {{ cfg.PROJET }} &nbsp;·&nbsp;
+        Ref. {{ cfg.REFERENCE }} &nbsp;·&nbsp; Depot : {{ cfg.GITHUB }} &nbsp;·&nbsp; 100% hors-ligne
+      </div>
+    </footer>
+  </div>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

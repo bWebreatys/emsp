@@ -1,0 +1,8 @@
+{
+  "superadmin": {
+    "hash": "pbkdf2:sha256:1000000$BchjLo1DcILIjHeL$481b0828623db2080f4dd910e065ad3477fdbe69ccde507c3330d6d851e332d7",
+    "doit_changer": false,
+    "cree_le": "30/06/2026 06:07:10",
+    "maj_le": "03/07/2026 07:53:55"
+  }
+}

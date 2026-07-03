@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 portrait; margin: 14mm; }
+  table.entete { border-collapse: collapse; width: 100%; font-size: 13px; margin-top: 6px; }
+  table.entete td { border: 1px solid var(--bord); padding: 6px 9px; vertical-align: top; }
+  table.entete td.lib { background: #f1f5f9; font-weight: 600; width: 150px; color: var(--bleu); }
+  table.roster { border-collapse: collapse; width: 100%; font-size: 13px; }
+  table.roster th, table.roster td { border: 1px solid var(--bord); padding: 5px 8px; }
+  table.roster th { background: #f1f5f9; color: var(--bleu); text-align: left; }
+  table.roster td.n, table.roster th.n { width: 34px; text-align: right; }
+  table.roster td.p, table.roster th.p { width: 78px; text-align: center; }
+  .case { display: inline-block; width: 13px; height: 13px; border: 1px solid var(--texte); border-radius: 2px; }
+  .sign { display: flex; justify-content: space-between; margin-top: 22px; font-size: 13px; }
+  .sign .bloc { width: 46%; }
+  .sign .lab { color: var(--gris); }
+  .sign .trait { border-bottom: 1px solid var(--texte); height: 38px; margin-top: 4px; }
+  .note-bas { margin-top: 8px; font-size: 12px; color: var(--gris); }
+  .feuille { page-break-after: always; }
+  .feuille:last-child { page-break-after: auto; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }} &mdash; {{ enseignant }} &mdash; {{ jour }} {{ date_fr }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  {% if not feuilles %}
+  <div class="doc-page"><p style="margin:20px;color:var(--gris)">Aucune séance planifiée pour ce professeur le {{ jour }} {{ date_fr }}.</p></div>
+  {% endif %}
+  {% for f in feuilles %}
+  <div class="doc-page feuille">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+    <div class="doc-titre">Feuille de presence &mdash; seance{% if f.saisi %} (releve saisi){% else %} (a signer){% endif %}
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+    <table class="entete">
+      <tr><td class="lib">Filiere</td><td>{{ f.entete.filiere or '—' }} {{ f.entete.niveau }} {{ f.entete.section }}</td>
+          <td class="lib">Matiere</td><td>{{ f.entete.matiere or '—' }}</td></tr>
+      <tr><td class="lib">Enseignant</td><td>{{ f.entete.enseignant or '—' }}</td>
+          <td class="lib">Salle</td><td>{{ f.entete.salle or '—' }}</td></tr>
+      <tr><td class="lib">Date</td><td>{{ f.entete.date or '—' }}</td>
+          <td class="lib">Creneau</td><td>{{ f.entete.creneau or '—' }}</td></tr>
+      <tr><td class="lib">Horaires</td><td colspan="3">{{ f.entete.jour }} {{ f.entete.debut }}{% if f.entete.fin %}-{{ f.entete.fin }}{% endif %}</td></tr>
+    </table>
+    <table class="roster">
+      <thead><tr><th class="n">#</th><th>Matricule</th><th>Nom &amp; prenom</th><th class="p">Present</th></tr></thead>
+      <tbody>
+        {% for e in f.roster %}
+        {% set etat = (f.deja.get(e.matricule, '') if f.deja else '') %}
+        <tr>
+          <td class="n">{{ loop.index }}</td>
+          <td>{{ e.matricule }}</td>
+          <td>{{ e.nom }} {{ e.prenom }}</td>
+          <td class="p">{% if etat=='O' %}Présent{% elif etat=='N' %}Absent{% else %}<span class="case"></span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="sign">
+      <div class="bloc"><div class="lab">Fait a Moroni, le {{ f.entete.date or '……/……/………' }}</div></div>
+      <div class="bloc"><div class="lab">Signature de l'enseignant</div><div class="trait"></div></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</body>
+</html>

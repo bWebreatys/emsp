@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Synthèse budgétaire</div>
+<div class="page-head">
+  <i class="ti ti-chart-bar ic"></i>
+  <div>
+    <h1>Synthèse budgétaire — prévu / réalisé / écart</h1>
+    <div class="sub">Prévu = budget prévisionnel (F5). Réalisé = dépenses (F1) sur la période de la session{% if data.debut %} ({{ data.debut }} → {{ data.fin }}){% endif %}. Écart = Prévu − Réalisé.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Synthèse budgétaire <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li><b>Prévu</b> : somme des lignes du <a href="{{ url_for('budget_previsionnel') }}">budget prévisionnel</a> (F5) pour la session.</li>
+      <li><b>Réalisé</b> : dépenses de trésorerie (F1) datées dans la période de la session ({{ data.debut }} → {{ data.fin }}).</li>
+      <li><b>Écart = Prévu − Réalisé</b> : positif = sous-consommé ; <b>négatif = dépassement</b> (en rouge).</li>
+      <li><b>Par formation</b> : prévu seul — la trésorerie (F1) ne porte pas la formation, le réalisé n'y est pas ventilable.</li>
+      <li>Les écarts alimentent les <b>plans d'action</b> (suivi des dépassements et sous-consommations).</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<style>
+  .syn-filtres{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#fff;padding:14px 16px;margin-bottom:16px}
+  .syn-filtres .f{display:flex;flex-direction:column;gap:4px}
+  .syn-filtres label{font-size:12px;font-weight:600;color:#5B6B7B}
+  .syn-filtres select,.syn-filtres input{padding:8px 10px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;border:none;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+  .btn-primary{background:#1F4E79;color:#fff}.btn-ghost{background:#EEF3F8;color:#1F4E79}.btn-off{background:#fff;color:#1F4E79;border:1px solid #1F4E79}
+  .btn-act{padding:4px 9px;font-size:12px;border-radius:7px;white-space:nowrap}
+  .syn-sec{border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#fff;margin-bottom:22px;overflow:hidden}
+  .syn-sec-head{display:flex;justify-content:space-between;align-items:center;background:#1F4E79;color:#fff;padding:10px 16px}
+  .syn-sec-head h2{margin:0;font-size:15px}
+  table.syn{width:100%;border-collapse:collapse;font-size:13px}
+  table.syn th,table.syn td{border:1px solid var(--bord,#D8E2EC);padding:7px 9px;text-align:left}
+  table.syn th{background:#EEF3F8;color:#1F4E79;font-weight:600}
+  table.syn td.num,table.syn th.num{text-align:right;white-space:nowrap}
+  table.syn tr:nth-child(even) td{background:#F6F9FC}
+  table.syn tfoot td{font-weight:700;background:#E8EEF5;color:#1F4E79}
+  .ecart-neg{color:#B42318;font-weight:700}
+  .ecart-pos{color:#3C7A1E}
+  .src{font-size:11px;color:#5B6B7B}
+  .note{font-size:12px;color:#5B6B7B;padding:8px 16px;background:#F6F9FC;border-top:1px solid var(--bord,#D8E2EC)}
+  .vide{padding:18px;text-align:center;color:#5B6B7B}
+  @media print{.syn-filtres,.no-print{display:none!important}}
+</style>
+
+<form method="get" action="{{ url_for('budget_synthese') }}" class="syn-filtres">
+  <div class="f"><label>Session</label>
+    <select name="session">
+      {% for s in sessions_opt %}<option value="{{ s }}" {% if s==session_sel %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      {% if session_sel and session_sel not in sessions_opt %}<option value="{{ session_sel }}" selected>{{ session_sel }}</option>{% endif %}
+    </select></div>
+  <div class="f"><label>Formation</label>
+    <select name="formation"><option value="">— Toutes —</option>
+      {% for f in formations_opt %}<option value="{{ f }}" {% if f==formation %}selected{% endif %}>{{ f }}</option>{% endfor %}
+    </select></div>
+  <div class="f"><label>Bailleur</label>
+    <select name="bailleur"><option value="">— Tous —</option>
+      {% for b in bailleurs_opt %}<option value="{{ b }}" {% if b==bailleur %}selected{% endif %}>{{ b }}</option>{% endfor %}
+    </select></div>
+  <button type="submit" class="btn btn-primary"><i class="ti ti-filter"></i> Afficher</button>
+  <a href="{{ url_for('budget_synthese') }}" class="btn btn-ghost"><i class="ti ti-filter-off"></i> Réinitialiser</a>
+  <a href="{{ url_for('budget_synthese_imprimer', session=session_sel, formation=formation, bailleur=bailleur) }}" target="_blank" class="btn btn-off no-print" style="margin-left:auto"><i class="ti ti-printer"></i> Imprimer</a>
+</form>
+
+{% macro tbl_ecart(sec, label1, maille, session_sel, peut_g1) %}
+<table class="syn">
+  <thead><tr><th>{{ label1 }}</th><th class="num">Prévu (KMF)</th><th class="num">Réalisé (KMF)</th><th class="num">Écart (KMF)</th><th class="num">% consommé</th>{% if peut_g1 %}<th class="no-print">Action</th>{% endif %}</tr></thead>
+  <tbody>
+    {% for l in sec.lignes %}
+    <tr>
+      <td>{{ l.cle }}{% if l.intitule %}<div class="src">{{ l.intitule }}</div>{% endif %}</td>
+      <td class="num">{{ l.prevu|kmf }}</td>
+      <td class="num">{{ l.realise|kmf }}</td>
+      <td class="num {{ 'ecart-neg' if l.ecart < 0 else 'ecart-pos' }}">{{ l.ecart|kmf }}</td>
+      <td class="num">{{ l.pct if l.pct is not none else '—' }}{% if l.pct is not none %} %{% endif %}</td>
+      {% if peut_g1 %}
+      <td class="no-print">
+        {% if l.ecart != 0 %}
+          {% set nature = 'dépassement' if l.ecart < 0 else 'sous-consommation' %}
+          {% set prefixe = ('Poste ' ~ l.cle ~ (' (' ~ l.intitule ~ ')' if l.intitule else '')) if maille == 'poste' else ('Bailleur ' ~ l.cle) %}
+          {% set desc = prefixe ~ ' — session ' ~ session_sel ~ ' : prévu ' ~ (l.prevu|kmf) ~ ', réalisé ' ~ (l.realise|kmf) ~ ', écart ' ~ (l.ecart|kmf) ~ ' KMF (' ~ nature ~ ')' %}
+          <a class="btn btn-off btn-act" target="_blank"
+             href="{{ url_for('module', onglet='G1_Plan_action', domaine='Finances / Budget', type_ecart='Budgétaire', axe='Finances', ecart=desc) }}"
+             title="Créer une action corrective pré-remplie"><i class="ti ti-plus"></i> Action</a>
+        {% endif %}
+      </td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="{{ 6 if peut_g1 else 5 }}" class="vide">Aucune donnée pour cette sélection.</td></tr>
+    {% endfor %}
+  </tbody>
+  {% if sec.lignes %}
+  <tfoot><tr>
+    <td>TOTAL</td>
+    <td class="num">{{ sec.total_prevu|kmf }}</td>
+    <td class="num">{{ sec.total_realise|kmf }}</td>
+    <td class="num {{ 'ecart-neg' if sec.total_ecart < 0 else 'ecart-pos' }}">{{ sec.total_ecart|kmf }}</td>
+    <td class="num">{{ sec.pct if sec.pct is not none else '—' }}{% if sec.pct is not none %} %{% endif %}</td>
+    {% if peut_g1 %}<td class="no-print"></td>{% endif %}
+  </tr></tfoot>
+  {% endif %}
+</table>
+{% endmacro %}
+
+<div class="syn-sec">
+  <div class="syn-sec-head"><h2><i class="ti ti-list-numbers"></i> Par poste budgétaire</h2></div>
+  {{ tbl_ecart(data.par_poste, "Poste", "poste", session_sel, peut_g1) }}
+</div>
+
+<div class="syn-sec">
+  <div class="syn-sec-head"><h2><i class="ti ti-building-bank"></i> Par bailleur</h2></div>
+  {{ tbl_ecart(data.par_bailleur, "Bailleur", "bailleur", session_sel, peut_g1) }}
+</div>
+
+<div class="syn-sec">
+  <div class="syn-sec-head"><h2><i class="ti ti-school"></i> Par formation</h2></div>
+  <table class="syn">
+    <thead><tr><th>Formation</th><th class="num">Prévu (KMF)</th><th>Réalisé</th></tr></thead>
+    <tbody>
+      {% for l in data.par_formation.lignes %}
+      <tr><td>{{ l.cle }}</td><td class="num">{{ l.prevu|kmf }}</td><td class="src">non ventilable (F1)</td></tr>
+      {% else %}
+      <tr><td colspan="3" class="vide">Aucune donnée pour cette sélection.</td></tr>
+      {% endfor %}
+    </tbody>
+    {% if data.par_formation.lignes %}
+    <tfoot><tr><td>TOTAL</td><td class="num">{{ data.par_formation.total_prevu|kmf }}</td><td></td></tr></tfoot>
+    {% endif %}
+  </table>
+  <div class="note"><i class="ti ti-info-circle"></i> Prévu seul : la trésorerie (F1) ne porte pas la formation, le réalisé n'y est pas ventilable. L'écart est disponible par poste et par bailleur.</div>
+</div>
+{% endblock %}

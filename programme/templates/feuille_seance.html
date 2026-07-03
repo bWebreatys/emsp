@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 portrait; margin: 14mm; }
+  table.entete { border-collapse: collapse; width: 100%; font-size: 13px; margin-top: 6px; }
+  table.entete td { border: 1px solid var(--bord); padding: 6px 9px; vertical-align: top; }
+  table.entete td.lib { background: #f1f5f9; font-weight: 600; width: 150px; color: var(--bleu); }
+  h2.sect { font-size: 14px; color: var(--bleu); margin: 16px 0 4px; }
+  table.roster { border-collapse: collapse; width: 100%; font-size: 13px; }
+  table.roster th, table.roster td { border: 1px solid var(--bord); padding: 5px 8px; }
+  table.roster th { background: #f1f5f9; color: var(--bleu); text-align: left; }
+  table.roster td.n, table.roster th.n { width: 34px; text-align: right; }
+  table.roster td.p, table.roster th.p { width: 78px; text-align: center; }
+  .case { display: inline-block; width: 13px; height: 13px; border: 1px solid var(--texte); border-radius: 2px; }
+  .sign { display: flex; justify-content: space-between; margin-top: 26px; font-size: 13px; }
+  .sign .bloc { width: 46%; }
+  .sign .lab { color: var(--gris); }
+  .sign .trait { border-bottom: 1px solid var(--texte); height: 38px; margin-top: 4px; }
+  .note-bas { margin-top: 10px; font-size: 12px; color: var(--gris); }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Feuille de presence &mdash; seance{% if saisi %} (releve saisi){% else %} (a signer){% endif %}
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+
+    <table class="entete">
+      <tr>
+        <td class="lib">Filiere</td><td>{{ entete.filiere or '—' }} {{ entete.niveau }} {{ entete.section }}</td>
+        <td class="lib">Annee acad.</td><td>{{ entete.annee or '—' }}</td>
+      </tr>
+      <tr>
+        <td class="lib">Matiere</td><td>{{ entete.matiere or '—' }}</td>
+        <td class="lib">Enseignant</td><td>{{ entete.enseignant or '—' }}</td>
+      </tr>
+      <tr>
+        <td class="lib">Date</td><td>{{ entete.date or '—' }}</td>
+        <td class="lib">Creneau</td><td>{{ entete.creneau or '—' }}</td>
+      </tr>
+      <tr>
+        <td class="lib">Horaires</td><td>{{ entete.jour }} {{ entete.debut }}{% if entete.fin %}-{{ entete.fin }}{% endif %}{% if entete.duree %} ({{ entete.duree }} h){% endif %}</td>
+        <td class="lib">Salle</td><td>{{ entete.salle or '—' }}</td>
+      </tr>
+    </table>
+
+    <h2 class="sect">Effectif &mdash; {{ roster|length }} etudiant(s)</h2>
+    <table class="roster">
+      <thead><tr><th class="n">N&deg;</th><th>Matricule</th><th>Nom Prenom</th><th class="p">Present</th></tr></thead>
+      <tbody>
+        {% for e in roster %}
+        {% set etat = (deja.get(e.matricule, '') if deja else '') %}
+        <tr>
+          <td class="n">{{ loop.index }}</td>
+          <td>{{ e.matricule }}</td>
+          <td>{{ e.nom }} {{ e.prenom }}</td>
+          <td class="p">{% if etat=='O' %}Présent{% elif etat=='N' %}Absent{% else %}<span class="case"></span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+        {% if not roster %}
+        <tr><td colspan="4" style="color:var(--gris)">Aucun etudiant rattache a cette seance (verifier filiere / niveau / section).</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <p class="note-bas">{% if saisi %}Releve des presences enregistrees (Present / Absent). La feuille signee par
+      l'enseignant vaut justificatif des heures assurees pour cette seance.{% else %}Cocher la case &laquo; Present &raquo; pour chaque etudiant present. La feuille signee par
+      l'enseignant vaut justificatif des heures assurees pour cette seance.{% endif %}</p>
+
+    <div class="sign">
+      <div class="bloc">
+        <div class="lab">Fait a Moroni, le {{ entete.date or '……/……/………' }}</div>
+      </div>
+      <div class="bloc">
+        <div class="lab">Signature de l'enseignant</div>
+        <div class="trait"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

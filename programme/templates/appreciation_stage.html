@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appreciation de stage — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  .app-fiche { font-size: 12.5px; }
+  .app-titre-cadre { border: 2px solid var(--bleu); color: var(--bleu); font-weight: 700;
+    text-align: center; padding: 6px; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .5px; }
+  .app-champs { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  .app-champs td { padding: 4px 6px; vertical-align: bottom; }
+  .app-champs .lib { font-weight: 600; white-space: nowrap; }
+  .app-champs .pt { border-bottom: 1px dotted #333; width: 100%; }
+  .app-intro { font-size: 11.5px; font-style: italic; color: #333; line-height: 1.45; margin: 8px 0; }
+  table.app { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  table.app th, table.app td { border: 1px solid var(--bord); padding: 4px 6px; }
+  table.app th { background: #dde7f1; }
+  table.app .grp { background: var(--bleu); color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+  table.app .crit { text-align: left; }
+  table.app .note { width: 52px; text-align: center; }
+  .app-effort { margin-top: 12px; }
+  .app-effort .ln { border-bottom: 1px dotted #333; height: 20px; }
+  table.app-bareme { width: 100%; border-collapse: collapse; margin-top: 12px; text-align: center; }
+  table.app-bareme td { border: 1px solid var(--bord); padding: 8px; }
+  .app-sign { display: flex; justify-content: space-between; gap: 24px; margin-top: 26px; }
+  .app-sign div { flex: 1; text-align: center; }
+  .app-sign .lib { font-weight: 600; margin-bottom: 30px; }
+  .app-sign .ligne { border-top: 1px dotted #333; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>Fiche d'appreciation de stage</b>
+  <span class="aide">Document a imprimer puis a remplir a la main sur le lieu de stage.</span>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="{{ url_for('impressions') }}">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+
+<div id="zone" contenteditable="true" spellcheck="false">
+  <div class="doc-page app-fiche">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores — Ecole de Medecine et de Sante Publique</div>
+        <div class="ss">Departement des sciences de soins infirmiers et soins obstetricaux</div>
+      </div>
+    </div>
+
+    <div class="app-titre-cadre">Appreciation de stage</div>
+
+    <table class="app-champs">
+      <tr>
+        <td class="lib">Hopital ou centre :</td><td class="pt"></td>
+        <td class="lib">Service :</td><td class="pt"></td>
+      </tr>
+      <tr>
+        <td class="lib">Section :</td><td class="pt"></td>
+        <td class="lib">Annee d'etudes :</td><td class="pt"></td>
+      </tr>
+      <tr>
+        <td class="lib">Nom de l'etudiant :</td><td class="pt"></td>
+        <td class="lib">Prenom :</td><td class="pt"></td>
+      </tr>
+      <tr>
+        <td class="lib">Dates : du</td><td class="pt"></td>
+        <td class="lib">au</td><td class="pt"></td>
+      </tr>
+      <tr>
+        <td class="lib">Duree des absences :</td><td class="pt" colspan="3"></td>
+      </tr>
+    </table>
+
+    <div class="app-titre-cadre">Aptitudes generales a la fonction</div>
+    <p class="app-intro">Eu egard aux objectifs de formation determines par le CNFRSP et au niveau de competences qui doit
+    etre acquis par l'etudiant, cette fiche d'appreciation doit etre remplie avant la fin du stage par la personne
+    responsable de celui-ci et l'equipe ayant effectivement assure l'encadrement. Cette appreciation doit etre portee
+    a la connaissance de l'etudiant au cours d'un entretien avec la personne responsable de la notation.</p>
+
+    <table class="app">
+      <thead><tr><th class="crit">Criteres</th><th class="note">Insuf</th><th class="note">A.B.</th><th class="note">B.</th><th class="note">T.B.</th></tr></thead>
+      <tbody>
+        <tr><td class="grp" colspan="5">Capacites personnelles</td></tr>
+        <tr><td class="crit">Fait preuve de respect vis a vis des personnes et des lieux</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Fait preuve de discretion professionnelle</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Prend des initiatives en fonction de ses competences</td><td></td><td></td><td></td><td></td></tr>
+
+        <tr><td class="grp" colspan="5">Capacites methodologiques</td></tr>
+        <tr><td class="crit">Recueille des informations utilisables</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Analyse la situation</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Identifie le ou les problemes poses</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Determine les objectifs de soins</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Prevoit ses actions selon les ressources du soigne et du service</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Organise des actes de soins avec methode</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Assure des transmissions precises</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Evalue l'atteinte des objectifs</td><td></td><td></td><td></td><td></td></tr>
+
+        <tr><td class="grp" colspan="5">Capacites techniques</td></tr>
+        <tr><td class="crit">Acquiert et utilise les connaissances theoriques et cliniques correspondant aux soins dispenses en fonction du niveau de formation atteint</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Realise les actes de soins avec dexterite</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Applique les regles d'hygiene et d'asepsie necessaires a la securite des personnes</td><td></td><td></td><td></td><td></td></tr>
+
+        <tr><td class="grp" colspan="5">Capacites d'adaptation</td></tr>
+        <tr><td class="crit">S'adapte a l'organisation du travail du lieu de stage</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Fait preuve de rigueur dans ses horaires</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Collabore avec les differentes categories de personnel</td><td></td><td></td><td></td><td></td></tr>
+
+        <tr><td class="grp" colspan="5">Capacites relationnelles</td></tr>
+        <tr><td class="crit">Etablit une communication adaptee aux personnes soignees</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Etablit une communication adaptee aux situations</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Etablit une communication adaptee a l'equipe de travail</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Controle ses reactions affectives</td><td></td><td></td><td></td><td></td></tr>
+
+        <tr><td class="grp" colspan="5">Capacites educatives et pedagogiques</td></tr>
+        <tr><td class="crit">Donne, en fonction des besoins de la personne ou des groupes de personnes, des conseils ou des reponses adaptes</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Participe a la formation d'autres stagiaires</td><td></td><td></td><td></td><td></td></tr>
+
+        <tr><td class="grp" colspan="5">Capacites d'organisation</td></tr>
+        <tr><td class="crit">Organise et planifie son travail</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Tient compte des priorites</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">S'adapte aux situations d'urgence</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="crit">Evalue les actions</td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <div class="app-effort">
+      <p style="font-weight:600;margin-bottom:6px">Sur quels points l'etudiant devrait-il faire un effort particulier ?</p>
+      <div class="ln"></div><div class="ln"></div><div class="ln"></div>
+    </div>
+
+    <table class="app-bareme">
+      <tr><td>Insuffisant<br>0 - 9</td><td>Assez bien<br>10 - 13</td><td>Bien<br>14 - 16</td><td>Tres bien<br>17 - 20</td><td><b>Note attribuee</b><br>........ / 20</td></tr>
+    </table>
+
+    <div class="app-effort">
+      <p style="font-weight:600;margin-bottom:6px">Argumentation de la note attribuee en fonction de l'evaluation realisee :</p>
+      <div class="ln"></div><div class="ln"></div>
+    </div>
+
+    <p style="margin-top:14px"><b>Date :</b> ...... / ...... / ............</p>
+    <div class="app-sign">
+      <div><div class="lib">Responsable de l'encadrement</div><div class="ligne"></div></div>
+      <div><div class="lib">L'etudiant</div><div class="ligne"></div></div>
+      <div><div class="lib">Cachet du lieu de stage</div><div class="ligne"></div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block fil %}
+  <nav class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> › <span>{{ info.section_titre }}</span> › <span>États de paiement</span></nav>
+{% endblock %}
+
+{% block contenu %}
+<div class="entete-module">
+  <h1><i class="ti {{ info.icone }}"></i> États de paiement des vacations</h1>
+  <p class="intro">Consolide les heures du relevé en montants (taux × heures autorisées, ou mois × coût pour les forfaits), puis génère l'écriture de dépense après l'arrêté.</p>
+</div>
+
+{% if peut_modifier %}
+<section class="carte">
+  <h2 class="carte-titre"><i class="ti ti-calculator"></i> Constituer / recalculer un état</h2>
+  <form method="post" action="{{ url_for('paiement_constituer') }}" class="form-ligne">
+    <div class="champ">
+      <label>Année académique</label>
+      <input type="text" name="annee" value="{{ annee_defaut }}" placeholder="AAAA-AAAA" required>
+    </div>
+    <div class="champ">
+      <label>Semestre</label>
+      <select name="semestre" required>
+        {% for s in semestres %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="champ champ-large">
+      <label>Mois à inclure (relevé des heures)</label>
+      {% if mois_dispo %}
+      <div class="cases-mois">
+        {% for m in mois_dispo %}
+        <label class="case"><input type="checkbox" name="mois" value="{{ m }}"> {{ m }}</label>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="color:var(--gris)">Aucun mois dans le relevé des heures (E2). Renseignez d'abord les heures.</p>
+      {% endif %}
+    </div>
+    <button type="submit" class="btn-action"><i class="ti ti-player-play"></i> Constituer (brouillon)</button>
+  </form>
+  <p class="aide-champ">Un état recalculable tant qu'il est en brouillon ; après l'arrêté il est figé.</p>
+</section>
+{% endif %}
+
+<section class="carte">
+  <h2 class="carte-titre"><i class="ti ti-list-details"></i> États existants</h2>
+  <table class="tableau">
+    <thead><tr><th>Identifiant</th><th>Semestre</th><th>Année</th><th>Lignes</th><th>Total (KMF)</th><th>Statut</th><th></th></tr></thead>
+    <tbody>
+      {% for e in etats %}
+      <tr>
+        <td><a href="{{ url_for('paiement', id=e.id) }}" style="color:var(--bleu);font-weight:600;text-decoration:none">{{ e.id }}</a></td>
+        <td>{{ e.semestre }}</td><td>{{ e.annee }}</td><td>{{ e.nb }}</td>
+        <td style="text-align:right">{{ e.total|kmf }}</td>
+        <td>
+          {% if e.statut == 'Passe en compta' %}<span class="badge badge-ok">Passé en compta</span>
+          {% elif e.statut == 'Arrete' %}<span class="badge">Arrêté</span>
+          {% else %}<span class="badge badge-gris">Brouillon</span>{% endif %}
+        </td>
+        <td><a class="lien-mini" href="{{ url_for('paiement_imprimer', eid=e.id) }}"><i class="ti ti-printer"></i></a></td>
+      </tr>
+      {% endfor %}
+      {% if not etats %}<tr><td colspan="7" style="color:var(--gris)">Aucun état de paiement pour l'instant.</td></tr>{% endif %}
+    </tbody>
+  </table>
+</section>
+
+{% if introuvable %}
+  <section class="carte"><p style="color:var(--gris)">État « {{ id_sel }} » introuvable.</p></section>
+{% endif %}
+
+{% if detail %}
+<section class="carte">
+  <div class="detail-entete">
+    <h2 class="carte-titre"><i class="ti ti-receipt"></i> {{ detail.id }} — {{ detail.semestre }} {{ detail.annee }}</h2>
+    <div>
+      {% if detail.statut == 'Passe en compta' %}<span class="badge badge-ok">Passé en compta</span>
+      {% elif detail.statut == 'Arrete' %}<span class="badge">Arrêté le {{ detail.date_arrete }} par {{ detail.arrete_par }}</span>
+      {% else %}<span class="badge badge-gris">Brouillon</span>{% endif %}
+      <a class="btn-imp" href="{{ url_for('paiement_imprimer', eid=detail.id) }}"><i class="ti ti-printer"></i> Imprimer</a>
+    </div>
+  </div>
+
+  <table class="tableau">
+    <thead><tr>
+      <th>Nom-Prénom</th><th>Statut</th><th>Mode</th><th>Matière</th>
+      <th>H. prévues</th><th>H. effect.</th><th>H. autor.</th><th>Taux</th>
+      <th>Mois</th><th>Coût mens.</th><th>Montant (KMF)</th>
+    </tr></thead>
+    <tbody>
+      {% for l in detail.lignes %}
+      <tr>
+        <td>{{ l.nom_complet }}</td><td>{{ l.statut_prof }}</td><td>{{ l.mode }}</td><td>{{ l.matiere }}</td>
+        <td style="text-align:right">{{ l.h_prevues }}</td>
+        <td style="text-align:right">{{ l.h_effectuees }}</td>
+        <td style="text-align:right">{{ l.h_autorisees }}</td>
+        <td style="text-align:right">{{ l.taux }}</td>
+        <td style="text-align:right">{{ l.nb_mois }}</td>
+        <td style="text-align:right">{{ l.cout_mensuel }}</td>
+        <td style="text-align:right;font-weight:600">{{ l.montant|kmf }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot><tr>
+      <td colspan="10" style="text-align:right;font-weight:600">TOTAL À PAYER (KMF)</td>
+      <td style="text-align:right;font-weight:700">{{ detail.total|kmf }}</td>
+    </tr></tfoot>
+  </table>
+  <p class="lettres">Arrêté à la somme de : {{ detail.total_lettres }}.</p>
+
+  {% if peut_modifier %}
+    {% if detail.statut == 'Brouillon' %}
+    <form method="post" action="{{ url_for('paiement_arreter', eid=detail.id) }}" onsubmit="return confirm('Arrêter cet état ? Il sera figé (plus de recalcul).');">
+      <button type="submit" class="btn-action"><i class="ti ti-lock"></i> Arrêter l'état</button>
+    </form>
+    {% elif detail.statut == 'Arrete' %}
+    <form method="post" action="{{ url_for('paiement_passer_compta', eid=detail.id) }}" class="form-ligne"
+          onsubmit="return confirm('Passer cet état en compta ? Une dépense sera créée par enseignant. Action non répétable.');">
+      <div class="champ">
+        <label>Compte / caisse</label>
+        <select name="compte" required>{% for c in comptes %}<option value="{{ c }}">{{ c }}</option>{% endfor %}</select>
+      </div>
+      <div class="champ">
+        <label>Mode de paiement</label>
+        <select name="mode" required>{% for m in modes %}<option value="{{ m }}">{{ m }}</option>{% endfor %}</select>
+      </div>
+      <button type="submit" class="btn-action"><i class="ti ti-cash-banknote"></i> Passer en compta</button>
+    </form>
+    {% else %}
+    <p style="color:var(--gris)"><i class="ti ti-circle-check"></i> Passé en compta — référence d'écriture <b>{{ detail.ref_f1 }}</b> dans la trésorerie (F1).</p>
+    {% endif %}
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% set sa = occ.salle %}
+
+{% block fil %}
+<div class="fil">
+  <a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo;
+  <a href="{{ url_for('salles') }}{% if demo %}?demo=1{% endif %}">Salles</a> &rsaquo; {{ sa.nom or sa.id }}
+</div>
+<div class="page-head">
+  <i class="ti ti-door ic"></i>
+  <div>
+    <h1>{{ sa.nom or sa.id }}</h1>
+    <div class="sub">{{ sa.type }}{% if sa.capacite %} · capacite {{ sa.capacite }} places{% endif %}{% if sa.batiment %} · {{ sa.batiment }}{% endif %}</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+<div style="margin:0 0 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <span style="color:var(--gris);font-size:13px"><i class="ti ti-chart-bar"></i> Requêtes liées :</span>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_vue', vid='equip_loc', salle=occ.salle.nom) }}"><i class="ti ti-arrow-right"></i> Équipements de cette salle</a>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_vue', vid='equip_bailleur') }}"><i class="ti ti-arrow-right"></i> Équipements par bailleur</a>
+</div>
+{% if demo %}<div class="bandeau-demo"><i class="ti ti-info-circle"></i> Donnees de demonstration (valeurs fictives).</div>{% endif %}
+
+<div class="jour-cols">
+  <div>
+    <div class="panel">
+      <div class="ph"><i class="ti ti-list-details i"></i><h3>Resume de l'occupation &mdash; {{ occ.nb }} seance(s) / semaine</h3></div>
+      <div class="pb">
+        {% if occ.occupation %}
+        {% for bloc in occ.occupation %}
+        <div class="occ-jour">
+          <div class="occ-jour-tete">{{ bloc.jour }}</div>
+          <ul class="jour-liste">
+            {% for s in bloc.seances %}
+            <li>
+              <span class="hr">{{ s.debut }}&ndash;{{ s.fin }}</span>
+              <span class="co"><b>{{ s.matiere }}</b><small>Par : {{ s.enseignant or '—' }} · Pour : {{ s.groupe or '—' }} · {{ s.type }}</small></span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="vide"><i class="ti ti-calendar-off i"></i> Cette salle n'est occupee par aucune seance enregistree.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><i class="ti ti-tools i"></i><h3>Materiel de la salle{% if occ.materiel %} &mdash; {{ occ.materiel|length }} materiel(s){% endif %}</h3>
+        {% if occ.materiel %}
+        <a class="btn-imp" target="_blank" style="margin-left:auto"
+           href="{{ url_for('salle_inventaire_imprimer', salle_id=(occ.salle.id or occ.salle.nom)) }}">
+          <i class="ti ti-printer"></i> Imprimer l'inventaire</a>
+        {% endif %}
+      </div>
+      <div class="pb">
+        {% if occ.materiel %}
+        <table class="mini mat-salle">
+          <thead>
+            <tr><th>Designation</th><th>Categorie</th><th class="num">Qte</th><th>Etat</th></tr>
+          </thead>
+          <tbody>
+            {% for m in occ.materiel %}
+            <tr>
+              <td>{{ m.designation or '—' }}</td>
+              <td class="muted">{{ m.categorie or '—' }}</td>
+              <td class="num">{{ m.quantite if m.quantite not in (None, '') else '—' }}</td>
+              <td class="muted">{{ m.etat or '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="vide-mini">Aucun materiel inventorie pour cette salle.</div>
+        {% endif %}
+        <div class="info-renvoi">
+          <i class="ti ti-info-circle"></i>
+          <span>Affichage seul. Pour ajouter ou retirer un materiel, gerez-le dans Logistique &rsaquo; Materiel.</span>
+          <a class="btn-renvoi" href="{{ url_for('module', onglet='M1_Equipements') }}"><i class="ti ti-external-link"></i> Gerer le materiel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jour-aside">
+    <div class="panel">
+      <div class="ph"><i class="ti ti-cursor-text i"></i><h3>Que voulez-vous faire ?</h3></div>
+      <div class="pb">
+        <div class="actions-salle">
+          {% if peut_reserver %}
+          <details class="act" {% if request.args.get('res')=='1' %}open{% endif %}>
+            <summary><i class="ti ti-calendar-plus"></i> Reserver la salle</summary>
+            <div class="act-corps">
+              <form method="post" action="{{ url_for('salle_reserver', salle_id=sa.id) }}" class="form-resa">
+                <label>Reserve par<input type="text" name="reserve_par" placeholder="Nom du demandeur" required></label>
+                <label>Date<input type="text" name="date" placeholder="JJ/MM/AAAA" required></label>
+                <div class="deux">
+                  <label>Heure debut<input type="text" name="heure_debut" placeholder="ex. 10h05"></label>
+                  <label>Heure fin<input type="text" name="heure_fin" placeholder="ex. 12h05"></label>
+                </div>
+                <label>Type
+                  <select name="type">
+                    {% for t in occ.types_reservation %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+                  </select>
+                </label>
+                <label>Seance liee (planning, facultatif)
+                  <select name="seance">
+                    <option value="">— Reservation hors cours —</option>
+                    {% for se in occ.seances_a3 %}<option value="{{ se.id }}">{{ se.libelle }}</option>{% endfor %}
+                  </select>
+                </label>
+                <p class="act-note"><i class="ti ti-info-circle"></i> Si une seance est choisie, filiere / niveau / matiere / enseignant sont repris du planning. Sinon, renseignez-les ci-dessous (facultatif).</p>
+                <div class="deux">
+                  <label>Filiere<input type="text" name="filiere" placeholder="ex. Soins infirmiers"></label>
+                  <label>Niveau<input type="text" name="niveau" placeholder="ex. L1"></label>
+                </div>
+                <label>Matiere<input type="text" name="matiere" placeholder="(facultatif)"></label>
+                <label>Enseignant (matricule)
+                  <input type="text" name="matricule" list="ens_liste" placeholder="(facultatif)">
+                </label>
+                <datalist id="ens_liste">
+                  {% for e in occ.enseignants %}<option value="{{ e.matricule }}">{{ e.matricule }} — {{ e.nom }}</option>{% endfor %}
+                </datalist>
+                <label>Enseignant (nom, si externe)<input type="text" name="enseignant" placeholder="(facultatif)"></label>
+                <label>Motif / objet<input type="text" name="motif" placeholder="Motif de la reservation"></label>
+                <label>Statut
+                  <select name="statut">
+                    <option value="Confirmee">Confirmee</option>
+                    <option value="Provisoire">Provisoire</option>
+                  </select>
+                </label>
+                <button class="btn-action" type="submit"><i class="ti ti-device-floppy"></i> Enregistrer la reservation</button>
+              </form>
+            </div>
+          </details>
+          {% endif %}
+
+          <details class="act" {% if not peut_reserver and occ.reservations %}open{% endif %}>
+            <summary><i class="ti ti-eye"></i> Reservations enregistrees{% if occ.reservations %} ({{ occ.reservations|length }}){% endif %}</summary>
+            <div class="act-corps">
+              {% if occ.reservations %}
+              <table class="mini">
+                <thead><tr><th>Date</th><th>Creneau</th><th>Type</th><th>Objet</th><th>Par</th><th>Statut</th></tr></thead>
+                <tbody>
+                  {% for r in occ.reservations %}
+                  <tr>
+                    <td>{{ r.date or '—' }}</td>
+                    <td>{{ (r.h_debut ~ '–' ~ r.h_fin)|trim('–') or '—' }}</td>
+                    <td>{{ r.type or '—' }}{% if r.seance %} <small class="muted">(seance {{ r.seance }})</small>{% endif %}</td>
+                    <td>{{ r.motif or '—' }}{% if r.matiere or r.enseignant %}<small class="muted"> · {{ r.matiere }}{% if r.enseignant %} / {{ r.enseignant }}{% endif %}</small>{% endif %}</td>
+                    <td>{{ r.reserve_par or '—' }}</td>
+                    <td>{{ r.statut or '—' }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+              <p class="vide-mini">Aucune reservation hors cours pour cette salle.</p>
+              {% endif %}
+              <p class="act-note"><i class="ti ti-info-circle"></i> L'occupation par les <b>cours</b> figure dans le resume a gauche (emploi du temps, planning A3).</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><i class="ti ti-info-square i"></i><h3>Caracteristiques</h3></div>
+      <div class="pb">
+        {% if peut_modifier %}
+        <form method="post" action="{{ url_for('salle_modifier', salle_id=sa.id) }}" class="form-salle">
+          <label class="ro">Identifiant<input type="text" value="{{ sa.id }}" disabled></label>
+          <label>Nom / libelle<input type="text" name="Nom / libelle" value="{{ sa.nom }}"></label>
+          <label>Type
+            <select name="Type (*)">
+              {% for t in types_salle %}<option value="{{ t }}"{% if sa.type==t %} selected{% endif %}>{{ t }}</option>{% endfor %}
+            </select>
+          </label>
+          <label>Capacite<input type="number" name="Capacite" min="0" value="{{ sa.capacite }}"></label>
+          <label>Localisation<input type="text" name="Batiment / localisation (*)" value="{{ sa.batiment }}" placeholder="ex. Batiment principal, RDC"></label>
+          <button class="btn-action" type="submit"><i class="ti ti-device-floppy"></i> Enregistrer les modifications</button>
+        </form>
+        {% else %}
+        <table class="mini">
+          <tbody>
+            <tr><td>Identifiant</td><td>{{ sa.id or '—' }}</td></tr>
+            <tr><td>Type</td><td>{{ sa.type or '—' }}</td></tr>
+            <tr><td>Capacite</td><td>{{ sa.capacite or '—' }}</td></tr>
+            <tr><td>Localisation</td><td>{{ sa.batiment or '—' }}</td></tr>
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

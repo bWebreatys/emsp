@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Releve de notes — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  .bo-id { width: 100%; border-collapse: collapse; margin: 6px 0 2px; font-size: 12.5px; }
+  .bo-id td { border: 1px solid var(--bord); padding: 4px 8px; }
+  .bo-id .lib { font-weight: 600; background: #f1f5f9; white-space: nowrap; }
+  .bo-sem { background: var(--bleu); color: #fff; text-align: center; font-weight: 700;
+    padding: 4px; margin: 12px 0 0; text-transform: uppercase; letter-spacing: .4px; font-size: 13px; }
+  table.bo { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  table.bo th, table.bo td { border: 1px solid var(--bord); padding: 3px 5px; }
+  table.bo th { background: #dde7f1; text-align: center; }
+  table.bo .mat { text-align: left; }
+  table.bo .c { text-align: center; }
+  table.bo tr.ue td { background: #eef3f8; font-weight: 700; }
+  table.bo tr.ue td.mat { text-transform: none; }
+  table.bo tr.moy td { background: #f1f5f9; font-weight: 700; }
+  .bo-jury { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 12px; }
+  .bo-jury td { border: 1px solid var(--bord); padding: 5px 8px; }
+  .bo-jury .lib { font-weight: 600; background: #f1f5f9; }
+  .bo-annuel { background: #eef3f8; border: 2px solid var(--bleu); border-radius: 8px;
+    padding: 8px 12px; margin-top: 10px; font-weight: 700; color: var(--bleu); }
+  .bo-note { font-style: italic; color: var(--gris); font-size: 11px; margin-top: 8px; }
+  .bo-sign { display: flex; justify-content: space-between; gap: 40px; margin-top: 20px; text-align: center; }
+  .bo-sign div { flex: 1; }
+  .bo-sign .l { font-weight: 600; margin-bottom: 26px; }
+  .bo-sign .t { border-top: 1px dotted #333; }
+  .bo-page2 { page-break-before: always; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>Releve de notes</b>
+  <span class="aide">Calcul automatique (decret 05-106). La deliberation du jury reste manuelle.</span>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="{{ url_for('impressions') }}">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+
+<div id="zone" contenteditable="true" spellcheck="false">
+  <div class="doc-page">
+  {% for sem in bo.semestres %}
+    <div class="{% if not loop.first %}bo-page2{% endif %}">
+    {% if loop.first %}
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Unite - Solidarite - Developpement — Universite des Comores</div>
+        <div class="ss">Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+    <div class="doc-titre">Releve de Notes</div>
+    <table class="bo-id">
+      <tr><td class="lib">Nom et Prenoms</td><td>{{ bo.nom }}</td><td class="lib">Matricule</td><td>{{ bo.matricule }}</td></tr>
+      <tr><td class="lib">Filiere / Niveau</td><td>{{ bo.filiere }} — {{ bo.niveau }}</td><td class="lib">Annee academique</td><td>{{ bo.annee }}</td></tr>
+    </table>
+    {% endif %}
+
+    <div class="bo-sem">{{ sem.ordinal }} semestre
+      <span style="float:right;font-weight:600">{{ sem.session_libelle }}</span></div>
+    <table class="bo">
+      <thead><tr>
+        <th class="mat">Unites d'enseignement / Matieres</th>
+        <th>C. Continu</th><th>Examen</th><th>Moyenne</th>
+        {% if sem.a_session2 %}<th>Exam. sess. 2</th><th>Moy. sess. 2</th>{% endif %}
+        <th>Coef</th><th>ECTS</th>
+      </tr></thead>
+      <tbody>
+        {% set ncols = 8 if sem.a_session2 else 6 %}
+        {% for ue in sem.ues %}
+        <tr class="ue">
+          <td class="mat">{{ ue.num }} — {{ ue.intitule }}</td>
+          <td class="c"></td><td class="c"></td><td class="c">{{ ue.moyenne or '—' }}</td>
+          {% if sem.a_session2 %}<td class="c"></td><td class="c"></td>{% endif %}
+          <td class="c">{{ ue.coef }}</td><td class="c">{{ ue.ects }}</td>
+        </tr>
+        {% for m in ue.matieres %}
+        <tr>
+          <td class="mat" style="padding-left:18px">{{ m.matiere }}</td>
+          <td class="c">{{ m.cc }}</td><td class="c">{{ m.ex }}</td><td class="c">{{ m.moy }}</td>
+          {% if sem.a_session2 %}<td class="c">{{ m.ex2 }}</td><td class="c">{{ m.moy2 }}</td>{% endif %}
+          <td class="c"></td><td class="c"></td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        <tr class="moy">
+          <td class="mat">Moyenne du {{ sem.ordinal|lower }} semestre</td>
+          <td class="c"></td><td class="c"></td><td class="c">{{ sem.moyenne or '—' }}</td>
+          {% if sem.a_session2 %}<td class="c"></td><td class="c"></td>{% endif %}
+          <td class="c" colspan="2">{{ '%g / %g'|format(sem.ects_acquis, sem.ects_total) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="bo-jury">
+      <tr><td class="lib">Decision du jury (proposition a confirmer)</td><td>{{ sem.proposition }}</td>
+          <td class="lib">Mention</td><td>{{ sem.mention or '—' }}</td></tr>
+    </table>
+    {% endfor %}
+
+    <div class="bo-annuel">Moyenne annuelle : {{ bo.moyenne or '—' }} &nbsp;·&nbsp; Mention : {{ bo.mention or '—' }}
+      {% if bo.ects_requis %} &nbsp;·&nbsp; Crédits : {{ '%g / %g'|format(bo.ects_acquis or 0, bo.ects_requis or 0) }}{% if bo.ects_ecart and bo.ects_ecart > 0 %} (écart {{ '%g'|format(bo.ects_ecart) }}){% endif %}{% endif %}
+      &nbsp;·&nbsp; Décision : {{ bo.decision or bo.proposition }}</div>
+    {% if bo.a_non_dispensee %}<p class="bo-note">Certaines matières prévues n'ont peut-être pas été totalement dispensées ce semestre et ne sont donc pas prises en compte dans la moyenne ; la moyenne est recalculée automatiquement sur les seules matières faites et notées.</p>{% endif %}
+    {% if bo.incomplet %}<p class="bo-note">Relevé incomplet : certaines matières dispensées ne sont pas encore notées ; les moyennes affichées sont provisoires.</p>{% endif %}
+    <p class="bo-note">Fait a Moroni, le {{ date_jour }}. Calcul indicatif (decret 05-106) ; seule la deliberation du jury fait foi.</p>
+    <div class="bo-sign">
+      <div><div class="l">Le Chef de la Scolarite</div><div class="t"></div></div>
+      <div><div class="l">Le Chef de Departement</div><div class="t"></div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

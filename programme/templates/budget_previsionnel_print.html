@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  .doc-titre .meta { display:block; font-size:12px; color:#555; font-weight:normal; margin-top:3px; }
+  table.bp { border-collapse: collapse; width: 100%; font-size: 11px; margin-top: 6px; }
+  table.bp th, table.bp td { border: 1px solid var(--bord); padding: 4px 6px; vertical-align: top; }
+  table.bp th { background: #f1f5f9; color: var(--bleu); font-weight: 600; text-align: center; }
+  table.bp td.num, table.bp th.num { text-align: right; white-space: nowrap; }
+  .form-titre { margin: 16px 0 2px; color: var(--bleu); font-size: 14px; font-weight: 700;
+                border-bottom: 2px solid var(--bleu); padding-bottom: 3px; }
+  .niv-titre { margin: 10px 0 2px; color: var(--bleu); font-size: 12px; font-weight: 600; }
+  .niv-tot { font-size: 11px; text-align: right; margin: 3px 0 6px; }
+  .niv-tot b { color: var(--bleu); }
+  .form-tot { font-size: 13px; text-align: right; font-weight: 700; color: var(--bleu);
+              margin: 4px 0 2px; border-top: 1px solid #999; padding-top: 4px; }
+  .general { font-size: 14px; text-align: right; font-weight: 700; color: var(--bleu);
+             margin-top: 10px; border-top: 2px solid var(--bleu); padding-top: 6px; }
+  .rubrique { font-size: 10px; color: #555; }
+  .lieu { margin-top: 14px; font-size: 12px; text-align: right; }
+  .sign { display: flex; justify-content: space-between; margin-top: 30px; font-size: 12px; }
+  .sign div { text-align: center; width: 30%; }
+  .sign .ligne { margin-top: 40px; border-top: 1px solid #555; padding-top: 4px; }
+  .note-taux { font-size: 11px; color: #555; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="barre no-print">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Unité &mdash; Solidarité &mdash; Développement</div>
+        <div class="ss">Université des Comores &mdash; École de Médecine et de Santé Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">BUDGET PRÉVISIONNEL
+      <span class="meta">
+        {% if formation %}Formation : {{ formation }}{% else %}Toutes formations{% endif %}
+        {% if session_sel %} &mdash; Session {{ session_sel }}{% endif %}
+      </span>
+    </div>
+    <div class="note-taux">Montant = Qté1 × Qté2 × Coût unitaire. Frais administratifs EMSP : {{ data.frais_admin_pct }} % par niveau. Taux de conversion : 1 EUR = {{ data.taux_eur|kmf }} KMF.</div>
+
+    {% if data.formations %}
+      {% for f in data.formations %}
+      <div class="form-titre">{{ f.formation }}</div>
+      {% for n in f.niveaux %}
+        <div class="niv-titre">{{ n.niveau or "(sans niveau)" }}</div>
+        <table class="bp">
+          <thead>
+            <tr>
+              <th>Désignation</th><th>Unité1</th><th class="num">Qté1</th>
+              <th>Unité2</th><th class="num">Qté2</th><th class="num">Coût unit. (KMF)</th>
+              <th class="num">Montant (KMF)</th><th class="num">Montant (EUR)</th>
+              <th>Poste</th><th>Bailleur</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for l in n.lignes %}
+            <tr>
+              <td>{{ l.designation }}{% if l.rubrique %}<div class="rubrique">{{ l.rubrique }}</div>{% endif %}</td>
+              <td>{{ l.unite1 }}</td><td class="num">{{ l.qte1 }}</td>
+              <td>{{ l.unite2 }}</td><td class="num">{{ l.qte2 }}</td>
+              <td class="num">{{ l.cout|kmf }}</td>
+              <td class="num">{{ l.montant_kmf|kmf }}</td>
+              <td class="num">{{ "%.2f"|format(l.montant_eur) }}</td>
+              <td>{{ l.poste }}</td><td>{{ l.bailleur }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="6" class="num">Total {{ n.niveau }}</td>
+              <td class="num">{{ n.total_kmf|kmf }}</td>
+              <td class="num">{{ "%.2f"|format(n.total_eur) }}</td>
+              <td colspan="2"></td>
+            </tr>
+            <tr>
+              <td colspan="6" class="num">Frais administratifs EMSP ({{ data.frais_admin_pct }} %)</td>
+              <td class="num">{{ n.frais_kmf|kmf }}</td>
+              <td class="num">{{ "%.2f"|format(n.frais_eur) }}</td>
+              <td colspan="2"></td>
+            </tr>
+            <tr>
+              <td colspan="6" class="num"><b>Sous-total {{ n.niveau }}</b></td>
+              <td class="num"><b>{{ n.sous_total_kmf|kmf }}</b></td>
+              <td class="num"><b>{{ "%.2f"|format(n.sous_total_eur) }}</b></td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      {% endfor %}
+      <div class="form-tot">TOTAL {{ f.formation|upper }} : {{ f.total_kmf|kmf }} KMF ({{ "%.2f"|format(f.total_eur) }} €)</div>
+      {% endfor %}
+
+      {% if data.formations|length > 1 %}
+      <div class="general">TOTAL GÉNÉRAL : {{ data.total_general_kmf|kmf }} KMF ({{ "%.2f"|format(data.total_general_eur) }} €)</div>
+      {% endif %}
+    {% else %}
+      <p style="margin-top:20px">Aucune ligne de budget prévisionnel pour cette sélection.</p>
+    {% endif %}
+
+    <div class="lieu">Moroni, le {{ date_jour }}</div>
+    <div class="sign">
+      <div><div class="ligne">Le Gestionnaire</div></div>
+      <div><div class="ligne">Le Directeur de l'EMSP</div></div>
+      <div><div class="ligne">Visa du bailleur</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

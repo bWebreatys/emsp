@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; {{ info.libelle }}</div>
+<div class="page-head">
+  <i class="ti ti-template ic"></i>
+  <div>
+    <h1>Modeles de documents</h1>
+    <div class="sub">Parties fixes des documents imprimables. Le corps peut contenir des jetons <code>{…}</code> remplis automatiquement.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Modeles <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p><b>Trois ecrans autour des documents :</b> <i>Modeles de documents</i> (cet ecran) = les <b>gabarits</b> reutilisables ; <i>Bibliotheque documentaire</i> = l'<b>archivage</b> de fichiers ; <i>Impressions &amp; editions</i> = la <b>generation</b> des editions. Ici on prepare les gabarits.</p>
+    <p>Modifiez ici l'<b>en-tete</b>, le <b>titre</b>, le <b>corps type</b>, les <b>mentions/pied</b>, le <b>libelle du signataire</b> et le <b>nombre de copies</b> de chaque document. Ces reglages sont <b>persistants</b> (enregistres dans le classeur).</p>
+    <p>Dans le corps, les <b>jetons</b> entre accolades (ex. <code>{nom}</code>, <code>{date_jour}</code>) sont remplaces automatiquement a l'impression par les donnees reelles. Les jetons disponibles sont rappeles sous chaque corps. Une retouche ponctuelle reste toujours possible directement sur l'apercu avant impression.</p>
+    <p>Lancer les impressions : <a href="{{ url_for('impressions') }}">Finances &amp; pilotage &rarr; Impressions &amp; editions</a>.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+{% for m in modeles %}
+<div class="panel">
+  <div class="ph"><i class="ti {{ m.icone }} i"></i><h3>{{ m.libelle }}</h3>
+    <span class="saisie-note" style="margin-left:auto">Source : {{ m.source }}{% if not m.tabulaire %} · corps a jetons{% else %} · tableau genere{% endif %}</span>
+  </div>
+  <div class="pb">
+    <form method="post" action="{{ url_for('modeles_enregistrer') }}">
+      <input type="hidden" name="cle" value="{{ m.cle }}">
+      <div class="saisie-grid">
+        <div class="saisie-champ" style="grid-column:1/-1"><label>En-tete</label>
+          <textarea name="En-tete" rows="5" style="font-family:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;width:100%">{{ m.entete }}</textarea></div>
+        <div class="saisie-champ" style="grid-column:1/-1"><label>Titre <span class="oblig">*</span></label>
+          <input type="text" name="Titre" value="{{ m.titre }}" required></div>
+        {% if not m.tabulaire %}
+        <div class="saisie-champ" style="grid-column:1/-1"><label>Corps (avec jetons {…})</label>
+          <textarea name="Corps" rows="9" style="font-family:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;width:100%">{{ m.corps }}</textarea></div>
+        {% else %}
+        <div class="saisie-champ" style="grid-column:1/-1"><label>Texte d'introduction (au-dessus du tableau)</label>
+          <textarea name="Corps" rows="3" style="font-family:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;width:100%">{{ m.corps }}</textarea></div>
+        {% endif %}
+        <div class="saisie-champ" style="grid-column:1/-1"><label>Mentions / pied</label>
+          <textarea name="Mentions / pied" rows="2" style="font-family:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;width:100%">{{ m.mentions }}</textarea></div>
+        <div class="saisie-champ"><label>Libelle signataire</label>
+          <input type="text" name="Libelle signataire" value="{{ m.signataire }}"></div>
+        <div class="saisie-champ"><label>Nombre de copies</label>
+          <input type="number" name="Nb copies" value="{{ m.nb_copies }}" min="1" max="5"></div>
+      </div>
+      {% if m.jetons %}
+      <div class="selecteur">
+        <div class="stitle"><i class="ti ti-braces"></i> Jetons disponibles (remplaces automatiquement) :</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          {% for j in m.jetons %}<code style="background:var(--bleu-pale);padding:2px 7px;border-radius:6px;font-size:12.5px">{{ '{' }}{{ j }}{{ '}' }}</code>{% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <div class="saisie-actions">
+        <button class="btn-action" type="submit"><i class="ti ti-device-floppy"></i> Enregistrer ce modele</button>
+        <span class="saisie-note">Enregistrement dans l'onglet D1_Modeles_docs du classeur.</span>
+      </div>
+    </form>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Releve de notes — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  .rel-id { width: 100%; border-collapse: collapse; margin: 8px 0 4px; font-size: 13px; }
+  .rel-id td { border: 1px solid var(--bord); padding: 5px 8px; }
+  .rel-id .lib { font-weight: 600; background: #f1f5f9; white-space: nowrap; }
+  .rel-sem { text-align: center; color: var(--bleu); font-weight: 700; margin: 12px 0 4px; text-transform: uppercase; }
+  table.rel { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.rel th, table.rel td { border: 1px solid var(--bord); padding: 4px 7px; }
+  table.rel th { background: #dde7f1; text-align: center; }
+  table.rel .ue td { background: #eef3f8; font-weight: 700; }
+  table.rel .mat td.lib { padding-left: 22px; font-weight: 400; }
+  table.rel .c { text-align: center; }
+  table.rel tr.moy td { font-weight: 700; background: #f1f5f9; }
+  .rel-pied { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+  .rel-pied td { border: 1px solid var(--bord); padding: 6px 8px; }
+  .rel-pied .lib { font-weight: 600; background: #f1f5f9; }
+  .rel-note { font-style: italic; color: var(--gris); font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>Releve de notes</b>
+  <span class="aide">Calcul automatique (decret 05-106). La deliberation du jury reste manuelle.</span>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="{{ url_for('impressions') }}">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+
+<div id="zone" contenteditable="true" spellcheck="false">
+  <div class="doc-page">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Unite - Solidarite - Developpement</div>
+        <div class="ss">Universite des Comores — Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Releve de notes</div>
+
+    <table class="rel-id">
+      <tr><td class="lib">Nom et Prenoms</td><td>{{ rel.nom }}</td><td class="lib">Matricule</td><td>{{ rel.matricule }}</td></tr>
+      <tr><td class="lib">Filiere / Niveau</td><td>{{ rel.filiere }} — {{ rel.niveau }}</td><td class="lib">Annee academique</td><td>{{ rel.annee }}</td></tr>
+    </table>
+
+    <div class="rel-sem">Semestre {{ rel.semestre }}</div>
+    <table class="rel">
+      <thead><tr>
+        <th style="text-align:left">Unites d'enseignement / Matieres</th>
+        <th>Moyenne</th><th>Coef</th><th>ECTS</th><th>Validee</th>
+      </tr></thead>
+      <tbody>
+        {% for ue in rel.ues %}
+        <tr class="ue">
+          <td>{{ ue.num }} — {{ ue.intitule }}</td>
+          <td class="c">{{ ue.moyenne if ue.moyenne is not none else '—' }}</td>
+          <td class="c">{{ ue.coef }}</td>
+          <td class="c">{{ ue.ects }}</td>
+          <td class="c">{{ 'Oui' if ue.validee else 'Non' }}</td>
+        </tr>
+        {% for m in ue.matieres %}
+        <tr class="mat"><td class="lib">{{ m.matiere }}</td><td class="c">{{ m.moyenne if m.moyenne is not none else '—' }}</td><td></td><td></td><td></td></tr>
+        {% endfor %}
+        {% endfor %}
+        <tr class="moy"><td>Moyenne du semestre</td><td class="c">{{ rel.moyenne if rel.moyenne is not none else '—' }}</td><td></td><td></td><td class="c">{{ '%g / %g'|format(rel.ects_acquis, rel.ects_total) }}</td></tr>
+      </tbody>
+    </table>
+
+    <table class="rel-pied">
+      <tr><td class="lib">Mention</td><td>{{ rel.mention or '—' }}</td>
+          <td class="lib">Proposition (a confirmer en jury)</td><td>{{ rel.proposition }}</td></tr>
+    </table>
+    {% if rel.bareme_provisoire %}<p class="rel-note">Bareme d'UE provisoire : coefficients/ECTS a confirmer dans le referentiel des maquettes.</p>{% endif %}
+    {% if rel.a_non_dispensee %}<p class="rel-note">Certaines matières prévues n'ont peut-être pas été totalement dispensées ce semestre et ne sont donc pas prises en compte dans la moyenne ; la moyenne est recalculée automatiquement sur les seules matières faites et notées.</p>{% endif %}
+    {% if rel.incomplet %}<p class="rel-note">Relevé incomplet : certaines matières dispensées ne sont pas encore notées ; les moyennes affichées sont provisoires.</p>{% endif %}
+    <p class="rel-note">Document edite le {{ date_jour }}. Calcul indicatif ; seule la deliberation du jury fait foi.</p>
+
+    <div class="doc-signature" style="display:flex;justify-content:space-between;gap:40px;text-align:center">
+      <div style="flex:1"><div class="lib">Le Chef de la Scolarite</div><div class="ligne" style="display:block;width:auto;margin-top:8px"></div></div>
+      <div style="flex:1"><div class="lib">Le Chef de Departement</div><div class="ligne" style="display:block;width:auto;margin-top:8px"></div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

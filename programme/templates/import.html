@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Import CSV national</div>
+<div class="page-head">
+  <i class="ti ti-file-import ic"></i>
+  <div>
+    <h1>Import CSV national</h1>
+    <div class="sub">Collez le fichier national : la zone repere les etudiants NOUVEAU / EXISTANT. La copie vers la fiche etudiants reste manuelle.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Import <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li>Collez le contenu du CSV national. Colonnes attendues dans l'ordre : <b>Matricule, Genre, Nom, Prenom, Date naissance, Lieu naissance, Niveau/Filiere</b>. Separateur tabulation, <code>;</code> ou <code>,</code> (auto-detecte) ; une ligne d'en-tete est ignoree.</li>
+      <li>La colonne <b>Statut vs base</b> compare le matricule a la fiche etudiants : <b>NOUVEAU</b> = absent (a ajouter), <b>EXISTANT</b> = deja present.</li>
+      <li>Recopiez ensuite <b>uniquement les NOUVEAU</b> dans la fiche etudiants (saisie A1). Cette zone ne modifie jamais la fiche etudiants : aucun risque sur les donnees.</li>
+      <li><b>Retour en arriere</b> : un import ou un vidage peut etre annule (restauration de la version precedente) tant que vous n'avez pas relance une autre action.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<style>
+  .imp-card{border:1px solid var(--bord,#D8E2EC);border-radius:12px;padding:16px 18px;background:#fff;margin-bottom:16px}
+  .imp-card h3{margin:0 0 10px;font-size:15px;color:#1F4E79}
+  .imp-card textarea{width:100%;min-height:150px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;padding:10px;font:13px/1.4 monospace;box-sizing:border-box}
+  .imp-actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:none;font:inherit;font-weight:600;cursor:pointer}
+  .btn-primary{background:#1F4E79;color:#fff}
+  .btn-ghost{background:#EEF3F8;color:#1F4E79}
+  .btn-undo{background:#FFF7ED;color:#7A4A12;border:1px solid #F2D9B6}
+  .imp-resume{display:flex;gap:18px;margin:6px 2px 14px;font-size:14px}
+  .imp-pill{display:inline-block;padding:2px 10px;border-radius:11px;font-size:12.5px;font-weight:700}
+  .imp-nouveau{background:#1E7A46;color:#fff}
+  .imp-existant{background:#EAEFF5;color:#5B6B7B}
+  .imp-vide{color:#9AA7B4}
+  .imp-note{color:#5B6B7B;font-size:13px;margin:2px}
+</style>
+
+<div class="imp-card">
+  <h3><i class="ti ti-clipboard-text i"></i> Coller le CSV national</h3>
+  <form method="post" action="{{ url_for('import_importer') }}" onsubmit="return confirm('Importer ce contenu ? Il remplace la zone actuelle (annulable ensuite).');">
+    <textarea name="csv" placeholder="Matricule;Genre;Nom;Prenom;Date naissance;Lieu naissance;Niveau/Filiere&#10;63835;F;ADAWATI;SANDOU;01/01/2004;Bandracouni - Anjouan;L3 Soins infirmiers"></textarea>
+    <div class="imp-actions">
+      <button type="submit" class="btn btn-primary"><i class="ti ti-file-import"></i> Importer dans la zone</button>
+      <form method="post" action="{{ url_for('import_vider') }}" style="display:inline" onsubmit="return confirm('Vider la zone d import ? (annulable)');">
+        <button type="submit" class="btn btn-ghost"><i class="ti ti-eraser"></i> Vider la zone</button>
+      </form>
+      {% if data.undo %}
+      <form method="post" action="{{ url_for('import_annuler') }}" style="display:inline">
+        <button type="submit" class="btn btn-undo"><i class="ti ti-arrow-back-up"></i> Annuler (restaurer la version precedente)</button>
+      </form>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<div class="imp-resume">
+  <span><i class="ti ti-list-numbers i"></i> {{ data.nb }} ligne(s) dans la zone</span>
+  <span><span class="imp-pill imp-nouveau">{{ data.nouveaux }}</span> nouveau(x)</span>
+  <span><span class="imp-pill imp-existant">{{ data.existants }}</span> existant(s)</span>
+</div>
+
+{% if data.lignes %}
+<div class="tbl-wrap">
+  <table class="data">
+    <thead><tr>{% for m in data.entetes %}<th>{{ m.libelle }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for lig in data.lignes %}
+      <tr>
+        {% for m in data.entetes %}
+          {% set v = lig[loop.index0] if loop.index0 < lig|length else '' %}
+          {% if m.libelle == 'Statut vs base' %}
+            <td>{% if v == 'NOUVEAU' %}<span class="imp-pill imp-nouveau">NOUVEAU</span>{% elif v == 'EXISTANT' %}<span class="imp-pill imp-existant">EXISTANT</span>{% else %}<span class="imp-vide">—</span>{% endif %}</td>
+          {% else %}<td>{{ v if v is not none else '' }}</td>{% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="imp-note"><i class="ti ti-info-circle i"></i> Recopiez les lignes <b>NOUVEAU</b> dans la fiche etudiants (menu Etudiants &rsaquo; saisie). Cette zone ne touche pas a la fiche etudiants.</p>
+{% else %}
+<p class="imp-note">La zone d'import est vide. Collez un CSV ci-dessus pour comparer avec la fiche etudiants.</p>
+{% endif %}
+{% endblock %}

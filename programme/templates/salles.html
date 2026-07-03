@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Salles — planning</div>
+<div class="page-head">
+  <i class="ti ti-layout-grid ic"></i>
+  <div>
+    <h1>Salles — planning du jour</h1>
+    <div class="sub">Occupation des salles à une date. Seules les salles réservées ou occupées s'affichent.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Salles <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li>Choisissez une <b>date</b> (le jour même est proposé ; cliquez le calendrier pour une autre date).</li>
+      <li>Le planning affiche les <b>réservations</b> de cette date et les <b>séances de cours</b> du jour ; seules les salles occupées apparaissent.</li>
+      <li>Cliquez l'en-tête d'une salle pour ouvrir sa fiche. Pour réserver, utilisez <b>Réservations de salles</b>.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div style="margin:0 0 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <span style="color:var(--gris);font-size:13px"><i class="ti ti-chart-bar"></i> Requêtes liées :</span>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_vue', vid='salle_occupation') }}"><i class="ti ti-arrow-right"></i> Occupation des salles</a>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('reservations', date=date_fr) }}"><i class="ti ti-calendar-plus"></i> Réserver une salle</a>
+</div>
+
+<div class="cal-toolbar">
+  <form method="get" action="{{ url_for('salles') }}" style="display:flex;gap:8px;align-items:center">
+    <label style="font-weight:600;font-size:13px">Date</label>
+    <input type="date" name="date" value="{{ date_iso }}" onchange="this.form.submit()">
+    {% if demo %}<input type="hidden" name="demo" value="1">{% endif %}
+    <span style="color:var(--gris);font-size:13px">{{ jour }} {{ date_fr }}</span>
+  </form>
+  <div class="cal-demo">
+    {% if demo %}<a class="btn demo-on" href="{{ url_for('salles', date=date_fr) }}"><i class="ti ti-eye-off"></i> Masquer la demonstration</a>
+    {% else %}<a class="btn" href="{{ url_for('salles', date=date_fr, demo=1) }}"><i class="ti ti-eye"></i> Donnees de demonstration</a>{% endif %}
+  </div>
+</div>
+
+{% if demo %}<div class="bandeau-demo"><i class="ti ti-info-circle"></i> Donnees de demonstration (valeurs fictives).</div>{% endif %}
+
+{% if occupation %}
+<div class="panel"><div class="pb">
+  <div class="og" style="--hmin:{{ heure_min }};--hmax:{{ heure_max }};--ncol:{{ occupation|length }}">
+    <div class="og-axe">
+      <div class="og-coin">{{ jour[:3] }}.</div>
+      {% for h in range(heure_min, heure_max+1) %}<div class="og-heure"><span>{{ h }}h</span></div>{% endfor %}
+    </div>
+    {% for o in occupation %}
+    {% set s = o.salle %}
+    <div class="og-col">
+      <div class="og-tete">
+        <a href="{{ url_for('salle_detail', salle_id=s.id or s.nom) }}{% if demo %}?demo=1{% endif %}">
+          <i class="ti ti-door"></i> {{ s.nom or s.id }}
+          <small>{{ s.type }}{% if s.capacite %} · {{ s.capacite }} pl.{% endif %}</small>
+        </a>
+      </div>
+      <div class="og-corps">
+        {% for h in range(heure_min, heure_max+1) %}<div class="og-ligne"></div>{% endfor %}
+        {% for x in o.blocs %}
+          {% if x.deb_min is not none and x.fin_min is not none %}
+          {% set top = (x.deb_min - heure_min*60) * 0.9 %}
+          {% set haut = ((x.fin_min - x.deb_min) * 0.9) %}
+          <a class="bloc type-{{ (x.type or '')|lower }}" href="{{ url_for('salle_detail', salle_id=s.id or s.nom) }}{% if demo %}?demo=1{% endif %}"
+             style="top:{{ top }}px;height:{{ haut if haut>22 else 22 }}px">
+            <b>{{ x.matiere }}</b>
+            <span class="meta">{{ x.debut }}&ndash;{{ x.fin }}</span>
+            <span class="meta">{{ x.groupe }}</span>
+          </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div></div>
+{% else %}
+<div class="panel"><div class="pb">
+  <div class="vide">
+    <i class="ti ti-calendar-off i"></i>
+    Aucune salle réservée ou occupée le {{ jour }} {{ date_fr }}.<br>
+    Créez une réservation via <b>Réservations de salles</b>, ou activez les <b>donnees de demonstration</b>.
+  </div>
+</div></div>
+{% endif %}
+{% endblock %}

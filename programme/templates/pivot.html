@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; <a href="{{ url_for('requetes') }}">Requetes</a> &rsaquo; Tableau croise</div>
+<div class="page-head">
+  <i class="ti ti-layout-grid ic"></i>
+  <div>
+    <h1>Tableau croise (pivot)</h1>
+    <div class="sub">Une dimension en ligne, une (facultative) en colonne, une mesure. Lecture seule.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+<form method="get" action="{{ url_for('requetes_pivot') }}" id="piv">
+<div class="panel">
+  <div class="ph"><i class="ti ti-adjustments i"></i><h3>Parametres</h3></div>
+  <div class="pb">
+    <div class="saisie-grid">
+      <div class="saisie-champ"><label>Table</label>
+        <select name="onglet" onchange="document.getElementById('piv').submit()">
+          {% for t in tables %}<option value="{{ t.onglet }}" {{ 'selected' if t.onglet==onglet else '' }}>{{ t.libelle }}</option>{% endfor %}
+        </select></div>
+      <div class="saisie-champ"><label>Lignes (dimension)</label>
+        <select name="lig"><option value="">—</option>{% for c in cols_all %}<option value="{{ c }}" {{ 'selected' if c==lig else '' }}>{{ c }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Colonnes (facultatif)</label>
+        <select name="col"><option value="">— aucune —</option>{% for c in cols_all %}<option value="{{ c }}" {{ 'selected' if c==col else '' }}>{{ c }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Mesure</label>
+        <select name="mesure"><option value="count" {{ 'selected' if mesure=='count' else '' }}>Nombre de lignes</option><option value="somme" {{ 'selected' if mesure=='somme' else '' }}>Somme</option><option value="moyenne" {{ 'selected' if mesure=='moyenne' else '' }}>Moyenne</option></select></div>
+      <div class="saisie-champ"><label>Colonne a mesurer (Somme/Moyenne)</label>
+        <select name="mes_col"><option value="">—</option>{% for c in cols_all %}<option value="{{ c }}" {{ 'selected' if c==mes_col else '' }}>{{ c }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="saisie-actions">
+      <button class="btn-action" type="submit"><i class="ti ti-table"></i> Calculer</button>
+      {% if res %}<button class="btn-action" type="submit" name="export" value="xlsx" style="background:var(--vert,#2e7d32)"><i class="ti ti-file-spreadsheet"></i> Exporter Excel</button>{% endif %}
+      <span class="saisie-note">Nombre : compte les lignes. Somme/Moyenne : sur la colonne choisie.</span>
+    </div>
+  </div>
+</div>
+</form>
+
+{% if res %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-layout-grid i"></i><h3>{{ res.sous_titre }}</h3></div>
+  <div class="pb">
+    {% if res.lignes %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr>{% for c in res.colonnes %}<th{% if not loop.first %} style="text-align:right"{% endif %}>{{ c }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for lig in res.lignes %}
+          <tr {% if loop.last %}class="" style="font-weight:700;background:#f1f5f9"{% endif %}>{% for v in lig %}<td{% if not loop.first %} style="text-align:right"{% endif %}>{{ v }}</td>{% endfor %}</tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide"><i class="ti ti-database-off i"></i> Aucune donnee.</div>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="panel"><div class="pb"><p style="margin:0;color:var(--gris)"><i class="ti ti-info-circle"></i> Choisissez au moins une dimension en <b>lignes</b>, puis Calculer.</p></div></div>
+{% endif %}
+{% endblock %}

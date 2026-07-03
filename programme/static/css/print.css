@@ -1,0 +1,77 @@
+/* Impressions & editions — V1.18. Rendu ecran + @media print (window.print). */
+:root { --bleu: #1F4E79; --gris: #555; --bord: #333; }
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; background: #e9eef3;
+  font-family: Calibri, "Segoe UI", Arial, sans-serif; color: #111;
+}
+
+/* Barre d'outils (jamais imprimee) */
+.barre {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 18px; background: var(--bleu); color: #fff;
+}
+.barre b { font-size: 15px; }
+.barre .pousse { margin-left: auto; }
+.barre a, .barre button {
+  font: inherit; font-size: 14px; cursor: pointer; border: 0; border-radius: 6px;
+  padding: 9px 16px; text-decoration: none;
+}
+.barre .btn-imp { background: #fff; color: var(--bleu); font-weight: 700; }
+.barre .btn-ret { background: rgba(255,255,255,.18); color: #fff; }
+.barre .aide { color: #d7e3ef; font-size: 13px; }
+
+/* Zone retouchable */
+#zone { padding: 24px 12px 60px; }
+#zone:focus { outline: none; }
+
+/* Une page = un document (ou une copie) */
+.doc-page {
+  background: #fff; width: 210mm; min-height: 290mm; margin: 0 auto 24px;
+  padding: 18mm 16mm; box-shadow: 0 2px 10px rgba(0,0,0,.18);
+}
+.doc-entete { display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--bleu); padding-bottom: 8px; }
+.doc-entete img { height: 72px; width: auto; }
+.entete-lignes { text-align: center; flex: 1; line-height: 1.35; }
+.entete-lignes div:first-child { font-weight: 700; letter-spacing: .5px; }
+.entete-lignes .ss { font-style: italic; color: var(--gris); }
+.doc-titre {
+  text-align: center; color: var(--bleu); font-size: 19px; font-weight: 700;
+  text-transform: uppercase; margin: 22px 0 8px; letter-spacing: .5px;
+}
+.doc-titre .meta { display: block; font-size: 13px; font-weight: 400; color: var(--gris); text-transform: none; letter-spacing: 0; margin-top: 3px; }
+.doc-corps { font-size: 14.5px; line-height: 1.6; margin-top: 14px; }
+.doc-corps p { margin: 0 0 10px; }
+.doc-mentions { margin-top: 16px; font-size: 12.5px; font-style: italic; color: var(--gris); }
+.doc-signature { margin-top: 38px; text-align: right; }
+.doc-signature .lib { font-weight: 600; }
+.doc-signature .ligne { display: inline-block; width: 220px; border-bottom: 1px dotted #333; height: 46px; }
+
+/* Tableaux (liste, recap, presence) */
+table.imp { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12.5px; }
+table.imp th, table.imp td { border: 1px solid var(--bord); padding: 5px 7px; text-align: left; }
+table.imp th { background: #dde7f1; font-weight: 700; }
+table.imp tr.total td { font-weight: 700; background: #f1f5f9; }
+table.imp.grille td { height: 26px; }
+table.imp .num { width: 38px; text-align: center; }
+table.imp .sig { width: 30%; }
+.contexte { font-size: 13px; margin: 4px 0 0; }
+.contexte b { color: var(--bleu); }
+
+@page { size: A4; margin: 12mm; }
+@media print {
+  html, body { background: #fff; }
+  .barre { display: none !important; }
+  #zone { padding: 0; }
+  .doc-page { box-shadow: none; margin: 0; width: auto; min-height: auto; padding: 0; page-break-after: always; }
+  .doc-page:last-child { page-break-after: auto; }
+}
+
+/* V1.46 — orientation paysage (feuille de presence de la semaine) */
+.doc-page.paysage { width: 297mm; }
+@media print { .doc-page.paysage { width: auto; } }
+table.imp.presence-sem { font-size: 10px; }
+table.imp.presence-sem th, table.imp.presence-sem td { padding: 3px 4px; }
+table.imp.presence-sem th.cr { width: 16px; padding: 2px; text-align: center; font-weight: 600; }
+table.imp.presence-sem td.cr { width: 16px; height: 22px; }

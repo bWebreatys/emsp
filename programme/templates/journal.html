@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; <a href="{{ url_for('autorisations') }}">Autorisations</a> &rsaquo; Journal d'audit</div>
+<div class="page-head">
+  <i class="ti ti-history ic"></i>
+  <div>
+    <h1>Journal d'audit</h1>
+    <div class="sub">Trace locale des actions (qui a fait quoi, quand). Aucun mot de passe n'y figure. Fichier local, hors depot.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+<form method="get" action="{{ url_for('journal_audit') }}">
+<div class="panel">
+  <div class="ph"><i class="ti ti-filter i"></i><h3>Filtres</h3></div>
+  <div class="pb">
+    <div class="saisie-grid">
+      <div class="saisie-champ"><label>Utilisateur</label><input type="text" name="login" value="{{ f_login }}"></div>
+      <div class="saisie-champ"><label>Action contient</label><input type="text" name="action" value="{{ f_action }}"></div>
+      <div class="saisie-champ" style="justify-content:end"><button class="btn-action" type="submit"><i class="ti ti-search"></i> Filtrer</button></div>
+    </div>
+  </div>
+</div>
+</form>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-list i"></i><h3>{{ entrees|length }} entree(s) — les plus recentes d'abord</h3></div>
+  <div class="pb">
+    {% if entrees %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr><th>Horodatage</th><th>Utilisateur</th><th>Action</th><th>Cible</th><th>Detail</th></tr></thead>
+        <tbody>
+          {% for e in entrees %}
+          <tr><td>{{ e.Horodatage }}</td><td>{{ e.Utilisateur }}</td><td>{{ e.Action }}</td><td>{{ e.Cible }}</td><td>{{ e.Detail }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide"><i class="ti ti-database-off i"></i> Aucune entree (ou aucun resultat pour ces filtres).</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

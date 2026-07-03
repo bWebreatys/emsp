@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} &mdash; {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  .doc-page.paysage { width: 297mm; }
+  table.imp td.r, table.imp th.r { text-align: right; }
+  h2.sect { font-size: 14px; color: var(--bleu); margin: 16px 0 4px; }
+  .crit { font-size: 12px; color: var(--gris); margin: 6px 0 0; }
+  .synth { display:flex; gap:18px; flex-wrap:wrap; margin-top:8px; font-size:13px; }
+  .synth b { color: var(--bleu); }
+</style>
+</head>
+<body>
+<div class="barre">
+  <b>{{ titre_page }}</b>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="javascript:history.back()">Retour</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+<div id="zone">
+  <div class="doc-page paysage">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div class="ss">Universite des Comores &mdash; Ecole de Medecine et de Sante Publique</div>
+      </div>
+    </div>
+
+    <div class="doc-titre">Affectations de stage
+      <span class="meta">Edite le {{ date_jour }}</span>
+    </div>
+
+    {% set f = filtres %}
+    {% if f.lieu or f.seance or f.niveau or f.filiere or f.nom %}
+    <p class="crit">Criteres :
+      {% if f.seance %}seance {{ f.seance }}{% endif %}
+      {% if f.lieu %} &middot; lieu {{ f.lieu }}{% endif %}
+      {% if f.niveau %} &middot; niveau {{ f.niveau }}{% endif %}
+      {% if f.filiere %} &middot; filiere {{ f.filiere }}{% endif %}
+      {% if f.nom %} &middot; nom « {{ f.nom }} »{% endif %}
+    </p>
+    {% endif %}
+
+    <div class="synth">
+      <div>Etudiants affectes : <b>{{ tdb.etudiants }}</b></div>
+      <div>Lieux : <b>{{ tdb.lieux }}</b></div>
+      <div>Places disponibles : <b>{{ tdb.places_dispo }}</b></div>
+      <div>Taux d'occupation global : <b>{{ tdb.taux_global }} %</b></div>
+    </div>
+
+    <h2 class="sect">Affectations ({{ affectations|length }})</h2>
+    {% if affectations %}
+    <table class="imp">
+      <thead><tr><th>Seance</th><th>Matricule</th><th>Nom</th><th>Prenom</th><th>Filiere</th><th>Niveau</th><th>Lieu</th><th>Debut</th><th>Fin</th><th>Retour</th><th class="r">Note</th><th class="r">Heures abs.</th></tr></thead>
+      <tbody>
+      {% for a in affectations %}
+        <tr><td>{{ a.seance }}</td><td>{{ a.matricule }}</td><td>{{ a.nom }}</td><td>{{ a.prenom }}</td>
+            <td>{{ a.filiere }}</td><td>{{ a.niveau }}</td><td>{{ a.lieu }}</td>
+            <td>{{ a.debut }}</td><td>{{ a.fin }}</td><td>{{ a.retour }}</td><td class="r">{{ a.note }}</td><td class="r">{{ a.heures_abs or '' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p style="font-size:13px;color:var(--gris)">Aucune affectation pour ces criteres.</p>{% endif %}
+
+    {% if tdb.lieux_detail %}
+    <h2 class="sect">Occupation par lieu</h2>
+    <table class="imp">
+      <thead><tr><th>Lieu</th><th>Niveau</th><th>Periode</th><th class="r">Quota</th><th class="r">Occupe</th><th class="r">Disponible</th><th class="r">Taux</th></tr></thead>
+      <tbody>
+      {% for l in tdb.lieux_detail %}
+        <tr><td>{{ l.lib }}</td><td>{{ l.niveau }}</td><td>{{ l.periode }}</td>
+            <td class="r">{{ l.quota }}</td><td class="r">{{ l.occupe }}</td><td class="r">{{ l.dispo }}</td><td class="r">{{ l.taux }} %</td></tr>
+      {% endfor %}
+      </tbody>
+      <tfoot><tr class="total"><td colspan="3">Total</td><td class="r">{{ tdb.quota_total }}</td><td class="r">{{ tdb.occupe_total }}</td><td class="r">{{ tdb.places_dispo }}</td><td class="r">{{ tdb.taux_global }} %</td></tr></tfoot>
+    </table>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>

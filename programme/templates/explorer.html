@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; <a href="{{ url_for('requetes') }}">Requetes</a> &rsaquo; Explorateur</div>
+<div class="page-head">
+  <i class="ti ti-table-options ic"></i>
+  <div>
+    <h1>Explorateur — {{ res.libelle }}</h1>
+    <div class="sub">Filtres multicriteres, tri et choix des colonnes. Lecture seule.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+<form method="get" action="{{ url_for('requetes_explorer') }}" id="exp">
+<div class="panel">
+  <div class="ph"><i class="ti ti-filter i"></i><h3>Criteres</h3></div>
+  <div class="pb">
+    <div class="saisie-grid">
+      <div class="saisie-champ"><label>Table</label>
+        <select name="onglet" onchange="document.getElementById('exp').submit()">
+          {% for t in tables %}<option value="{{ t.onglet }}" {{ 'selected' if t.onglet==onglet else '' }}>{{ t.libelle }}</option>{% endfor %}
+        </select></div>
+      <div class="saisie-champ"><label>Trier par</label>
+        <select name="tri_col"><option value="">—</option>{% for c in res.cols_all %}<option value="{{ c }}" {{ 'selected' if c==tri_col else '' }}>{{ c }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Sens</label>
+        <select name="tri_sens"><option value="asc" {{ 'selected' if tri_sens=='asc' else '' }}>Croissant</option><option value="desc" {{ 'selected' if tri_sens=='desc' else '' }}>Decroissant</option></select></div>
+    </div>
+
+    <p style="margin:14px 0 6px;font-weight:600;color:var(--bleu)">Filtres (cumulatifs)</p>
+    {% for i in range(3) %}
+    {% set f = filtres[i] if i < filtres|length else None %}
+    <div class="pres-select" style="margin-bottom:8px">
+      <div class="saisie-champ"><label>Colonne</label>
+        <select name="f{{ i }}_col"><option value="">—</option>{% for c in res.cols_all %}<option value="{{ c }}" {{ 'selected' if f and f.col==c else '' }}>{{ c }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Operateur</label>
+        <select name="f{{ i }}_op">{% for op in operateurs %}<option value="{{ op }}" {{ 'selected' if f and f.op==op else '' }}>{{ op }}</option>{% endfor %}</select></div>
+      <div class="saisie-champ"><label>Valeur</label>
+        <input type="text" name="f{{ i }}_val" value="{{ f.val if f else '' }}"></div>
+    </div>
+    {% endfor %}
+
+    <details style="margin-top:8px">
+      <summary style="cursor:pointer;color:var(--bleu);font-weight:600">Colonnes a afficher ({{ res.colonnes|length }}/{{ res.cols_all|length }})</summary>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
+        {% for c in res.cols_all %}
+        <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px">
+          <input type="checkbox" name="col" value="{{ c }}" {{ 'checked' if (not colonnes_sel or c in colonnes_sel) else '' }}> {{ c }}
+        </label>
+        {% endfor %}
+      </div>
+    </details>
+
+    <div class="saisie-actions">
+      <button class="btn-action" type="submit"><i class="ti ti-search"></i> Filtrer</button>
+      <button class="btn-action" type="submit" name="export" value="xlsx" style="background:var(--vert,#2e7d32)"><i class="ti ti-file-spreadsheet"></i> Exporter Excel</button>
+      <span class="saisie-note">{{ res.nb }} ligne(s)</span>
+    </div>
+  </div>
+</div>
+</form>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-table i"></i><h3>Resultat &mdash; {{ res.nb }} ligne(s)</h3></div>
+  <div class="pb">
+    {% if res.lignes %}
+    <div class="tbl-wrap">
+      <table class="data">
+        <thead><tr>{% for c in res.colonnes %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+        <tbody>{% for lig in res.lignes %}<tr>{% for v in lig %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="vide"><i class="ti ti-database-off i"></i> Aucune ligne ne correspond aux criteres.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

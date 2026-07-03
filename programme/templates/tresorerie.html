@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Tresorerie &rsaquo; Saisie en grille</div>
+<div class="page-head">
+  <i class="ti ti-table-options ic"></i>
+  <div>
+    <h1>Tresorerie — saisie en grille</h1>
+    <div class="sub">Registre facon papier : un compte, plusieurs lignes, solde en direct, un seul enregistrement.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Saisie en grille <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <p>Choisissez le <b>compte / caisse</b> : le <b>solde d'ouverture</b> affiche est son solde courant. Saisissez ensuite vos lignes : utilisez <b>Tab</b> pour passer de cellule en cellule. Pour chaque ligne, renseignez le montant dans <b>Recette</b> <i>ou</i> <b>Depense</b> (pas les deux) ; le <b>Solde</b> a droite se recalcule en direct. Bouton <b>Ajouter des lignes</b> si besoin de place. Un seul <b>Enregistrer tout</b> ecrit l'ensemble dans la tresorerie.</p>
+    <p>Les lignes vides sont ignorees. En cas d'erreur sur une ligne, <b>rien n'est enregistre</b> et votre saisie est conservee pour correction. Acces reserve : Comptabilite et Direction.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+{% if erreurs %}
+<div class="flash flash-err" style="flex-direction:column;align-items:flex-start;gap:4px">
+  <div><i class="ti ti-alert-circle"></i> <b>Corrigez les lignes suivantes :</b></div>
+  {% for e in erreurs %}<div style="margin-left:24px">&bull; {{ e }}</div>{% endfor %}
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-wallet i"></i><h3>Compte / caisse</h3></div>
+  <div class="pb">
+    {% if comptes %}
+    <form method="get" action="{{ url_for('tresorerie') }}" class="pres-select">
+      <div class="saisie-champ"><label>Compte / caisse</label>
+        <select name="compte" onchange="this.form.submit()">
+          {% for c in comptes %}<option value="{{ c.nom }}" {{ 'selected' if c.nom==compte else '' }}>{{ c.nom }}</option>{% endfor %}
+        </select></div>
+      <div class="saisie-champ"><label>Lignes affichees</label>
+        <input type="number" name="lignes" value="{{ nb_lignes }}" min="1" max="100"></div>
+      <noscript><button class="btn-action" type="submit">Afficher</button></noscript>
+      <div class="pres-meta" style="margin:0">
+        <span><i class="ti ti-cash"></i> Solde d'ouverture : <b id="solde-ouverture" data-val="{{ solde_ouverture }}">{{ "{:,.0f}".format(solde_ouverture).replace(',',' ') }} KMF</b></span>
+      </div>
+    </form>
+    {% else %}
+    <p style="margin:0;color:var(--gris)"><i class="ti ti-info-circle"></i> Aucun compte/caisse parametre. Renseignez d'abord la liste <code>Comptes_caisses</code> dans <a href="{{ url_for('module', onglet='P0_Parametres') }}">Parametres</a>.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if comptes %}
+<form method="post" action="{{ url_for('tresorerie_enregistrer') }}" id="grille-form">
+<input type="hidden" name="compte" value="{{ compte }}">
+<div class="panel">
+  <div class="ph"><i class="ti ti-table i"></i><h3>Registre — {{ compte }}</h3>
+    <span class="saisie-note" style="margin-left:auto">Solde courant : <b id="solde-courant"></b></span>
+  </div>
+  <div class="pb">
+    <div class="tbl-wrap">
+      <table class="data treso">
+        <thead><tr>
+          <th class="num">N</th>
+          {% for col in colonnes %}<th>{{ col.libelle }}{% if col.obligatoire %} <span class="oblig">*</span>{% endif %}</th>{% endfor %}
+          <th>Solde</th>
+        </tr></thead>
+        <tbody id="grille-corps">
+          {% set rows = rows_pref if rows_pref else range(nb_lignes) %}
+          {% for row in rows %}
+          <tr>
+            <td class="num">{{ loop.index }}</td>
+            {% for col in colonnes %}
+              {% set val = (row[col.libelle] if rows_pref else '') %}
+              {% set role = ('recette' if 'Recette' in col.libelle else ('depense' if 'Depense' in col.libelle else '')) %}
+              <td>
+                {% if col.options %}
+                  <select name="c{{ loop.index0 }}[]">
+                    <option value=""></option>
+                    {% for o in col.options %}<option value="{{ o.value }}" {{ 'selected' if o.value==val else '' }}>{{ o.label }}</option>{% endfor %}
+                  </select>
+                {% elif col.type == 'number' %}
+                  <input type="number" step="1" min="0" name="c{{ loop.index0 }}[]" value="{{ val }}" {% if role %}data-role="{{ role }}" oninput="recalc()"{% endif %}>
+                {% else %}
+                  <input type="text" name="c{{ loop.index0 }}[]" value="{{ val }}" {% if col.type=='date_fr' %}placeholder="JJ/MM/AAAA"{% endif %}>
+                {% endif %}
+              </td>
+            {% endfor %}
+            <td class="solde-cell" style="text-align:right;font-variant-numeric:tabular-nums"></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="saisie-actions">
+      <button class="btn-action" type="submit"><i class="ti ti-device-floppy"></i> Enregistrer tout</button>
+      <button class="mini" type="button" onclick="ajouterLignes(5)"><i class="ti ti-plus"></i> Ajouter 5 lignes</button>
+      <span class="saisie-note">Lignes vides ignorees. Recette <b>ou</b> Depense par ligne.</span>
+    </div>
+  </div>
+</div>
+</form>
+
+<template id="ligne-modele">
+  <tr>
+    <td class="num"></td>
+    {% for col in colonnes %}
+      {% set role = ('recette' if 'Recette' in col.libelle else ('depense' if 'Depense' in col.libelle else '')) %}
+      <td>
+        {% if col.options %}
+          <select name="c{{ loop.index0 }}[]"><option value=""></option>{% for o in col.options %}<option value="{{ o.value }}">{{ o.label }}</option>{% endfor %}</select>
+        {% elif col.type == 'number' %}
+          <input type="number" step="1" min="0" name="c{{ loop.index0 }}[]" {% if role %}data-role="{{ role }}" oninput="recalc()"{% endif %}>
+        {% else %}
+          <input type="text" name="c{{ loop.index0 }}[]" {% if col.type=='date_fr' %}placeholder="JJ/MM/AAAA"{% endif %}>
+        {% endif %}
+      </td>
+    {% endfor %}
+    <td class="solde-cell" style="text-align:right;font-variant-numeric:tabular-nums"></td>
+  </tr>
+</template>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<style>
+table.treso th, table.treso td { padding: 3px 5px; }
+table.treso input, table.treso select { width: 100%; min-width: 90px; padding: 5px 6px; border: 1px solid var(--bord); border-radius: 6px; font: inherit; font-size: 13px; }
+table.treso input[type=number] { min-width: 96px; text-align: right; }
+table.treso .num { width: 34px; text-align: center; color: var(--gris); }
+table.treso .solde-cell { font-weight: 600; min-width: 110px; }
+</style>
+<script>
+function fmt(n){ return (Math.round(n)).toLocaleString('fr-FR').replace(/\u00A0/g,' ') + ' KMF'; }
+function recalc(){
+  var ouv = parseFloat((document.getElementById('solde-ouverture')||{}).dataset?.val || '0') || 0;
+  var run = ouv;
+  document.querySelectorAll('#grille-corps tr').forEach(function(tr){
+    var rec = parseFloat((tr.querySelector('[data-role=recette]')||{}).value || '0') || 0;
+    var dep = parseFloat((tr.querySelector('[data-role=depense]')||{}).value || '0') || 0;
+    run += rec - dep;
+    var cell = tr.querySelector('.solde-cell');
+    var vide = !(tr.querySelector('[data-role=recette]')||{}).value && !(tr.querySelector('[data-role=depense]')||{}).value;
+    if (cell) cell.textContent = vide ? '' : fmt(run);
+  });
+  var sc = document.getElementById('solde-courant');
+  if (sc) sc.textContent = fmt(run);
+  renumeroter();
+}
+function renumeroter(){
+  document.querySelectorAll('#grille-corps tr').forEach(function(tr, i){
+    var n = tr.querySelector('td.num'); if (n) n.textContent = (i + 1);
+  });
+}
+function ajouterLignes(k){
+  var tpl = document.getElementById('ligne-modele');
+  var corps = document.getElementById('grille-corps');
+  for (var i = 0; i < k; i++){ corps.appendChild(tpl.content.cloneNode(true)); }
+  // rebrancher le recalcul sur les nouveaux champs montant
+  document.querySelectorAll('#grille-corps [data-role]').forEach(function(el){ el.oninput = recalc; });
+  recalc();
+}
+document.addEventListener('DOMContentLoaded', recalc);
+</script>
+{% endblock %}

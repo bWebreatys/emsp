@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Releve / bulletin</div>
+{% endblock %}
+
+{% macro bloc(rel) %}
+<div class="releve-bloc">
+  <div class="releve-entete">
+    <div><b>{{ rel.nom or '(etudiant inconnu)' }}</b> &middot; Matricule {{ rel.matricule }}</div>
+    <div>{{ rel.filiere }} {{ rel.niveau }} &middot; Annee {{ rel.annee }} &middot; Semestre {{ rel.semestre }}</div>
+  </div>
+  {% if rel.bareme_provisoire %}
+  <div class="bareme-provisoire">
+    <i class="ti ti-alert-triangle"></i>
+    <span><b>Barème provisoire</b> — les coefficients de ce barème sont à 1 par défaut. Ils doivent être
+    corrigés d'après le document de référence officiel pour que les moyennes et la proposition soient
+    conformes aux exigences de passage. Les valeurs ci-dessous sont indicatives.</span>
+  </div>
+  {% endif %}
+  <div class="tbl-wrap">
+    <table class="data">
+      <thead><tr><th>UE / Matiere</th><th>Moyenne</th><th>Coef</th><th>ECTS</th><th>Validee</th></tr></thead>
+      <tbody>
+        {% for ue in rel.ues %}
+        <tr class="ue-ligne">
+          <td><b>{{ ue.num }} &mdash; {{ ue.intitule }}</b></td>
+          <td><b>{{ '%.2f'|format(ue.moyenne) if ue.moyenne is not none else '—' }}</b></td>
+          <td>{{ '%g'|format(ue.coef) }}</td>
+          <td>{{ ue.ects|int }}</td>
+          <td>{{ 'Oui' if ue.validee else ('Non' if ue.moyenne is not none else '—') }}</td>
+        </tr>
+        {% for m in ue.matieres %}
+        <tr class="mat-ligne"><td>&nbsp;&nbsp;&nbsp;{{ m.matiere }}{% if m.coefm is defined and m.coefm != 1 %} <span style="color:var(--gris);font-size:11.5px">(coef {{ '%g'|format(m.coefm) }})</span>{% endif %}</td>
+          <td>{{ '%.2f'|format(m.moyenne) if m.moyenne is not none else '—' }}</td>
+          <td></td><td></td><td></td></tr>
+        {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="releve-synthese">
+    <div>Moyenne du semestre : <b>{{ '%.2f'|format(rel.moyenne) if rel.moyenne is not none else '—' }}</b></div>
+    <div>Mention : <b>{{ rel.mention or '—' }}</b></div>
+    <div>Proposition (a valider) : <b>{{ rel.proposition }}</b>{% if rel.signalements %} <span class="signal-flag no-print">&mdash; {{ rel.signalements|length }} signalement(s) à examiner</span>{% endif %}</div>
+    <div>ECTS acquis : <b>{{ rel.ects_acquis|int }} / {{ rel.ects_total|int }}</b></div>
+  </div>
+  {% if rel.signalements %}
+  <div class="signal-encart no-print">
+    <div class="signal-titre"><i class="ti ti-alert-triangle"></i> Signalements à examiner en délibération ({{ rel.signalements|length }})</div>
+    <div class="signal-note">Information de délibération — ne figure pas sur le bulletin officiel et n'affecte ni le calcul des moyennes ni la proposition.</div>
+    <table class="data signal-table">
+      <thead><tr><th>Date</th><th>Contexte</th><th>Fonction</th><th>Émetteur</th><th>Motif</th></tr></thead>
+      <tbody>
+        {% for s in rel.signalements %}
+        <tr><td>{{ s.date }}</td><td>{{ s.contexte }}</td><td>{{ s.fonction }}</td><td>{{ s.nom }}</td><td>{{ s.motif }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% block contenu %}
+<div class="panel no-print">
+  <div class="ph"><i class="ti ti-file-certificate i"></i><h3>Relevé / bulletin</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('releve') }}" class="releve-form">
+      <label>Matricule
+        <input type="text" name="matricule" value="{{ matricule }}" list="dl_etudiants"
+               placeholder="taper ou choisir…" autocomplete="off" required>
+      </label>
+      <datalist id="dl_etudiants">
+        {% for e in etudiants %}<option value="{{ e.libelle }}"></option>{% endfor %}
+      </datalist>
+      <label>Annee academique
+        <select name="annee" required>
+          <option value="">— choisir —</option>
+          {% for a in opt_annees %}
+          <option value="{{ a }}" {{ 'selected' if annee==a else '' }}>{{ a }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Periode
+        <select name="semestre">
+          <option value="">Annee complete (recapitulatif)</option>
+          {% for s in ['1','2','3','4','5','6'] %}
+          <option value="{{ s }}" {{ 'selected' if semestre==s else '' }}>Semestre {{ s }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button type="submit" class="btn-action"><i class="ti ti-search"></i> Afficher</button>
+    </form>
+    <p class="saisie-note">Le calcul s'appuie sur le barème (onglet Barème des UE). Les moyennes, la mention et la proposition sont calculées ; la décision finale reste validée à la main.</p>
+  </div>
+</div>
+
+{% if rel %}
+<div class="panel releve-doc">
+  <div class="ph no-print"><i class="ti ti-file-certificate i"></i><h3>Relevé du semestre {{ rel.semestre }}</h3>
+    <span class="releve-actions">
+      <a class="btn-action" target="_blank" href="{{ url_for('impr_bulletin', matricule=rel.matricule, annee=rel.annee, semestre=rel.semestre) }}"><i class="ti ti-printer"></i> Imprimer</a>
+      <a class="btn-action" href="{{ url_for('releve_export', matricule=rel.matricule, annee=rel.annee, semestre=rel.semestre) }}"><i class="ti ti-file-spreadsheet"></i> Exporter (Excel)</a>
+    </span>
+  </div>
+  <div class="pb">
+    <div class="releve-titre-print">UNIVERSITE DES COMORES &middot; EMSP &mdash; Releve de notes</div>
+    {{ bloc(rel) }}
+  </div>
+</div>
+{% elif annuel %}
+<div class="panel releve-doc">
+  <div class="ph no-print"><i class="ti ti-file-certificate i"></i><h3>Récapitulatif annuel {{ annuel.annee }}</h3>
+    <span class="releve-actions">
+      <a class="btn-action" target="_blank" href="{{ url_for('impr_bulletin', matricule=annuel.matricule, annee=annuel.annee) }}"><i class="ti ti-printer"></i> Imprimer</a>
+      <a class="btn-action" href="{{ url_for('releve_export', matricule=annuel.matricule, annee=annuel.annee) }}"><i class="ti ti-file-spreadsheet"></i> Exporter (Excel)</a>
+    </span>
+  </div>
+  <div class="pb">
+    <div class="releve-titre-print">UNIVERSITE DES COMORES &middot; EMSP &mdash; Releve de notes (annuel)</div>
+    <div class="releve-entete"><div><b>{{ annuel.nom or '(etudiant inconnu)' }}</b> &middot; Matricule {{ annuel.matricule }} &middot; {{ annuel.filiere }} {{ annuel.niveau }} &middot; Annee {{ annuel.annee }}</div></div>
+    {% for r in annuel.semestres %}{{ bloc(r) }}{% endfor %}
+    <div class="releve-synthese releve-annuelle">
+      <div>MOYENNE ANNUELLE : <b>{{ '%.2f'|format(annuel.moyenne) if annuel.moyenne is not none else '—' }}</b></div>
+      <div>Mention : <b>{{ annuel.mention or '—' }}</b></div>
+      <div>Proposition (a valider) : <b>{{ annuel.proposition }}</b></div>
+      {% if annuel.bareme_provisoire %}<div class="bareme-provisoire-inline"><i class="ti ti-alert-triangle"></i> Barème provisoire (coefficients à 1 par défaut) : moyenne annuelle indicative, à confirmer après saisie des coefficients officiels.</div>{% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

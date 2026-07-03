@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> Saisie façon bulletin</div>
+{% endblock %}
+
+{% block contenu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-user-search i"></i><h3>Étudiant &amp; contexte</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('bulletin') }}" id="form-sel" autocomplete="off">
+      <div style="display:flex;gap:12px 16px;align-items:flex-end;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Matricule</label>
+          <input type="text" id="rech" name="matricule" list="dl-etu" value="{{ matricule }}"
+                 placeholder="ex. 74180" autofocus
+                 style="width:calc(20ch + 18px);padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+          <datalist id="dl-etu">{% for e in etudiants %}<option value="{{ e.label }}"></option>{% endfor %}</datalist>
+        </div>
+        {% if fiche %}
+        <div style="flex:1 1 200px;padding-bottom:7px;font-size:14px">
+          <b>{{ fiche.nom_complet or '(sans nom)' }}</b>
+          <span style="color:var(--gris)"> · {{ fiche.Filiere }} {{ fiche.Niveau }}</span>
+        </div>
+        {% endif %}
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Année</label>
+          <input name="annee" value="{{ annee }}" placeholder="2025-2026"
+                 style="width:13ch;padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Semestre</label>
+          <select name="semestre" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:8ch">
+            {% if not semestres %}<option value="">—</option>{% endif %}
+            {% for s in semestres %}<option value="{{ s }}" {{ 'selected' if s==semestre else '' }}>{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-weight:600;font-size:13px">Session</label>
+          <select name="session" style="padding:7px 9px;border:1px solid var(--bord);border-radius:8px;font-family:inherit;font-size:14px;width:7ch">
+            <option value="1" {{ 'selected' if session=='1' else '' }}>1</option>
+            <option value="2" {{ 'selected' if session=='2' else '' }}>2</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-table"></i> Afficher le bulletin</button>
+      </div>
+    </form>
+    {% if introuvable %}
+    <p style="margin-top:12px;color:var(--rouge)"><i class="ti ti-alert-triangle"></i> Aucun étudiant avec le matricule « {{ matricule }} ».</p>
+    {% endif %}
+  </div>
+</div>
+
+{% if grille and grille.ok %}
+<form method="post" action="{{ url_for('bulletin_enregistrer') }}" id="form-bul">
+  <input type="hidden" name="matricule" value="{{ grille.matricule }}">
+  <input type="hidden" name="annee" value="{{ grille.annee }}">
+  <input type="hidden" name="semestre" value="{{ grille.semestre }}">
+  <input type="hidden" name="session" value="{{ grille.session }}">
+  <input type="hidden" name="meta" id="meta">
+
+  <div class="panel">
+    <div class="ph">
+      <i class="ti ti-clipboard-text i"></i><h3>Bulletin — semestre {{ grille.semestre }}, session {{ grille.session }}</h3>
+      {% if grille.provisoire %}<span style="margin-left:auto;font-size:12px;color:#9a6a00;background:#FFF6E5;border:1px solid #E8C988;border-radius:7px;padding:2px 9px"><i class="ti ti-alert-triangle"></i> Barème provisoire (coef à confirmer)</span>{% endif %}
+    </div>
+    <div class="pb" style="padding-top:8px">
+      <p style="margin:0 0 10px;color:var(--gris);font-size:13px">Moyenne matière = ¼ CC + ¾ examen. CC en gris = dérivé des contrôles continus (N4), non modifiable ici. Une note vide n'est pas enregistrée.</p>
+      <div class="tbl-wrap">
+        <table class="data" id="tbl-bul">
+          <thead><tr><th style="text-align:left">UE / Matière</th><th style="width:92px;text-align:center">CC /20</th><th style="width:98px;text-align:center">Examen /20</th><th style="width:92px;text-align:center">Moyenne</th></tr></thead>
+          <tbody>
+          {% for ue in grille.ues %}
+            <tr class="ue-row" data-ue="{{ ue.num }}" data-coef="{{ ue.coef }}" data-ects="{{ ue.ects }}" style="background:var(--bleu-pale)">
+              <td style="font-weight:700;color:var(--bleu)">{{ ue.num }} · {{ ue.intitule }}
+                <span style="font-weight:400;color:var(--gris)">(Coef {{ ue.coef }} · {{ ue.ects }} ECTS)</span></td>
+              <td></td><td></td>
+              <td class="ue-moy" style="text-align:center;font-weight:700;color:var(--bleu)">—</td>
+            </tr>
+            {% for m in ue.matieres %}
+            <tr class="mat-row" data-idx="{{ m.idx }}" data-ue="{{ ue.num }}" data-mat="{{ m.matiere }}" data-ro="{{ 1 if m.cc_readonly else 0 }}" data-coefm="{{ m.coefm }}">
+              <td style="padding-left:22px">{{ m.matiere }}
+                {% if m.coefm != 1 %}<span style="font-size:11.5px;color:var(--gris)"> (coef {{ '%g'|format(m.coefm) }})</span>{% endif %}
+                {% if m.ref %}<div style="font-size:11.5px;color:var(--gris)">Session 1 — CC {{ m.ref.cc or '—' }} · Ex {{ m.ref.examen or '—' }} · Moy {{ m.ref.moyenne if m.ref.moyenne is not none else '—' }}</div>{% endif %}
+              </td>
+              <td style="text-align:center">
+                {% if m.cc_readonly %}
+                  <span class="cc-ro" data-cc="{{ m.cc }}" title="dérivé des contrôles N4 (lecture seule)"
+                        style="display:inline-block;min-width:48px;background:#EFEFEF;border:1px solid #DADADA;border-radius:7px;padding:3px 6px;color:#555">{{ m.cc }}</span>
+                {% else %}
+                  <input class="cc-in note" name="cc_{{ m.idx }}" value="{{ m.cc }}" inputmode="decimal"
+                         style="width:62px;text-align:center;padding:4px;border:1px solid var(--bord);border-radius:7px;font-family:inherit">
+                {% endif %}
+              </td>
+              <td style="text-align:center">
+                <input class="ex-in note" name="examen_{{ m.idx }}" value="{{ m.examen }}" inputmode="decimal"
+                       style="width:62px;text-align:center;padding:4px;border:1px solid var(--bord);border-radius:7px;font-family:inherit">
+              </td>
+              <td class="mat-moy" style="text-align:center;color:var(--bleu)">—</td>
+            </tr>
+            {% endfor %}
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid var(--bord);padding-top:12px;display:flex;align-items:center;flex-wrap:wrap;gap:18px">
+        <div style="font-size:14px"><span style="color:var(--gris)">Moyenne semestre :</span> <b id="moy-sem" style="color:var(--bleu);font-size:18px">—</b></div>
+        <div style="font-size:13.5px"><span style="color:var(--gris)">Mention :</span> <b id="mention">—</b></div>
+        <div style="font-size:13.5px"><span style="color:var(--gris)">Proposition :</span> <b id="proposition">—</b> <span style="color:var(--gris)">(indicatif)</span></div>
+        <div style="font-size:13.5px"><span style="color:var(--gris)">ECTS :</span> <b id="ects">—</b></div>
+        <div style="margin-left:auto;display:flex;gap:10px">
+          <a class="btn" href="{{ url_for('releve', matricule=grille.matricule, annee=grille.annee, semestre=grille.semestre) }}"><i class="ti ti-file-certificate"></i> Relevé imprimable</a>
+          <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-device-floppy"></i> Enregistrer le bulletin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% elif grille and not grille.ok %}
+<div class="panel"><div class="pb"><p style="margin:0;color:var(--rouge)"><i class="ti ti-alert-triangle"></i>
+  Aucune UE au barème pour {{ grille.filiere }} {{ grille.niveau }} — semestre {{ grille.semestre }}.</p></div></div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  // Recherche par matricule : on ne garde que le matricule avant soumission.
+  var fs=document.getElementById('form-sel'), inp=document.getElementById('rech');
+  if(fs&&inp){
+    fs.addEventListener('submit',function(){var m=(inp.value||'').split(/\s+|—/)[0].trim(); if(m) inp.value=m;});
+    inp.addEventListener('change',function(){ if((inp.value||'').indexOf('—')>=0) fs.submit(); });
+  }
+  var tbl=document.getElementById('tbl-bul'); if(!tbl) return;
+
+  function rhu(x,d){ if(x===null||isNaN(x)) return null; var f=Math.pow(10,d);
+    return Math.sign(x)*Math.round(Math.abs(x)*f+1e-9)/f; }
+  function fmt(x){ return x===null?'—':rhu(x,2).toFixed(2).replace('.',','); }
+  function num(s){ s=(s||'').toString().trim().replace(',','.'); if(s==='') return null;
+    var v=parseFloat(s); return isNaN(v)?null:v; }
+  function moyMat(cc,ex){ if(cc!==null&&ex!==null) return 0.25*cc+0.75*ex;
+    if(ex!==null) return ex; if(cc!==null) return cc; return null; }
+
+  function ccDe(row){ var ro=row.querySelector('.cc-ro'); if(ro) return num(ro.getAttribute('data-cc'));
+    var inp=row.querySelector('.cc-in'); return inp?num(inp.value):null; }
+  function exDe(row){ var inp=row.querySelector('.ex-in'); return inp?num(inp.value):null; }
+
+  var ueRows=[].slice.call(tbl.querySelectorAll('.ue-row'));
+  function recalc(){
+    var sc=0, sp=0, ectsAcq=0, ectsTot=0;
+    ueRows.forEach(function(ueR){
+      var coef=parseFloat(ueR.getAttribute('data-coef'))||0;
+      var ects=parseFloat(ueR.getAttribute('data-ects'))||0;
+      ectsTot+=ects;
+      var sm=0, pm=0, r=ueR.nextElementSibling;
+      while(r && r.classList.contains('mat-row')){
+        var mv=moyMat(ccDe(r), exDe(r));
+        r.querySelector('.mat-moy').textContent=fmt(mv);
+        if(mv!==null){ var cm=parseFloat(r.getAttribute('data-coefm'))||1; sm+=mv*cm; pm+=cm; }
+        r=r.nextElementSibling;
+      }
+      var ueMoy = pm>0 ? sm/pm : null;   /* moyenne d'UE ponderee par coef matiere (defaut 1) */
+      ueR.querySelector('.ue-moy').textContent=fmt(ueMoy);
+      if(ueMoy!==null){ sc+=coef; sp+=ueMoy*coef; if(rhu(ueMoy,2)>=10) ectsAcq+=ects; }
+    });
+    var sem = sc ? sp/sc : null;
+    document.getElementById('moy-sem').textContent=fmt(sem);
+    var ment='—', prop='—', pc='';
+    if(sem!==null){ var s=rhu(sem,2);
+      ment = s>=16?'Très bien':s>=14?'Bien':s>=12?'Assez bien':s>=10?'Passable':'Insuffisant';
+      prop = s>=10?'Admis':'Ajourné'; pc = s>=10?'var(--vert)':'var(--rouge)'; }
+    document.getElementById('mention').textContent=ment;
+    var pe=document.getElementById('proposition'); pe.textContent=prop; pe.style.color=pc;
+    document.getElementById('ects').textContent = rhu(ectsAcq,0)+' / '+rhu(ectsTot,0);
+  }
+  tbl.addEventListener('input', function(e){ if(e.target.classList.contains('note')) recalc(); });
+  recalc();
+
+  // Construit le meta JSON (ue/matiere/readonly/idx) avant l'envoi.
+  var fb=document.getElementById('form-bul');
+  if(fb) fb.addEventListener('submit', function(){
+    var meta=[].slice.call(tbl.querySelectorAll('.mat-row')).map(function(r){
+      return {i:r.getAttribute('data-idx'), ue:r.getAttribute('data-ue'),
+              mat:r.getAttribute('data-mat'), ro:r.getAttribute('data-ro')==='1'};
+    });
+    document.getElementById('meta').value=JSON.stringify(meta);
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titre_page }} — {{ cfg.APP_NOM }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}">
+</head>
+<body>
+<div class="barre">
+  <b>Proces-verbal de cloture / passation</b>
+  <span class="aide">Vous pouvez retoucher le texte avant d'imprimer (modifications non enregistrees).</span>
+  <span class="pousse"></span>
+  <a class="btn-ret" href="{{ url_for('cloture') }}">Retour</a>
+  <a class="btn-ret" href="{{ url_for('cloture_pv_docx') }}">Word (.docx)</a>
+  <button class="btn-imp" onclick="window.print()">Imprimer / PDF</button>
+</div>
+
+<div id="zone" contenteditable="true" spellcheck="false">
+  <div class="doc-page">
+    <div class="doc-entete">
+      <img src="{{ url_for('static', filename=cfg.LOGO) }}" alt="Universite des Comores">
+      <div class="entete-lignes">
+        <div>UNION DES COMORES</div>
+        <div>Universite des Comores</div>
+        <div>Ecole de Medecine et de Sante Publique (EMSP)</div>
+      </div>
+    </div>
+    <div class="doc-corps">
+      {% for typ, txt in blocs %}
+        {% if typ == 'titre' %}<h1 style="color:#1F4E79;text-align:center;font-size:18px;margin:6px 0">{{ txt }}</h1>
+        {% elif typ == 'soustitre' %}<h2 style="color:#1F4E79;text-align:center;font-size:15px;margin:0 0 14px">{{ txt }}</h2>
+        {% elif typ == 'gras' %}<p style="font-weight:700;color:#1F4E79;margin:14px 0 4px">{{ txt }}</p>
+        {% elif typ == 'sign' %}<p style="margin-top:48px">{{ txt }}</p>
+        {% else %}<p style="margin:3px 0">{{ txt }}</p>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</body>
+</html>

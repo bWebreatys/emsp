@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block fil %}
+<div class="fil"><i class="ti {{ info.icone }}"></i> {{ info.section_titre }} &rsaquo; Heures constatees du mois</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide &mdash; Heures constatees <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="aide-c">
+    <p>Les heures constatees sont <b>calculees automatiquement</b> a partir des appels de presence : chaque seance pour laquelle un appel a ete saisi compte une fois, pour l'enseignant programme et la duree prevue (Heure fin - Heure debut). Les <b>exceptions</b> (remplacant, cours annule, duree differente) saisies sur l'ecran d'appel surchargent ce calcul.</p>
+    <p>Le bouton <b>Reporter dans E2</b> inscrit ces heures dans le releve mensuel (base de la paie). Une valeur deja saisie a la main dans E2 et <b>differente</b> du calcul (feuille disparue, heures contestees) <b>n'est jamais ecrasee</b> sans confirmation.</p>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<div style="margin:0 0 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <span style="color:var(--gris);font-size:13px"><i class="ti ti-chart-bar"></i> Requêtes liées :</span>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_vue', vid='ens_ecart', mois_debut=mois, mois_fin=mois) }}"><i class="ti ti-arrow-right"></i> Écart programme / constaté</a>
+  <a class="btn-action" style="margin-top:0" href="{{ url_for('requetes_explorer', onglet='E2_Releve_heures') }}"><i class="ti ti-table"></i> Explorer les relevés d'heures</a>
+</div>
+<div class="page-head">
+  <h1><i class="ti {{ info.icone }} i"></i> Heures constatees du mois</h1>
+  <div class="sub">Calculees depuis les appels de presence &middot; report vers le releve d'heures (E2)</div>
+</div>
+
+<div class="panel">
+  <div class="ph"><i class="ti ti-calendar-month i"></i><h3>Choisir le mois</h3></div>
+  <div class="pb">
+    <form method="get" action="{{ url_for('heures_constatees') }}" class="pres-select">
+      <div class="champ">
+        <label>Mois / Annee (MM/AAAA)</label>
+        <input type="text" name="mois" value="{{ mois }}" list="dl_mois" placeholder="06/2026">
+        <datalist id="dl_mois">{% for m in mois_dispo %}<option value="{{ m }}">{% endfor %}</datalist>
+      </div>
+      <div class="champ" style="align-self:flex-end">
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-calculator"></i> Calculer</button>
+      </div>
+    </form>
+    {% if mois_dispo %}
+    <div class="saisie-note" style="margin-top:8px">Mois disposant d'appels : {{ mois_dispo|join(', ') }}</div>
+    {% else %}
+    <div class="saisie-note" style="margin-top:8px">Aucun appel de presence enregistre pour l'instant.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% if apercu %}
+<div class="panel">
+  <div class="ph"><i class="ti ti-clock-check i"></i><h3>{{ apercu.libelle }} &mdash; {{ apercu.nb }} enseignant(s)</h3></div>
+  <div class="pb">
+
+    {% if apercu.anomalies %}
+    <div class="flash flash-warn" style="margin-bottom:14px">
+      <i class="ti ti-alert-triangle"></i> {{ apercu.anomalies|length }} point(s) d'attention (non comptabilises) :
+      <ul style="margin:6px 0 0 18px">{% for a in apercu.anomalies %}<li>{{ a }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    {% if apercu.lignes %}
+    <form method="post" action="{{ url_for('heures_constatees_reporter') }}">
+      <input type="hidden" name="mois" value="{{ apercu.mois }}">
+      <div class="pres-actions-haut">
+        {% if peut_reporter %}
+        <button type="submit" class="btn-action" style="margin-top:0"><i class="ti ti-arrow-bar-to-down"></i> Reporter dans E2 (toutes les lignes cochees)</button>
+        <label class="saisie-note" style="display:inline-flex;align-items:center;gap:6px">
+          <input type="checkbox" name="forcer" value="1"> Report force (ecrase les valeurs corrigees a la main)
+        </label>
+        {% else %}
+        <span class="saisie-note">Consultation seule (droit d'ecriture Enseignants requis pour reporter).</span>
+        {% endif %}
+      </div>
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr>
+            <th>Reporter</th><th>Matricule</th><th>Nom Prenom</th>
+            <th>Prevu</th><th>Fait (calcule)</th><th>Enregistre (E2)</th>
+            <th>Ecart prevu &minus; fait</th><th>Ecart calc. &minus; enr.</th>
+            <th>Etat</th><th>Seances</th>
+          </tr></thead>
+          <tbody>
+            {% for l in apercu.lignes %}
+            <tr{% if l.alerte %} style="background:#fdf3f3"{% endif %}>
+              <td class="c">{% if peut_reporter and l.reportable %}<input type="checkbox" name="mat" value="{{ l.matricule }}" {{ 'checked' if l.statut != 'identique' else '' }}>{% endif %}</td>
+              <td>{{ l.matricule }}</td>
+              <td>{{ l.nom or '?' }}</td>
+              <td>{{ l.prevu if l.prevu != '' else '—' }}</td>
+              <td><b>{{ l.calc }}</b> h</td>
+              <td>{{ l.actuel if l.actuel != '' else '—' }}</td>
+              <td{% if l.ecart_pf not in ('', '0') %} style="color:var(--rouge);font-weight:600"{% endif %}>{{ l.ecart_pf if l.ecart_pf != '' else '—' }}</td>
+              <td{% if l.ecart_ce not in ('', '0') %} style="color:var(--rouge);font-weight:600"{% endif %}>{{ l.ecart_ce if l.ecart_ce != '' else '—' }}</td>
+              <td>
+                {% if l.statut == 'a_reporter' %}<span class="badge-na">a reporter</span>
+                {% elif l.statut == 'identique' %}<span class="badge-ok">identique</span>
+                {% else %}<span class="badge-no">different (E2 corrige)</span>{% endif %}
+              </td>
+              <td>{% if l.nb_seances %}<a href="#det-{{ l.matricule }}" onclick="document.getElementById('det-{{ l.matricule }}').open=true">{{ l.nb_seances }} seance(s)</a>{% else %}<span style="color:var(--gris)">&mdash;</span>{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% if apercu.totaux %}
+          <tfoot><tr style="font-weight:700;border-top:2px solid var(--bord)">
+            <td></td><td></td><td>Total</td>
+            <td>{{ apercu.totaux.prevu }}</td><td>{{ apercu.totaux.calc }} h</td><td>{{ apercu.totaux.actuel }}</td>
+            <td>{{ apercu.totaux.ecart_pf }}</td><td>{{ apercu.totaux.ecart_ce }}</td>
+            <td></td><td></td>
+          </tr></tfoot>
+          {% endif %}
+        </table>
+      </div>
+    </form>
+    <p style="margin:8px 2px 0;font-size:13px;color:var(--gris)">
+      <b style="color:var(--bleu)">Ecart prevu &minus; fait</b> : seances prevues non assurees ou non pointees.
+      <b style="color:var(--bleu)">Ecart calc. &minus; enr.</b> : a reporter ou divergence avec E2
+      (feuille de presence non remplie ou retard de saisie). Les lignes en rose signalent un point d'attention.
+    </p>
+
+    <div style="margin-top:18px">
+      {% for l in apercu.lignes %}{% if l.nb_seances %}
+      <details id="det-{{ l.matricule }}" class="det-seances">
+        <summary>{{ l.nom or l.matricule }} &mdash; {{ l.calc }} h ({{ l.nb_seances }} seance(s))</summary>
+        <table class="data" style="margin-top:8px">
+          <thead><tr><th>Date</th><th>Creneau</th><th>Seance</th><th>Matiere</th><th>Duree (h)</th><th></th></tr></thead>
+          <tbody>
+            {% for s in l.seances %}
+            <tr>
+              <td>{{ s.date }}</td><td>{{ s.creneau }}</td><td>{{ s.session }}</td>
+              <td>{{ s.matiere }}</td><td>{{ s.duree }}</td>
+              <td>{% if s.remplacant %}<span class="badge-na">remplacant</span>{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </details>
+      {% endif %}{% endfor %}
+    </div>
+
+    {% else %}
+    <div class="vide"><i class="ti ti-clock-off i"></i> Aucune heure constatee pour ce mois (aucun appel exploitable).</div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

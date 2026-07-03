@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block fil %}
+<div class="fil"><a href="{{ url_for('accueil') }}">Accueil</a> &rsaquo; {{ info.section_titre }} &rsaquo; Cloture &amp; archivage</div>
+<div class="page-head">
+  <i class="ti ti-archive ic"></i>
+  <div>
+    <h1>Cloture &amp; archivage</h1>
+    <div class="sub">Operations de fin de periode, reservees a la Direction. Chaque cloture met a jour le journal permanent et genere un proces-verbal.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block aide %}
+<details class="aide">
+  <summary><i class="ti ti-help-circle i"></i> Aide — Cloture &amp; archivage <i class="ti ti-chevron-right chev"></i></summary>
+  <div class="corps">
+    <ul>
+      <li><b>Cloture des eleves</b> (annee scolaire, oct &rarr; juil) : journalise les eleves <b>sortis</b> (Diplome / Abandonne / Radie). Ils <b>restent</b> dans le fichier actif environ {{ cfg.ANNEES_GARDE_ELEVES }} ans, puis sont <b>archivables</b>.</li>
+      <li><b>Archivage</b> : deplace les cohortes sorties depuis &ge; {{ cfg.ANNEES_GARDE_ELEVES }} ans vers un fichier d'archive separe et renseigne la reference dans le journal.</li>
+      <li><b>Cloture compta</b> (annee civile) : archive les mouvements de l'annee, ecrit le journal permanent, et reporte a nouveau le solde de chaque compte (1re ligne de l'exercice suivant).</li>
+      <li>Le <b>proces-verbal</b> est consultable / imprimable (PDF via le navigateur) et telechargeable en <b>Word</b>.</li>
+    </ul>
+  </div>
+</details>
+{% endblock %}
+
+{% block contenu %}
+<style>
+  .clo-grid{display:flex;flex-direction:column;gap:18px}
+  .clo-card{border:1px solid var(--bord,#D8E2EC);border-radius:12px;background:#fff;padding:16px 18px}
+  .clo-card h2{color:#1F4E79;font-size:16px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+  .clo-card .meta{color:#5B6B7B;font-size:13px;margin:0 0 12px}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;border:none;font:inherit;font-weight:600;cursor:pointer}
+  .btn-primary{background:#1F4E79;color:#fff}
+  .btn-ghost{background:#EEF3F8;color:#1F4E79}
+  .clo-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .clo-row input[type=text]{padding:8px 10px;border:1px solid var(--bord,#D8E2EC);border-radius:8px;font:inherit}
+  table.data td input,table.data td select{padding:5px 7px;border:1px solid var(--bord,#D8E2EC);border-radius:7px;font:inherit;width:100%}
+  .pv-box{border:1px solid #BBD3A8;background:#F3F9EE;border-radius:11px;padding:14px 16px;margin-bottom:18px}
+  .pv-box h3{margin:0 0 8px;color:#2C5C1E;font-size:15px}
+  .clo-empty{color:#5B6B7B;font-style:italic}
+</style>
+
+{% if pv %}
+<div class="pv-box">
+  <h3><i class="ti ti-file-check i"></i> Proces-verbal genere</h3>
+  <p class="meta" style="margin:0 0 10px">La derniere operation a produit un proces-verbal de cloture / passation.</p>
+  <div class="clo-row">
+    <a class="btn btn-primary" href="{{ url_for('cloture_pv') }}" target="_blank"><i class="ti ti-printer"></i> Voir / Imprimer (PDF)</a>
+    <a class="btn btn-ghost" href="{{ url_for('cloture_pv_docx') }}"><i class="ti ti-file-type-docx"></i> Telecharger en Word</a>
+  </div>
+</div>
+{% endif %}
+
+<div class="clo-grid">
+
+  <div class="clo-card">
+    <h2><i class="ti ti-school i"></i> Cloture des eleves — annee scolaire {{ apercu.annee_scolaire }}</h2>
+    {% if apercu.eleves_a_journaliser %}
+    <p class="meta">{{ apercu.eleves_a_journaliser | length }} eleve(s) sorti(s) a journaliser. Renseignez le diplome et la mention si applicable (laisser vide pour Abandonne / Radie).</p>
+    <form method="post" action="{{ url_for('cloture_eleves') }}">
+      <input type="hidden" name="annee_scolaire" value="{{ apercu.annee_scolaire }}">
+      <div class="tbl-wrap">
+        <table class="data">
+          <thead><tr><th>Matricule</th><th>Nom</th><th>Prenom</th><th>Filiere</th><th>Statut final</th><th>Diplome obtenu</th><th>Mention</th></tr></thead>
+          <tbody>
+            {% for e in apercu.eleves_a_journaliser %}
+            <tr>
+              <td>{{ e.matricule }}</td><td>{{ e.nom }}</td><td>{{ e.prenom }}</td>
+              <td>{{ e.filiere }}</td><td>{{ e.statut }}</td>
+              <td><input type="text" name="diplome_{{ e.matricule }}" placeholder="ex. Licence Soins infirmiers"></td>
+              <td><select name="mention_{{ e.matricule }}"><option value="">—</option>{% for m in apercu.mentions %}<option value="{{ m }}">{{ m }}</option>{% endfor %}</select></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="clo-row" style="margin-top:12px">
+        <button type="submit" class="btn btn-primary" onclick="return confirm('Cloturer l\'annee scolaire {{ apercu.annee_scolaire }} ? Les eleves sortis seront inscrits au journal permanent.');"><i class="ti ti-archive"></i> Cloturer l'annee eleves</button>
+      </div>
+    </form>
+    {% else %}
+    <p class="clo-empty">Aucun eleve sorti (statut Diplome / Abandonne / Radie) en attente de journalisation.</p>
+    {% endif %}
+  </div>
+
+  <div class="clo-card">
+    <h2><i class="ti ti-box-seam i"></i> Archivage des cohortes anciennes</h2>
+    {% if apercu.eleves_archivables %}
+    <p class="meta">{{ apercu.eleves_archivables | length }} eleve(s) sorti(s) depuis &ge; {{ cfg.ANNEES_GARDE_ELEVES }} ans peuvent etre archives (deplaces hors du fichier actif).</p>
+    <form method="post" action="{{ url_for('cloture_archiver') }}">
+      <button type="submit" class="btn btn-primary" onclick="return confirm('Archiver les cohortes sorties depuis au moins {{ cfg.ANNEES_GARDE_ELEVES }} ans ? Les eleves seront deplaces vers un fichier d\'archive et retires du fichier actif.');"><i class="ti ti-box-seam"></i> Archiver les sorties &ge; {{ cfg.ANNEES_GARDE_ELEVES }} ans</button>
+    </form>
+    {% else %}
+    <p class="clo-empty">Aucune cohorte a archiver pour le moment.</p>
+    {% endif %}
+  </div>
+
+  <div class="clo-card">
+    <h2><i class="ti ti-cash i"></i> Cloture de l'exercice comptable</h2>
+    <p class="meta">Annee civile (1er janvier &rarr; 31 decembre). Archive les mouvements, ecrit le journal permanent et reporte a nouveau les soldes.</p>
+    <form method="post" action="{{ url_for('cloture_compta') }}" class="clo-row">
+      <label>Exercice (AAAA) :</label>
+      <input type="text" name="annee_civile" value="{{ apercu.annee_civile }}" pattern="\d{4}" maxlength="4" style="width:90px" required>
+      <button type="submit" class="btn btn-primary" onclick="return confirm('Cloturer l\'exercice comptable saisi ? Les mouvements seront archives et les soldes reportes a nouveau.');"><i class="ti ti-archive"></i> Cloturer l'exercice</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

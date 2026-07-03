@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block contenu %}
+<div class="page-head"><i class="ti ti-alert-triangle ic"></i><div><h1>{{ titre_page }}</h1></div></div>
+<div class="panel"><div class="pb"><p>{{ message or "La page demandee n'existe pas." }} <a href="{{ url_for('accueil') }}">Revenir a l'accueil</a>.</p></div></div>
+{% endblock %}
